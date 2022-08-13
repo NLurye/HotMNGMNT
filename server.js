@@ -1,23 +1,31 @@
 /*
-Calling for db.js to create database of all messages
-Waiting for a client to connect
-Calling for db.js to extract relevant adds:
-    Depending on num of screen received in the request (/screen=:num)
-    and time and date db.js sending a query to DB i.e the business logics is happening in db.js
-sending to client index.html
-index.html only go through an array
-
+Server:
+Calling for db.js init database
 Waiting for a client to connect
 Sending to client index.html (main page) with option to login
 Handles client's requests:
-- login ->  DB query (if confirmed) send to client:
-            - page with option (nav-bar) to book and check-in
-            - book ->
-                        - show available rooms in selected dates -> DB query -> send rooms to client
-            - check-in
-abcd
-test222
-333
+- [login] ->  send login form to a client -> DB query: Calling for db.js to check staff id -> (if confirmed) send to client page with option (nav-bar) to book and check-in/out
+                - [book] ->
+                            - [show available rooms] (in selected dates) -> DB query: Calling for db.js to extract relevant rooms -> send rooms to client
+                                - [book] (selected room) -> send order form to a client -> [confirm] -> DB query: Calling for db.js to add an order ____
+                                                                                                                                                        |
+                          /_____________________________________________________________________________________________________________________________|
+                          \
+                - [check-in] ->
+                            - send id form to a client -> DB query: Calling for db.js to extract relevant order -> send relevant order __
+                                                                                                                                         |
+                          /______________________________________________________________________________________________________________|
+                          \
+                - [check-out] ->
+                            - send id form to a client -> DB query: Calling for db.js to move relevant order to History _________________
+                                                                                                                                         |
+                          /______________________________________________________________________________________________________________|
+                          \
+                - [log-out] __
+                              |
+ /____________________________|
+ \
+
  */
 
 const express = require('express');
