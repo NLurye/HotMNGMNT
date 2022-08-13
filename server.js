@@ -16,6 +16,7 @@ Handles client's requests:
                         - show available rooms in selected dates -> DB query -> send rooms to client
             - check-in
 abcd
+test222
  */
 
 const express = require('express');
