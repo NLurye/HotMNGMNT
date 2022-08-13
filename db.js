@@ -279,7 +279,8 @@ let createMsgsCollection = function () {
                                 to: new Date('2022 - 10 - 25')
                             },
                         }],
-                    cust
+                    custName: "Tom",
+                    custID: "1111"
                 },
                 {
                     roomNum: 23,
@@ -289,7 +290,9 @@ let createMsgsCollection = function () {
                                 from: new Date('2022 - 1 - 1'),
                                 to: new Date('2022 - 1 - 10')
                             }
-                        }]
+                        }],
+                    custName: "Alon",
+                    custID: "2222"
                 },
                 {
                     roomNum: 44,
@@ -299,8 +302,22 @@ let createMsgsCollection = function () {
                                 from: new Date('2022 - 4 - 4'),
                                 to: new Date('2022 - 4 - 7')
                             }
-                        }]
+                        }],
+                    custName: "Anastasia",
+                    custID: "3333"
                 }];
+            let prevOrders = [ {
+                roomNum: 1,
+                times:
+            [{
+                dates: {
+                    from: new Date('2021 - 9 - 29'),
+                    to: new Date('2021 - 10 - 5')
+                },
+            }],
+                custName: "Tom",
+                custID: "1111"//before adding a new prev order check if custID already exist -> add new date. if not exist -> new prev order.
+        }];
             dbo.collection("Messages").insertMany(messages, function (err, res) {
                 if (err) throw err;
             });
