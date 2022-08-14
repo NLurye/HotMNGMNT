@@ -1,211 +1,211 @@
 let MongoClient = require('mongodb').MongoClient;
 let url = "mongodb://localhost:27017/msgs";
-
+let queryResult;
 //fs = require('fs');
-let InitHotelDB = function () {
+let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
         dbo.dropDatabase(function () { //Delete previous db <------delete
             let rooms = [
                 {
-                    roomNumber: 1,
+                    room: 1,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 2,
+                    room: 2,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 3,
+                    room: 3,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 4,
+                    room: 4,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 5,
+                    room: 5,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 6,
+                    room: 6,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 7,
+                    room: 7,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 8,
+                    room: 8,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 9,
+                    room: 9,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 10,
+                    room: 10,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 11,
+                    room: 11,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 12,
+                    room: 12,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 13,
+                    room: 13,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 14,
+                    room: 14,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 15,
+                    room: 15,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 16,
+                    room: 16,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 17,
+                    room: 17,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 18,
+                    room: 18,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 19,
+                    room: 19,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 20,
+                    room: 20,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 21,
+                    room: 21,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 22,
+                    room: 22,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 23,
+                    room: 23,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 24,
+                    room: 24,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 25,
+                    room: 25,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 26,
+                    room: 26,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 27,
+                    room: 27,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 28,
+                    room: 28,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 29,
+                    room: 29,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 30,
+                    room: 30,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 31,
+                    room: 31,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 32,
+                    room: 32,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 33,
+                    room: 33,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 34,
+                    room: 34,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 35,
+                    room: 35,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 36,
+                    room: 36,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 37,
+                    room: 37,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 38,
+                    room: 38,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 39,
+                    room: 39,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 40,
+                    room: 40,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 41,
+                    room: 41,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 42,
+                    room: 42,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 43,
+                    room: 43,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 44,
+                    room: 44,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 45,
+                    room: 45,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 46,
+                    room: 46,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 47,
+                    room: 47,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 48,
+                    room: 48,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 49,
+                    room: 49,
                     numOfBeds: 2,
                 },
                 {
-                    roomNumber: 50,
+                    room: 50,
                     numOfBeds: 2,
                 }];
             let staff = [
@@ -265,33 +265,62 @@ let InitHotelDB = function () {
                 }];
             let orders = [
                 {
-                    roomNum: 1,
-                    from: new Date('2022 - 9 - 29'),
-                    to: new Date('2022 - 10 - 5'),
+                    room: 1,
+                    from: new Date('2022-08-01'),
+                    to: new Date('2022-08-02'),
                     custName: "Tom",
-                    custID: "111111111"
+                    custID: "111111110"
                 },
                 {
-                        roomNum: 23,
-                    from: new Date('2022 - 1 - 1'),
-                    to: new Date('2022 - 1 - 10'),
+                    room: 2,
+                    from: new Date('2022-08-01'),
+                    to: new Date('2022-08-05'),
                     custName: "Alon",
                     custID: "222222222"
                 },
                 {
-                    roomNum: 44,
-                    from: new Date('2022 - 4 - 4'),
-                    to: new Date('2022 - 4 - 7'),
+                    room: 2,
+                    from: new Date('2022-08-06'),
+                    to: new Date('2022-08-07'),
                     custName: "Anastasia",
                     custID: "444444444"
-                }];
-            let ordersHistory = [ {
-                roomNum: 1,
-                from: new Date('2021 - 9 - 29'),
-                to: new Date('2021 - 10 - 5'),
+                },
+                {
+                    room: 2,
+                    from: new Date('2022-08-08'),
+                    to: new Date('2022-08-12'),
+                    custName: "Anastasia",
+                    custID: "444444444"
+                },
+                {
+                    room: 3,
+                    from: new Date('2022-08-05'),
+                    to: new Date('2022-08-11'),
+                    custName: "Anastasia",
+                    custID: "444444444"
+                },
+                {
+                    room: 1,
+                    from: new Date('2022-08-04'),
+                    to: new Date('2022-08-06'),
+                    custName: "Tom",
+                    custID: "111111111"
+                },
+                {
+                    room: 1,
+                    from: new Date('2022-08-10'),
+                    to: new Date('2022-08-14'),
+                    custName: "Tom",
+                    custID: "111111111"
+                }
+            ];
+            let ordersHistory = [{
+                room: 1,
+                from: new Date('2021-09-29'),
+                to: new Date('2021-10-05'),
                 custName: "Tom",
                 custID: "111111111"//before adding a new prev order check if custID already exist -> add new date. if not exist -> new prev order.
-        }];
+            }];
             dbo.collection("Rooms").insertMany(rooms, function (err, res) {
                 if (err) throw err;
             });
@@ -307,49 +336,58 @@ let InitHotelDB = function () {
         });
     });
 }
-let selectRoomsByDates = function (selected_from,selected_to) {
+let selectRoomsByDates = function (selected_from, selected_to) {
     //from.setHours(0,0,0,0);
+    //eliminate rooms that have orders that starting before selected_to and simultaneously ending after selected_from
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
         let orders = dbo.collection("Orders");
-        orders.find({
-               "from": {$l: selected_to},
-                "to": {$g: selected_from},
-            }
-        ).toArray(function (err, queryResult) {
-            if (err) throw err;
-            //console.log(queryResult);
-            result = queryResult;
-            db.close();
-        });
+        // orders.find(
+        //     {
+        //         from: {$lt: new Date(selected_to)},
+        //         to: {$gt: new Date(selected_from)}
+        //     }
+        // ).toArray(function (err, queryResult) {
+        //     if (err) throw err;
+        //     console.log(queryResult);
+        //
+        //     db.close();
+        // });
+        orders.aggregate( [
+            // Stage 1: Filter order documents by dates
+            {
+                $match:
+                    {
+                    from: {$lt: new Date(selected_to)},
+                    to: {$gt: new Date(selected_from)}
+                    }
+            },
+            // Stage 2: Group by room
+            {
+                $group: { _id : "$room" }
+            },{
+            $lookup:{
+                from: "Rooms",//collection to join
+                localField: "_id",//field from the input documents
+                foreignField: "room",//field from the documents of the "from" collection
+                as: "inventory_docs"
+            }}
+        ] ).toArray(function (err, queryResult) {
+                if (err) throw err;
+                console.log(queryResult);
+
+                db.close();
+            });
 
     });
 
 }
-// let selectRoomsByDates = function (selected_from,selected_to) {
-//     //from.setHours(0,0,0,0);
-//     MongoClient.connect(url, function (err, db) {
-//         if (err) throw err;
-//         let dbo = db.db("hotel");
-//         let orders = dbo.collection("Orders");
-//         orders.find({
-//                 "from": {$gte: selected_to},
-//                 "to": {$lte: selected_from},
-//             }
-//         ).toArray(function (err, queryResult) {
-//             if (err) throw err;
-//             //console.log(queryResult);
-//             result = queryResult;
-//             db.close();
-//         });
-//
-//     });
-//
-// }
 
-exports.createMsgsCollection = createMsgsCollection;
-exports.chooseMsgs = chooseMsgs;
-module.exports.ress = result;
+
+module.exports.init = initHotelDB;
+module.exports.selectRooms = selectRoomsByDates;
+
+
 
 
