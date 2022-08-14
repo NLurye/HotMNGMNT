@@ -343,17 +343,6 @@ let selectRoomsByDates = function (selected_from, selected_to) {
         if (err) throw err;
         let dbo = db.db("hotel");
         let orders = dbo.collection("Orders");
-        // orders.find(
-        //     {
-        //         from: {$lt: new Date(selected_to)},
-        //         to: {$gt: new Date(selected_from)}
-        //     }
-        // ).toArray(function (err, queryResult) {
-        //     if (err) throw err;
-        //     console.log(queryResult);
-        //
-        //     db.close();
-        // });
         orders.aggregate( [
             // Stage 1: Filter order documents by dates
             {
@@ -366,24 +355,30 @@ let selectRoomsByDates = function (selected_from, selected_to) {
             // Stage 2: Group by room
             {
                 $group: { _id : "$room" }
-            },{
-            $lookup:{
-                from: "Rooms",//collection to join
-                localField: "_id",//field from the input documents
-                foreignField: "room",//field from the documents of the "from" collection
-                as: "inventory_docs"
-            }}
+            }
+
         ] ).toArray(function (err, queryResult) {
                 if (err) throw err;
-                console.log(queryResult);
-
-                db.close();
+            let interruptions = queryResult.map(a=>a._id);
+            console.log("Booked rooms on those dates: " + interruptions);
+            let rooms = dbo.collection("Rooms");
+            rooms.find(
+                        {
+                            room: {$nin: interruptions}
+                        },
+                    ).toArray(function (err, queryResult) {
+                        if (err) throw err;
+                        //console.log("Available: ");
+                        //console.log(queryResult);
+                        db.close();
+                        return queryResult;
+                    });
             });
+
 
     });
 
 }
-
 
 module.exports.init = initHotelDB;
 module.exports.selectRooms = selectRoomsByDates;
