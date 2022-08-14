@@ -1,14 +1,12 @@
 let MongoClient = require('mongodb').MongoClient;
 let url = "mongodb://localhost:27017/msgs";
-let result;
 
-fs = require('fs');
-
-let createMsgsCollection = function () {
+//fs = require('fs');
+let InitHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
-        let dbo = db.db("msgs");
-        dbo.dropDatabase(function () { //Delete previous db
+        let dbo = db.db("hotel");
+        dbo.dropDatabase(function () { //Delete previous db <------delete
             let rooms = [
                 {
                     roomNumber: 1,
@@ -214,132 +212,110 @@ let createMsgsCollection = function () {
                 {
                     empID: 1,
                     empPass: 1,
-                    admin: "True"
+                    admin: "true"
                 },
                 {
                     empID: 2,
                     empPass: 2,
-                    admin: "False"
+                    admin: "false"
 
                 },
                 {
                     empID: 3,
                     empPass: 3,
-                    admin: "False"
+                    admin: "false"
 
                 },
                 {
                     empID: 4,
                     empPass: 4,
-                    admin: "False"
+                    admin: "false"
                 },
                 {
                     empID: 5,
                     empPass: 5,
-                    admin: "False"
+                    admin: "false"
 
                 },
                 {
                     empID: 6,
                     empPass: 6,
-                    admin: "False"
+                    admin: "false"
 
                 },
                 {
                     empID: 7,
                     empPass: 7,
-                    admin: "False"
+                    admin: "false"
                 },
                 {
                     empID: 8,
                     empPass: 8,
-                    admin: "False"
+                    admin: "false"
                 },
                 {
                     empID: 9,
                     empPass: 9,
-                    admin: "False"
+                    admin: "false"
                 },
                 {
                     empID: 10,
                     empPass: 10,
-                    admin: "True"
+                    admin: "true"
                 }];
             let orders = [
                 {
                     roomNum: 1,
-                    times:
-                        [{
-                            dates: {
-                                from: new Date('2022 - 9 - 29'),
-                                to: new Date('2022 - 10 - 5')
-                            },
-                            dates: {
-                                from: new Date('2022 - 10 - 15'),
-                                to: new Date('2022 - 10 - 25')
-                            },
-                        }],
+                    from: new Date('2022 - 9 - 29'),
+                    to: new Date('2022 - 10 - 5'),
                     custName: "Tom",
-                    custID: "1111"
+                    custID: "111111111"
                 },
                 {
-                    roomNum: 23,
-                    times:
-                        [{
-                            dates: {
-                                from: new Date('2022 - 1 - 1'),
-                                to: new Date('2022 - 1 - 10')
-                            }
-                        }],
+                        roomNum: 23,
+                    from: new Date('2022 - 1 - 1'),
+                    to: new Date('2022 - 1 - 10'),
                     custName: "Alon",
-                    custID: "2222"
+                    custID: "222222222"
                 },
                 {
                     roomNum: 44,
-                    times:
-                        [{
-                            dates: {
-                                from: new Date('2022 - 4 - 4'),
-                                to: new Date('2022 - 4 - 7')
-                            }
-                        }],
+                    from: new Date('2022 - 4 - 4'),
+                    to: new Date('2022 - 4 - 7'),
                     custName: "Anastasia",
-                    custID: "3333"
+                    custID: "444444444"
                 }];
-            let prevOrders = [ {
+            let ordersHistory = [ {
                 roomNum: 1,
-                times:
-            [{
-                dates: {
-                    from: new Date('2021 - 9 - 29'),
-                    to: new Date('2021 - 10 - 5')
-                },
-            }],
+                from: new Date('2021 - 9 - 29'),
+                to: new Date('2021 - 10 - 5'),
                 custName: "Tom",
-                custID: "1111"//before adding a new prev order check if custID already exist -> add new date. if not exist -> new prev order.
+                custID: "111111111"//before adding a new prev order check if custID already exist -> add new date. if not exist -> new prev order.
         }];
-            dbo.collection("Messages").insertMany(messages, function (err, res) {
+            dbo.collection("Rooms").insertMany(rooms, function (err, res) {
+                if (err) throw err;
+            });
+            dbo.collection("Staff").insertMany(staff, function (err, res) {
+                if (err) throw err;
+            });
+            dbo.collection("Orders").insertMany(orders, function (err, res) {
+                if (err) throw err;
+            });
+            dbo.collection("OrdersHistory").insertMany(ordersHistory, function (err, res) {
                 if (err) throw err;
             });
         });
     });
-
 }
-let chooseMsgs = function () {
-
+let selectRoomsByDates = function (selected_from,selected_to) {
+    //from.setHours(0,0,0,0);
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
-        let dbo = db.db("msgs");
-        let collection = dbo.collection("Messages");
-        collection.find({
-                screen: scr/*,
-            "times.t.days": day,
-               "times.t.dates.from": {$lte: now},
-                "times.t.dates.to": {$gte: now},
-                "times.t.hours.from": {$lte: hour},
-                "times.t.hours.to":{$gte :hour},
-                "times.t.minutes.from": {$lte: minute},
-                "times.t.minutes.to":{$gte :minute}*/
+        let dbo = db.db("hotel");
+        let orders = dbo.collection("Orders");
+        orders.find({
+               "from": {$l: selected_to},
+                "to": {$g: selected_from},
             }
         ).toArray(function (err, queryResult) {
             if (err) throw err;
@@ -351,6 +327,26 @@ let chooseMsgs = function () {
     });
 
 }
+// let selectRoomsByDates = function (selected_from,selected_to) {
+//     //from.setHours(0,0,0,0);
+//     MongoClient.connect(url, function (err, db) {
+//         if (err) throw err;
+//         let dbo = db.db("hotel");
+//         let orders = dbo.collection("Orders");
+//         orders.find({
+//                 "from": {$gte: selected_to},
+//                 "to": {$lte: selected_from},
+//             }
+//         ).toArray(function (err, queryResult) {
+//             if (err) throw err;
+//             //console.log(queryResult);
+//             result = queryResult;
+//             db.close();
+//         });
+//
+//     });
+//
+// }
 
 exports.createMsgsCollection = createMsgsCollection;
 exports.chooseMsgs = chooseMsgs;
