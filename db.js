@@ -7,22 +7,23 @@ let initHotelDB = function () {
         let dbo = db.db("hotel");
         dbo.dropDatabase(function () { //Delete previous db <------delete
 
-            let rooms = [     //rooms 10-19: first floor,  100$ per night, 150$ per night if there are 4 beds in the room.
-                              //rooms 20-29: second floor, 200$ per night, 250$ per night if there are 4 beds in the room.
-                              //rooms 30-39: third floor,  300$ per night, 350$ per night if there are 4 beds in the room.
-                              //rooms 40-49: fourth floor, 400$ per night, 450$ per night if there are 4 beds in the room.
-                              //rooms 50-59: fifth floor,  500$ per night, 550$ per night if there are 4 beds in the room.
-                                                 //rooms with 4 beds: 11,14,18,23,29,36,44,53
-                              //100$ per night: rooms 10,12,13,15,16,17,19
-                              //150$ per night: rooms 11,14,18
-                              //200$ per night: rooms 20,21,22,24,25,26,27,28
-                              //250$ per night: rooms 23,29
-                              //300$ per night: rooms 30,31,32,33,34,35,37,38,39
-                              //350$ per night: room 36
-                              //400$ per night: rooms 40,41,42,43,45,46,47,48,49
-                              //450$ per night: room 44
-                              //500$ per night: rooms 50,51,52,54,55,56,57,58,59
-                              //550$ per night: room 53
+            let rooms = [
+                //rooms 10-19: first floor,  100$ per night, 150$ per night if there are 4 beds in the room.
+                //rooms 20-29: second floor, 200$ per night, 250$ per night if there are 4 beds in the room.
+                //rooms 30-39: third floor,  300$ per night, 350$ per night if there are 4 beds in the room.
+                //rooms 40-49: fourth floor, 400$ per night, 450$ per night if there are 4 beds in the room.
+                //rooms 50-59: fifth floor,  500$ per night, 550$ per night if there are 4 beds in the room.
+                //rooms with 4 beds: 11,14,18,23,29,36,44,53
+                //100$ per night: rooms 10,12,13,15,16,17,19
+                //150$ per night: rooms 11,14,18
+                //200$ per night: rooms 20,21,22,24,25,26,27,28
+                //250$ per night: rooms 23,29
+                //300$ per night: rooms 30,31,32,33,34,35,37,38,39
+                //350$ per night: room 36
+                //400$ per night: rooms 40,41,42,43,45,46,47,48,49
+                //450$ per night: room 44
+                //500$ per night: rooms 50,51,52,54,55,56,57,58,59
+                //550$ per night: room 53
 
                 {
                     room: 10,
@@ -274,11 +275,11 @@ let initHotelDB = function () {
                     numOfBeds: 2,
                     price: 500,
                 }
-                ];
+            ];
             let staff = [
-                                 //in the hotel staff we got 10 workers, 2 admins and 8 workers.
-                                 //admins:  empID: 1, 10
-                                 //workers: empID: 2,3,4,5,6,7,8,9
+                //in the hotel staff we got 10 workers, 2 admins and 8 workers.
+                //admins:  empID: 1, 10
+                //workers: empID: 2,3,4,5,6,7,8,9
                 {
                     empID: 1,
                     empPass: 1,
@@ -406,41 +407,58 @@ let initHotelDB = function () {
         });
     });
 }
+let logIn = function (id,pass,Admin) {
+    MongoClient.connect(url, function (err,db) {
+        if (err) throw err;
+        let dbo = db.db("hotel");
+        let staff = dbo.collection("Staff");
+        staff.findOne(
+            { empID: id ,empPass: pass ,admin: Admin}
+        ).toArray(function (err,logInRes) {
+            if (err) throw err;
+            else {
+                if (logInRes.length === 0)
+                    console.log("User doesn't exist");
+                else return true;
+            }
+        })
+    } )
+}
 let selectRoomsByDates = function (selected_from, selected_to) {
     //eliminate rooms that have orders that starting before selected_to and simultaneously ending after selected_from
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
         let orders = dbo.collection("Orders");
-        orders.aggregate( [
+        orders.aggregate([
             // Stage 1: Filter order documents by dates
             {
                 $match:
                     {
-                    from: {$lt: new Date(selected_to)},
-                    to: {$gt: new Date(selected_from)}
+                        from: {$lt: new Date(selected_to)},
+                        to: {$gt: new Date(selected_from)}
                     }
             },
             // Stage 2: Group by room
             {
-                $group: { _id : "$room" }
+                $group: {_id: "$room"}
             }
 
-        ] ).toArray(function (err, queryResult) {
-                if (err) throw err;
-            let interruptions = queryResult.map(a=>a._id);
+        ]).toArray(function (err, queryResult) {
+            if (err) throw err;
+            let interruptions = queryResult.map(a => a._id);
             console.log("Booked rooms on those dates: " + interruptions);
             let rooms = dbo.collection("Rooms");
             rooms.find(
-                        {
-                            room: {$nin: interruptions}
-                        },
-                    ).toArray(function (err, queryResult) {
-                        if (err) throw err;
-                         selectedRooms.push(queryResult)
-                        db.close();
-                    });
+                {
+                    room: {$nin: interruptions}
+                },
+            ).toArray(function (err, queryResult) {
+                if (err) throw err;
+                selectedRooms.push(queryResult)
+                db.close();
             });
+        });
 
 
     });
