@@ -283,56 +283,56 @@ let initHotelDB = function () {
                 {
                     empID: 1,
                     empPass: 1,
-                    admin: "true"
+                    admin: 1
                 },
                 {
                     empID: 2,
                     empPass: 2,
-                    admin: "false"
+                    admin: 0
 
                 },
                 {
                     empID: 3,
                     empPass: 3,
-                    admin: "false"
+                    admin: 0
 
                 },
                 {
                     empID: 4,
                     empPass: 4,
-                    admin: "false"
+                    admin: 0
                 },
                 {
                     empID: 5,
                     empPass: 5,
-                    admin: "false"
+                    admin: 0
 
                 },
                 {
                     empID: 6,
                     empPass: 6,
-                    admin: "false"
+                    admin: 0
 
                 },
                 {
                     empID: 7,
                     empPass: 7,
-                    admin: "false"
+                    admin: 0
                 },
                 {
                     empID: 8,
                     empPass: 8,
-                    admin: "false"
+                    admin: 0
                 },
                 {
                     empID: 9,
                     empPass: 9,
-                    admin: "false"
+                    admin: 0
                 },
                 {
                     empID: 10,
                     empPass: 10,
-                    admin: "true"
+                    admin: 1
                 }];
             let orders = [
                 {
