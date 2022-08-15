@@ -7,207 +7,275 @@ let initHotelDB = function () {
         if (err) throw err;
         let dbo = db.db("hotel");
         dbo.dropDatabase(function () { //Delete previous db <------delete
-            let rooms = [
-                {
-                    room: 1,
-                    numOfBeds: 2,
-                },
-                {
-                    room: 2,
-                    numOfBeds: 2,
-                },
-                {
-                    room: 3,
-                    numOfBeds: 2,
-                },
-                {
-                    room: 4,
-                    numOfBeds: 2,
-                },
-                {
-                    room: 5,
-                    numOfBeds: 2,
-                },
-                {
-                    room: 6,
-                    numOfBeds: 2,
-                },
-                {
-                    room: 7,
-                    numOfBeds: 2,
-                },
-                {
-                    room: 8,
-                    numOfBeds: 2,
-                },
-                {
-                    room: 9,
-                    numOfBeds: 2,
-                },
+
+            let rooms = [     //rooms 10-19: first floor,  100$ per night, 150$ per night if there are 4 beds in the room.
+                              //rooms 20-29: second floor, 200$ per night, 250$ per night if there are 4 beds in the room.
+                              //rooms 30-39: third floor,  300$ per night, 350$ per night if there are 4 beds in the room.
+                              //rooms 40-49: fourth floor, 400$ per night, 450$ per night if there are 4 beds in the room.
+                              //rooms 50-59: fifth floor,  500$ per night, 550$ per night if there are 4 beds in the room.
+                                                 //rooms with 4 beds: 11,14,18,23,29,36,44,53
+                              //100$ per night: 10,12,13,15,16,17,19
+                              //150$ per night: 11,14,18
+                              //200$ per night: 20,21,22,24,25,26,27,28
+                              //250$ per night: 23,29
+                              //300$ per night: 30,31,32,33,34,35,37,38,39
+                              //350$ per night: 36
+                              //400$ per night: 40,41,42,43,45,46,47,48,49
+                              //450$ per night: 44
+                              //500$ per night: 50,51,52,54,55,56,57,58,59
+                              //550$ per night: 53
+
                 {
                     room: 10,
                     numOfBeds: 2,
+                    price: 100,
                 },
                 {
                     room: 11,
-                    numOfBeds: 2,
+                    numOfBeds: 4,
+                    price: 150,
                 },
                 {
                     room: 12,
                     numOfBeds: 2,
+                    price: 100,
                 },
                 {
                     room: 13,
                     numOfBeds: 2,
+                    price: 100,
                 },
                 {
                     room: 14,
-                    numOfBeds: 2,
+                    numOfBeds: 4,
+                    price: 150,
                 },
                 {
                     room: 15,
                     numOfBeds: 2,
+                    price: 100,
                 },
                 {
                     room: 16,
                     numOfBeds: 2,
+                    price: 100,
                 },
                 {
                     room: 17,
                     numOfBeds: 2,
+                    price: 100,
                 },
                 {
                     room: 18,
-                    numOfBeds: 2,
+                    numOfBeds: 4,
+                    price: 150,
                 },
                 {
                     room: 19,
                     numOfBeds: 2,
+                    price: 100,
                 },
                 {
                     room: 20,
                     numOfBeds: 2,
+                    price: 200,
                 },
                 {
                     room: 21,
                     numOfBeds: 2,
+                    price: 200,
                 },
                 {
                     room: 22,
                     numOfBeds: 2,
+                    price: 200,
                 },
                 {
                     room: 23,
-                    numOfBeds: 2,
+                    numOfBeds: 4,
+                    price: 250,
                 },
                 {
                     room: 24,
                     numOfBeds: 2,
+                    price: 200,
                 },
                 {
                     room: 25,
                     numOfBeds: 2,
+                    price: 200,
                 },
                 {
                     room: 26,
                     numOfBeds: 2,
+                    price: 200,
                 },
                 {
                     room: 27,
                     numOfBeds: 2,
+                    price: 200,
                 },
                 {
                     room: 28,
                     numOfBeds: 2,
+                    price: 200,
                 },
                 {
                     room: 29,
-                    numOfBeds: 2,
+                    numOfBeds: 4,
+                    price: 250,
                 },
                 {
                     room: 30,
                     numOfBeds: 2,
+                    price: 300,
                 },
                 {
                     room: 31,
                     numOfBeds: 2,
+                    price: 300,
                 },
                 {
                     room: 32,
                     numOfBeds: 2,
+                    price: 300,
                 },
                 {
                     room: 33,
                     numOfBeds: 2,
+                    price: 300,
                 },
                 {
                     room: 34,
                     numOfBeds: 2,
+                    price: 300,
                 },
                 {
                     room: 35,
                     numOfBeds: 2,
+                    price: 300,
                 },
                 {
                     room: 36,
-                    numOfBeds: 2,
+                    numOfBeds: 4,
+                    price: 350,
                 },
                 {
                     room: 37,
                     numOfBeds: 2,
+                    price: 300,
                 },
                 {
                     room: 38,
                     numOfBeds: 2,
+                    price: 300,
                 },
                 {
                     room: 39,
                     numOfBeds: 2,
+                    price: 300,
                 },
                 {
                     room: 40,
                     numOfBeds: 2,
+                    price: 400,
                 },
                 {
                     room: 41,
                     numOfBeds: 2,
+                    price: 400,
                 },
                 {
                     room: 42,
                     numOfBeds: 2,
+                    price: 400,
                 },
                 {
                     room: 43,
                     numOfBeds: 2,
+                    price: 400,
                 },
                 {
                     room: 44,
-                    numOfBeds: 2,
+                    numOfBeds: 4,
+                    price: 450,
                 },
                 {
                     room: 45,
                     numOfBeds: 2,
+                    price: 400,
                 },
                 {
                     room: 46,
                     numOfBeds: 2,
+                    price: 400,
                 },
                 {
                     room: 47,
                     numOfBeds: 2,
+                    price: 400,
                 },
                 {
                     room: 48,
                     numOfBeds: 2,
+                    price: 400,
                 },
                 {
                     room: 49,
                     numOfBeds: 2,
+                    price: 400,
                 },
                 {
                     room: 50,
                     numOfBeds: 2,
-                }];
+                    price: 500,
+                },
+                {
+                    room: 51,
+                    numOfBeds: 2,
+                    price: 500,
+                },
+                {
+                    room: 52,
+                    numOfBeds: 2,
+                    price: 500,
+                },
+                {
+                    room: 53,
+                    numOfBeds: 4,
+                    price: 550,
+                },
+                {
+                    room: 54,
+                    numOfBeds: 2,
+                    price: 500,
+                },
+                {
+                    room: 55,
+                    numOfBeds: 2,
+                    price: 500,
+                },
+                {
+                    room: 56,
+                    numOfBeds: 2,
+                    price: 500,
+                },
+                {
+                    room: 57,
+                    numOfBeds: 2,
+                    price: 500,
+                },
+                {
+                    room: 58,
+                    numOfBeds: 2,
+                    price: 500,
+                },
+                {
+                    room: 59,
+                    numOfBeds: 2,
+                    price: 500,
+                }
+                ];
             let staff = [
                 {
                     empID: 1,
