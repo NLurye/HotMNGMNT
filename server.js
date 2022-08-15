@@ -33,8 +33,26 @@ const app = express();
 
 
 //myDB.init();
-myDB.selectRooms(from,to);
-//});
+app.get("/book", function(req, res){
+    let from = new Date('2022-08-01'); //<---get from url/form instead
+    let to = new Date('2022-08-14'); //<---get from url/form instead
+    myDB.selectRooms(from, to);
+    setTimeout(getResultFromSelectRooms,1000);
+    function getResultFromSelectRooms() {
+        console.log(myDB.selectedRooms);//<---------append to section instead
+    }
+    //<--------------- add filter by num of beds + price + floor
+    app.get("/book/??/reserve", function(request, response) {
+        //send
+    })
+
+
+
+    });
+
+
+
+
 
 app.get('', function(req, res){
 res.sendFile(__dirname + '/index.html');
