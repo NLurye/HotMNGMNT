@@ -447,7 +447,24 @@ let selectRoomsByDates = function (selected_from, selected_to) {
 
 }
 
+let addOrder = function (room, from, to, custName, custID) {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        let dbo = db.db("hotel");
+        let order =
+            {
+                room: room,
+                from: new Date(from),
+                to: new Date(to),
+                custName: custName,
+                custID: custID
+             }
+            dbo.collection("Orders").insertOne(order, function (err, res) {if (err) throw err;})
+        }
+    )}
+
 module.exports.init = initHotelDB;
+module.exports.addOrder = addOrder;
 module.exports.selectRooms = selectRoomsByDates;
 module.exports.selectedRooms = selectedRooms;
 
