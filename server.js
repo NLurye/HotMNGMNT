@@ -27,13 +27,11 @@ Handles client's requests:
  \
 
  */
-
 const express = require('express');
 const myDB = require("./db");
 const app = express();
-let arr = [];
-let from = new Date('2022-08-01');
-let to = new Date('2022-08-14')
+
+
 //myDB.init();
 myDB.selectRooms(from,to);
 //});

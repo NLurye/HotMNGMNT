@@ -1,7 +1,6 @@
 let MongoClient = require('mongodb').MongoClient;
 let url = "mongodb://localhost:27017/msgs";
-let queryResult;
-//fs = require('fs');
+const selectedRooms = [];
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
@@ -337,7 +336,6 @@ let initHotelDB = function () {
     });
 }
 let selectRoomsByDates = function (selected_from, selected_to) {
-    //from.setHours(0,0,0,0);
     //eliminate rooms that have orders that starting before selected_to and simultaneously ending after selected_from
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
@@ -368,10 +366,8 @@ let selectRoomsByDates = function (selected_from, selected_to) {
                         },
                     ).toArray(function (err, queryResult) {
                         if (err) throw err;
-                        //console.log("Available: ");
-                        //console.log(queryResult);
+                         selectedRooms.push(queryResult)
                         db.close();
-                        return queryResult;
                     });
             });
 
@@ -382,6 +378,8 @@ let selectRoomsByDates = function (selected_from, selected_to) {
 
 module.exports.init = initHotelDB;
 module.exports.selectRooms = selectRoomsByDates;
+module.exports.selectedRooms = selectedRooms;
+
 
 
 
