@@ -1,10 +1,10 @@
 /*
 Server:
-Calling for db.js init database
-Waiting for a client to connect
-Sending to client index.html (main page) with option to login
+Calling for db.js init database [V]
+Waiting for a client to connect [V]
+Sending to client index.html [] (main page) with option to login []
 Handles client's requests:
-- [login] ->  send login form to a client -> DB query: Calling for db.js to check staff id -> (if confirmed) send to client page with option (nav-bar) to book and check-in/out and logout.
+- [login] ->  send login form to a client [] -> DB query: Calling for db.js to check staff id [] -> (if confirmed) send to client page with option (nav-bar) to book and check-in/out and logout.[]
                 - [book] ->
                             - [show available rooms] (in selected dates) -> DB query: Calling for db.js to extract relevant rooms -> send rooms to client
                                 - [book] (selected room) -> send order form to a client -> [confirm] -> DB query: Calling for db.js to add an order ____
@@ -44,14 +44,15 @@ app.get("/book", function(req, res){
     }
     //<--------------- add filter by num of beds + price + floor
     app.get("/book/??/reserve", function(request, response) {
-        //send
+        //<--- append confirmation form
+        app.get("/book/??/reserve/confirm", function(request, response) {
+            myDB.addOrder(from,to,castName,castID);
+        })
     })
 
 
 
     });
-
-
 
 
 
