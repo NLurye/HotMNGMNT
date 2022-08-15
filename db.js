@@ -336,49 +336,49 @@ let initHotelDB = function () {
                 }];
             let orders = [
                 {
-                    room: 1,
+                    room: 10,
                     from: new Date('2022-08-01'),
                     to: new Date('2022-08-02'),
                     custName: "Tom",
                     custID: "111111110"
                 },
                 {
-                    room: 2,
+                    room: 11,
                     from: new Date('2022-08-01'),
                     to: new Date('2022-08-05'),
                     custName: "Alon",
                     custID: "222222222"
                 },
                 {
-                    room: 2,
+                    room: 11,
                     from: new Date('2022-08-06'),
                     to: new Date('2022-08-07'),
                     custName: "Anastasia",
                     custID: "444444444"
                 },
                 {
-                    room: 2,
+                    room: 11,
                     from: new Date('2022-08-08'),
                     to: new Date('2022-08-12'),
                     custName: "Anastasia",
                     custID: "444444444"
                 },
                 {
-                    room: 3,
+                    room: 12,
                     from: new Date('2022-08-05'),
                     to: new Date('2022-08-11'),
                     custName: "Anastasia",
                     custID: "444444444"
                 },
                 {
-                    room: 1,
+                    room: 10,
                     from: new Date('2022-08-04'),
                     to: new Date('2022-08-06'),
                     custName: "Tom",
                     custID: "111111111"
                 },
                 {
-                    room: 1,
+                    room: 10,
                     from: new Date('2022-08-10'),
                     to: new Date('2022-08-14'),
                     custName: "Tom",
@@ -386,7 +386,7 @@ let initHotelDB = function () {
                 }
             ];
             let ordersHistory = [{
-                room: 1,
+                room: 10,
                 from: new Date('2021-09-29'),
                 to: new Date('2021-10-05'),
                 custName: "Tom",
