@@ -14,16 +14,16 @@ let initHotelDB = function () {
                               //rooms 40-49: fourth floor, 400$ per night, 450$ per night if there are 4 beds in the room.
                               //rooms 50-59: fifth floor,  500$ per night, 550$ per night if there are 4 beds in the room.
                                                  //rooms with 4 beds: 11,14,18,23,29,36,44,53
-                              //100$ per night: 10,12,13,15,16,17,19
-                              //150$ per night: 11,14,18
-                              //200$ per night: 20,21,22,24,25,26,27,28
-                              //250$ per night: 23,29
-                              //300$ per night: 30,31,32,33,34,35,37,38,39
-                              //350$ per night: 36
-                              //400$ per night: 40,41,42,43,45,46,47,48,49
-                              //450$ per night: 44
-                              //500$ per night: 50,51,52,54,55,56,57,58,59
-                              //550$ per night: 53
+                              //100$ per night: rooms 10,12,13,15,16,17,19
+                              //150$ per night: rooms 11,14,18
+                              //200$ per night: rooms 20,21,22,24,25,26,27,28
+                              //250$ per night: rooms 23,29
+                              //300$ per night: rooms 30,31,32,33,34,35,37,38,39
+                              //350$ per night: room 36
+                              //400$ per night: rooms 40,41,42,43,45,46,47,48,49
+                              //450$ per night: room 44
+                              //500$ per night: rooms 50,51,52,54,55,56,57,58,59
+                              //550$ per night: room 53
 
                 {
                     room: 10,
@@ -277,6 +277,9 @@ let initHotelDB = function () {
                 }
                 ];
             let staff = [
+                                 //in the hotel staff we got 10 workers, 2 admins and 8 workers.
+                                 //admins:  empID: 1, 10
+                                 //workers: empID: 2,3,4,5,6,7,8,9
                 {
                     empID: 1,
                     empPass: 1,
