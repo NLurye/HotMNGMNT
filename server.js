@@ -32,9 +32,30 @@ const express = require('express');
 const myDB = require("./db");
 const app = express();
 
+app.set('view engine', 'ejs');
+
+//routing test
+
+app.get("/home", function (req,res){
+    res.sendFile(__dirname + '/pages/index.html');
+});
+
+app.get("/book", function (req,res){
+    res.sendFile(__dirname + '/pages/book.html');
+});
+
+app.get("/checkIn", function (req,res){
+    res.sendFile(__dirname + '/pages/checkIn.html');
+});
+
+app.get("/checkOut", function (req,res){
+    res.sendFile(__dirname + '/pages/checkOut.html');
+});
+
+
 
 //myDB.init();
-app.get("/book", function(req, res){
+app.get("/book1", function(req, res){
     let from = new Date('2022-08-01'); //<---get from url/form instead
     let to = new Date('2022-08-14'); //<---get from url/form instead
     myDB.selectRooms(from, to);
@@ -53,6 +74,8 @@ app.get("/book", function(req, res){
 
 
     });
+
+
 
 
 

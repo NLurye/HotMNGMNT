@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="index.css" />
+<link rel="stylesheet" href="index.css"/>
 <link
         href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
         rel="stylesheet"
@@ -8,9 +8,12 @@
 />
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
 <!------ Include the above in your HEAD tag ---------->
 
 <!-- Second navbar for categories -->
+<body style="background-image: linear-gradient(35deg, rgba(30,144,255,0.5) 0%, rgba(244,164,96,0.5) 60%), url('background.jpg'); ">
 <nav class="navbar navbar-default">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -32,10 +35,10 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Book</a></li>
-                <li><a href="#">Check-in</a></li>
-                <li><a href="#">Check-out</a></li>
+                <li><a href="home">Home</a></li>
+                <li><a href="book" onclick="window.history.pushState('/book')">Book</a></li>
+                <li><a href="checkIn" onclick="renderCheckin()">Check-in</a></li>
+                <li><a href="checkOut" onclick="renderCheckout()">Check-out</a></li>
                 <li>
                     <a
                             class="btn btn-default btn-outline btn-circle collapsed"
@@ -53,7 +56,8 @@
     </div>
     <!-- /.container -->
 </nav>
+<div id="container" class="container"></div>
+</body>
 
-</div>
 
 </html>
