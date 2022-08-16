@@ -1,193 +1,474 @@
-
 let MongoClient = require('mongodb').MongoClient;
 let url = "mongodb://localhost:27017/msgs";
-let result;
+const selectedRooms = [];
+let initHotelDB = function () {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        let dbo = db.db("hotel");
+        dbo.dropDatabase(function () { //Delete previous db <------delete
 
-fs = require('fs');
+            let rooms = [     //rooms 10-19: first floor,  100$ per night, 150$ per night if there are 4 beds in the room.
+                              //rooms 20-29: second floor, 200$ per night, 250$ per night if there are 4 beds in the room.
+                              //rooms 30-39: third floor,  300$ per night, 350$ per night if there are 4 beds in the room.
+                              //rooms 40-49: fourth floor, 400$ per night, 450$ per night if there are 4 beds in the room.
+                              //rooms 50-59: fifth floor,  500$ per night, 550$ per night if there are 4 beds in the room.
+                                                 //rooms with 4 beds: 11,14,18,23,29,36,44,53
+                              //100$ per night: rooms 10,12,13,15,16,17,19
+                              //150$ per night: rooms 11,14,18
+                              //200$ per night: rooms 20,21,22,24,25,26,27,28
+                              //250$ per night: rooms 23,29
+                              //300$ per night: rooms 30,31,32,33,34,35,37,38,39
+                              //350$ per night: room 36
+                              //400$ per night: rooms 40,41,42,43,45,46,47,48,49
+                              //450$ per night: room 44
+                              //500$ per night: rooms 50,51,52,54,55,56,57,58,59
+                              //550$ per night: room 53
 
-let createMsgsCollection=function (){
-    MongoClient.connect(url, function(err, db) { if (err) throw err;
-    let dbo = db.db("msgs");
-    dbo.dropDatabase(function() { //Delete previous db
-    let messages = [
-        {
-            name: "Travel Agency",
-            template: "./templateA.html",
-            text: [{l: "Tourist Israel is an Israel travel agent offering services to visitors to Israel from around the world."}, {l: "Since 2008, we have served over 500,000 visitors to Israel with tours, packages, hotels, private tours, and special services."}, {l: "From our Tel Aviv head-office, our team of travel experts is able to provide a solution for groups ranging in size from individuals and families, to religious and educational groups up to hundreds of people."}, {l: "Being on the ground in Israel means that we have access to a greater range of services, options, and are able to hand-pick and closely control the quality of the services we offer."}],
-            img: [{i: "https://www.gomeltourist.com/wp-content/uploads/2021/11/Travel.jpg"}, {i: "https://kharkiv-travel.com/wp-content/uploads/2021/12/Travel000000.jpg"}],
-            times:[
                 {
-                    t: {
-                        dates: {
-                            from: new Date('2022-1-1'),
-                            to: new Date('2022-12-31')
-                        },
-                        days: [1],
-                        hours: {
-                            from: 6,
-                            to: 12
-                        },
-                        minutes: {
-                            from: 0,
-                            to: 0,
-                        }
-                    }
+                    room: 10,
+                    numOfBeds: 2,
+                    price: 100,
                 },
                 {
-                    t: {
-                        dates: {
-                            from: new Date('2022-1-1'),
-                            to: new Date('2022-12-31')
-                        },
-                        days: [3],
-                        hours: {
-                            from: 13,
-                            to: 20
-                        },
-                        minutes: {
-                            from: 0,
-                            to: 59,
-                        }
-                    }
-                }],
-            duration: 2000,
-            screen: [1, 2]
-        },
-        {
-            name: "Our response to the war in Ukraine",
-            template: "./templateB.html",
-            text: [{l: "As the global response to the tragedies in Ukraine and other impacted regions continues to evolve, "}, {l: "I wanted to share with our community an expansion of the message that I shared earlier this week with our Hubbers."}, {l: "GitHub is united with the people of Ukraine and the international community in condemning these horrific acts of violence against a sovereign nation and its people."}, {l: "We continue to monitor the events in Europe surrounding the unlawful Russian military invasion of Ukraine."}, {l: "We care deeply about our global community, and many of us have loved ones all over the world,"}, {l: "including in Ukraine, Russia, and other impacted regions. I grew up in East Germany during the Cold War, "}, {l: "and I remember the happiness and optimism in the early 1990s that the world would come closer together."}, {l: "What we are witnessing now is something I never wanted to see again."}, {l: "It is devastating for the innocent people in Ukraine, "}, {l: "and it is leading to feelings of helplessness and anger for those of us near and far away."}],
-            img: [{i: "https://github.blog/wp-content/uploads/2022/03/1200x630-GitHub-1.png?resize=2400%2C1254"}],
-            times:
-                [{
-                    t: {
-                        dates: {
-                            from: new Date('2022-3-1'),
-                            to: new Date('2022-4-30')
-                        },
-                        days: [2, 3],
-                        hours: {
-                            from: 10,
-                            to: 16
-                        },
-                        minutes: {
-                            from: 0,
-                            to: 59,
-                        }
-                    }
-                }],
-            duration: 2000,
-            screen: [1, 3]
-        },
-        {
-            name: "Empty",
-            template: "./templateC.html",
-            times:
-                [{
-                    t: {
-                        dates: {
-                            from: new Date('2022-5-1'),
-                            to: new Date('2022-6-15')
-                        },
-                        days: [0, 1, 2, 3, 4, 5, 6],
-                        hours: {
-                            from: 8,
-                            to: 22
-                        },
-                        minutes: {
-                            from: 0,
-                            to: 59,
-                        }
-                    }
-                }],
-            duration: 2000,
-            screen: [2, 3]
-        },
-        {
-            name: "Coming Soon",
-            template: "./templateA.html",
-            text: [{l: "We will be celebrating the launch of our site very soon!"}, {l: "Sign up to be notified!"},],
-            times:
-                [{
-                    t: {
-                        dates: {
-                            from: new Date('2022-3-29'),
-                            to: new Date('2022-4-15')
-                        },
-                        days: [1],
-                        hours: {
-                            from: 15,
-                            to: 19
-                        },
-                        minutes: {
-                            from: 0,
-                            to: 59,
-                        }
-                    }
-                }],
-            duration: 2000,
-            screen: [1]
-        },
-        {
-            name: "Fast Food",
-            template: "./templateB.html",
-            text: [{l: "Eight in 10 Americans eat fast food at least once a month and half eat it every week according, to a Gallup Poll."}, {l: "Yet most people who eat fast food know it’s bad for them."}, {l: "So why do they keep eating it?"}, {l: "The answer is simple: the benefits of eating fast food outweigh the long-term implications for most people."}, {l: "However, once you read these reasons why all those trips to the drive through may be slowly killing you, you may just want to stop eating fast food after all."}, {l: "A 15-year study of over 3,000 people found that eating fast food is linked to weight gain and insulin resistance."}, {l: "In others words, fast food makes you fat and increases your risk of type 2 diabetes."}],
-            img: [{i: "https://blog.monouso.es/wp-content/uploads//La-obesidad-y-el-fast-food-1024x536.jpg"}, {i: "https://www.fastfoodmenunutrition.com/wp-content/uploads/2015/03/fast-food.jpg"}],
-            times:
-                [{
-                    t: {
-                        dates: {
-                            from: new Date('2022-4-1'),
-                            to: new Date('2022-4-30')
-                        },
-                        days: [1, 2, 3],
-                        hours: {
-                            from: 1,
-                            to: 23
-                        },
-                        minutes: {
-                            from: 0,
-                            to: 59,
-                        }
-                    }
-                }],
-            duration: 2000,
-            screen: [3]
-        }
-    ];
-    dbo.collection("Messages").insertMany(messages, function(err, res) { if (err) throw err;});
+                    room: 11,
+                    numOfBeds: 4,
+                    price: 150,
+                },
+                {
+                    room: 12,
+                    numOfBeds: 2,
+                    price: 100,
+                },
+                {
+                    room: 13,
+                    numOfBeds: 2,
+                    price: 100,
+                },
+                {
+                    room: 14,
+                    numOfBeds: 4,
+                    price: 150,
+                },
+                {
+                    room: 15,
+                    numOfBeds: 2,
+                    price: 100,
+                },
+                {
+                    room: 16,
+                    numOfBeds: 2,
+                    price: 100,
+                },
+                {
+                    room: 17,
+                    numOfBeds: 2,
+                    price: 100,
+                },
+                {
+                    room: 18,
+                    numOfBeds: 4,
+                    price: 150,
+                },
+                {
+                    room: 19,
+                    numOfBeds: 2,
+                    price: 100,
+                },
+                {
+                    room: 20,
+                    numOfBeds: 2,
+                    price: 200,
+                },
+                {
+                    room: 21,
+                    numOfBeds: 2,
+                    price: 200,
+                },
+                {
+                    room: 22,
+                    numOfBeds: 2,
+                    price: 200,
+                },
+                {
+                    room: 23,
+                    numOfBeds: 4,
+                    price: 250,
+                },
+                {
+                    room: 24,
+                    numOfBeds: 2,
+                    price: 200,
+                },
+                {
+                    room: 25,
+                    numOfBeds: 2,
+                    price: 200,
+                },
+                {
+                    room: 26,
+                    numOfBeds: 2,
+                    price: 200,
+                },
+                {
+                    room: 27,
+                    numOfBeds: 2,
+                    price: 200,
+                },
+                {
+                    room: 28,
+                    numOfBeds: 2,
+                    price: 200,
+                },
+                {
+                    room: 29,
+                    numOfBeds: 4,
+                    price: 250,
+                },
+                {
+                    room: 30,
+                    numOfBeds: 2,
+                    price: 300,
+                },
+                {
+                    room: 31,
+                    numOfBeds: 2,
+                    price: 300,
+                },
+                {
+                    room: 32,
+                    numOfBeds: 2,
+                    price: 300,
+                },
+                {
+                    room: 33,
+                    numOfBeds: 2,
+                    price: 300,
+                },
+                {
+                    room: 34,
+                    numOfBeds: 2,
+                    price: 300,
+                },
+                {
+                    room: 35,
+                    numOfBeds: 2,
+                    price: 300,
+                },
+                {
+                    room: 36,
+                    numOfBeds: 4,
+                    price: 350,
+                },
+                {
+                    room: 37,
+                    numOfBeds: 2,
+                    price: 300,
+                },
+                {
+                    room: 38,
+                    numOfBeds: 2,
+                    price: 300,
+                },
+                {
+                    room: 39,
+                    numOfBeds: 2,
+                    price: 300,
+                },
+                {
+                    room: 40,
+                    numOfBeds: 2,
+                    price: 400,
+                },
+                {
+                    room: 41,
+                    numOfBeds: 2,
+                    price: 400,
+                },
+                {
+                    room: 42,
+                    numOfBeds: 2,
+                    price: 400,
+                },
+                {
+                    room: 43,
+                    numOfBeds: 2,
+                    price: 400,
+                },
+                {
+                    room: 44,
+                    numOfBeds: 4,
+                    price: 450,
+                },
+                {
+                    room: 45,
+                    numOfBeds: 2,
+                    price: 400,
+                },
+                {
+                    room: 46,
+                    numOfBeds: 2,
+                    price: 400,
+                },
+                {
+                    room: 47,
+                    numOfBeds: 2,
+                    price: 400,
+                },
+                {
+                    room: 48,
+                    numOfBeds: 2,
+                    price: 400,
+                },
+                {
+                    room: 49,
+                    numOfBeds: 2,
+                    price: 400,
+                },
+                {
+                    room: 50,
+                    numOfBeds: 2,
+                    price: 500,
+                },
+                {
+                    room: 51,
+                    numOfBeds: 2,
+                    price: 500,
+                },
+                {
+                    room: 52,
+                    numOfBeds: 2,
+                    price: 500,
+                },
+                {
+                    room: 53,
+                    numOfBeds: 4,
+                    price: 550,
+                },
+                {
+                    room: 54,
+                    numOfBeds: 2,
+                    price: 500,
+                },
+                {
+                    room: 55,
+                    numOfBeds: 2,
+                    price: 500,
+                },
+                {
+                    room: 56,
+                    numOfBeds: 2,
+                    price: 500,
+                },
+                {
+                    room: 57,
+                    numOfBeds: 2,
+                    price: 500,
+                },
+                {
+                    room: 58,
+                    numOfBeds: 2,
+                    price: 500,
+                },
+                {
+                    room: 59,
+                    numOfBeds: 2,
+                    price: 500,
+                }
+                ];
+            let staff = [
+                                 //in the hotel staff we got 10 workers, 2 admins and 8 workers.
+                                 //admins:  empID: 1, 10
+                                 //workers: empID: 2,3,4,5,6,7,8,9
+                {
+                    empID: 1,
+                    empPass: 1,
+                    admin: 1
+                },
+                {
+                    empID: 2,
+                    empPass: 2,
+                    admin: 0
+
+                },
+                {
+                    empID: 3,
+                    empPass: 3,
+                    admin: 0
+
+                },
+                {
+                    empID: 4,
+                    empPass: 4,
+                    admin: 0
+                },
+                {
+                    empID: 5,
+                    empPass: 5,
+                    admin: 0
+
+                },
+                {
+                    empID: 6,
+                    empPass: 6,
+                    admin: 0
+
+                },
+                {
+                    empID: 7,
+                    empPass: 7,
+                    admin: 0
+                },
+                {
+                    empID: 8,
+                    empPass: 8,
+                    admin: 0
+                },
+                {
+                    empID: 9,
+                    empPass: 9,
+                    admin: 0
+                },
+                {
+                    empID: 10,
+                    empPass: 10,
+                    admin: 1
+                }];
+            let orders = [
+                {
+                    room: 10,
+                    from: new Date('2022-08-01'),
+                    to: new Date('2022-08-02'),
+                    custName: "Tom",
+                    custID: "111111110"
+                },
+                {
+                    room: 11,
+                    from: new Date('2022-08-01'),
+                    to: new Date('2022-08-05'),
+                    custName: "Alon",
+                    custID: "222222222"
+                },
+                {
+                    room: 11,
+                    from: new Date('2022-08-06'),
+                    to: new Date('2022-08-07'),
+                    custName: "Anastasia",
+                    custID: "444444444"
+                },
+                {
+                    room: 11,
+                    from: new Date('2022-08-08'),
+                    to: new Date('2022-08-12'),
+                    custName: "Anastasia",
+                    custID: "444444444"
+                },
+                {
+                    room: 12,
+                    from: new Date('2022-08-05'),
+                    to: new Date('2022-08-11'),
+                    custName: "Anastasia",
+                    custID: "444444444"
+                },
+                {
+                    room: 10,
+                    from: new Date('2022-08-04'),
+                    to: new Date('2022-08-06'),
+                    custName: "Tom",
+                    custID: "111111111"
+                },
+                {
+                    room: 10,
+                    from: new Date('2022-08-10'),
+                    to: new Date('2022-08-14'),
+                    custName: "Tom",
+                    custID: "111111111"
+                }
+            ];
+            let ordersHistory = [{
+                room: 10,
+                from: new Date('2021-09-29'),
+                to: new Date('2021-10-05'),
+                custName: "Tom",
+                custID: "111111111"//before adding a new prev order check if custID already exist -> add new date. if not exist -> new prev order.
+            }];
+            dbo.collection("Rooms").insertMany(rooms, function (err, res) {
+                if (err) throw err;
+            });
+            dbo.collection("Staff").insertMany(staff, function (err, res) {
+                if (err) throw err;
+            });
+            dbo.collection("Orders").insertMany(orders, function (err, res) {
+                if (err) throw err;
+            });
+            dbo.collection("OrdersHistory").insertMany(ordersHistory, function (err, res) {
+                if (err) throw err;
+            });
         });
+    });
+}
+let selectRoomsByDates = function (selected_from, selected_to) {
+    //eliminate rooms that have orders that starting before selected_to and simultaneously ending after selected_from
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        let dbo = db.db("hotel");
+        let orders = dbo.collection("Orders");
+        orders.aggregate( [
+            // Stage 1: Filter order documents by dates
+            {
+                $match:
+                    {
+                    from: {$lt: new Date(selected_to)},
+                    to: {$gt: new Date(selected_from)}
+                    }
+            },
+            // Stage 2: Group by room
+            {
+                $group: { _id : "$room" }
+            }
+
+        ] ).toArray(function (err, queryResult) {
+                if (err) throw err;
+            let interruptions = queryResult.map(a=>a._id);
+            console.log("Booked rooms on those dates: " + interruptions);
+            let rooms = dbo.collection("Rooms");
+            rooms.find(
+                        {
+                            room: {$nin: interruptions}
+                        },
+                    ).toArray(function (err, queryResult) {
+                        if (err) throw err;
+                         selectedRooms.push(queryResult)
+                        db.close();
+                    });
+            });
+
+
     });
 
 }
-let chooseMsgs=function (){
 
-    MongoClient.connect(url, function(err, db) { if (err) throw err;
-        let dbo = db.db("msgs");
-        let collection = dbo.collection("Messages");
-        collection.find({
-           screen: scr/*,
-            "times.t.days": day,
-               "times.t.dates.from": {$lte: now},
-                "times.t.dates.to": {$gte: now},
-                "times.t.hours.from": {$lte: hour},
-                "times.t.hours.to":{$gte :hour},
-                "times.t.minutes.from": {$lte: minute},
-                "times.t.minutes.to":{$gte :minute}*/
+let addOrder = function (room, from, to, custName, custID) {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        let dbo = db.db("hotel");
+        let order =
+            {
+                room: room,
+                from: new Date(from),
+                to: new Date(to),
+                custName: custName,
+                custID: custID
+             }
+            dbo.collection("Orders").insertOne(order, function (err, res) {if (err) throw err;})
         }
+    )}
 
-        ).toArray(function (err,queryResult){ if (err) throw err;
-            //console.log(queryResult);
-            result = queryResult;
-            db.close();
-        });
+module.exports.init = initHotelDB;
+module.exports.addOrder = addOrder;
+module.exports.selectRooms = selectRoomsByDates;
+module.exports.selectedRooms = selectedRooms;
 
-    });
 
-}
 
-exports.createMsgsCollection=createMsgsCollection;
-exports.chooseMsgs=chooseMsgs;
-module.exports.ress=result;
 
 
