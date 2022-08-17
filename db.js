@@ -1,7 +1,8 @@
 let MongoClient = require('mongodb').MongoClient;
 let url = "mongodb://localhost:27017/msgs";
 const selectedRooms = [];
-
+let validLogIn = false;
+let validReservation = [];
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
@@ -414,16 +415,16 @@ let logIn = function (id,pass,Admin) { ///<-----ad encryption
         let dbo = db.db("hotel");
         let staff = dbo.collection("Staff");
         staff.findOne(
-            { empID: id ,empPass: pass ,admin: Admin}
-        ).toArray(function (err,logInRes) {
+            {empID: id, empPass: pass, admin: Admin}
+        ).toArray(function (err, logInRes) {
             if (err) throw err;
             else {
                 if (logInRes.length === 0)
                     console.log("User doesn't exist");
-                else return true;
+                else validLogIn = true;
             }
         })
-    } )
+    })
 }
 let selectRoomsByDates = function (selected_from, selected_to) {
     //eliminate rooms that have orders that starting before selected_to and simultaneously ending after selected_from
@@ -463,29 +464,119 @@ let selectRoomsByDates = function (selected_from, selected_to) {
 
 
     });
-
 }
-
-let addOrder = function (room, from, to, custName, custID) {
+let checkIn = function (cust_id, cust_name) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
-        let order =
-            {
-                room: room,
-                from: new Date(from),
-                to: new Date(to),
-                custName: custName,
-                custID: custID
-             }
-            dbo.collection("Orders").insertOne(order, function (err, res) {if (err) throw err;})
+        let orders = dbo.collection("Orders");
+        let day = now.getDay();
+        orders.find(
+            {custID: cust_id},
+            {custName: cust_name},
+            {from: day}
+        ).toArray(function (err, checkInRes) {
+            if (err) throw err;
+            else {
+                if (checkInRes.length === 0)
+                    console.log("reservation doesn't exist");
+                else validReservation.push(checkInRes);
+            }
+        })
+    })
+}
+let checkOut = function (cust_id, cust_name) {
+    MongoClient.connect(url, function (err, db) {
+            if (err) throw err;
+            let dbo = db.db("hotel");
+            let orders = dbo.collection("Orders");
+            let ordersHistory = dbo.collection("OrdersHistory");
+            orders.find(
+                {custID: cust_id},
+                {custName: cust_name}
+            ).toArray(function (err, checkOutRes) {
+                    if (err) throw err;
+                    else {
+                        if (checkOutRes.length === 0)
+                            console.log("reservation doesn't exist");
+                        else {
+                            ordersHistory.push(checkOutRes);
+                            orders.remove(checkOutRes);
+                        }
+                    }
+                }
+            )
         }
-    )}
+    )
+}
+let addOrder = function (room, from, to, custName, custID) {
+    MongoClient.connect(url, function (err, db) {
+            if (err) throw err;
+            let dbo = db.db("hotel");
+            let order =
+                {
+                    room: room,
+                    from: new Date(from),
+                    to: new Date(to),
+                    custName: custName,
+                    custID: custID
+                }
+            dbo.collection("Orders").insertOne(order, function (err, res) {
+                if (err) throw err;
+            })
+        }
+    )
+}
+let deleteOrder = function (cust_id, cust_name, myFrom, myTo) {
+    MongoClient.connect(url, function (err, db) {
+            if (err) throw err;
+            let dbo = db.db("hotel");
+            let orders = dbo.collection("Orders");
+            try {
+                orders.deleteMany(
+                    {
+                        custName: cust_name,
+                        custID: cust_id,
+                        from: myFrom,
+                        to: myTo
+                    }
+                );
+            } catch (e) {
+                print(e);
+            }
+        }
+    )
+}
+let addRoom = function (roomNumber, bedsNumber, myPrice) {
+    MongoClient.connect(url, function (err, db) {
+            if (err) throw err;
+            let dbo = db.db("hotel");
+            let room =
+                {
+                    room: roomNumber,
+                    numOfBeds: bedsNumber,
+                    price: myPrice
+                }
+            dbo.collection("Rooms").insertOne(room, function (err, res) {
+                if (err) throw err;
+            })
+        }
+    )
+}
+
 
 module.exports.init = initHotelDB;
 module.exports.addOrder = addOrder;
 module.exports.selectRooms = selectRoomsByDates;
-module.exports.selectedRooms = selectedRooms;
+module.exports.logInWorker = logIn;
+module.exports.checkInCust = checkIn;
+module.exports.checkOutCust = checkOut;
+module.exports.deleteOrder = deleteOrder;
+module.exports.addRoom = addRoom;
+
+
+
+
 
 
 
