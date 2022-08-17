@@ -596,6 +596,26 @@ let changeEmpPass = function (emp_id, emp_pass, new_emp_pass) {
         }
     )
 }
+let updateRoom = function (roomNum, bedsNum, myPrice) {
+    MongoClient.connect(url, function (err, db) {
+            if (err) throw err;
+            let dbo = db.db("hotel");
+            let room = dbo.collection("Rooms");
+            room.findOneAndUpdate(
+                {
+                    room: roomNum
+                },
+                {
+                    numOfBeds: bedsNum,
+                    price: myPrice
+                }
+            );
+        }
+    )
+}
+
+
+
 
 
 
@@ -609,6 +629,8 @@ module.exports.deleteOrder = deleteOrder;
 module.exports.addRoom = addRoom;
 module.exports.signIn = addEmployee;
 module.exports.changeEmpPass = changeEmpPass;
+module.exports.updateRoom = updateRoom;
+
 
 
 
