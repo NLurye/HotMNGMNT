@@ -11,7 +11,13 @@
 
 
 <!------ Include the above in your HEAD tag ---------->
-
+<script type="text/javascript">
+    const myDB = require("./db");
+    $(document).ready(function () {
+        // $('body').css('background-image', 'url("/background.jpg")');
+        $('body').append(myDB.selectedRooms);
+    })
+</script>
 <!-- Second navbar for categories -->
 <body style="background-image: linear-gradient(35deg, rgba(30,144,255,0.5) 0%, rgba(244,164,96,0.5) 60%), url('background.jpg'); ">
 <nav class="navbar navbar-default">
