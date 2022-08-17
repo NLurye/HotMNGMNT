@@ -598,6 +598,31 @@ let deleteEmployee = function (emp_ID) {
     )
 }
 
+let updateOrder = function (cust_id, cust_name, my_from, my_to, new_cust_id, new_cust_name) {
+    MongoClient.connect(url, function (err, db) {
+            if (err) throw err;
+            let dbo = db.db("hotel");
+            let order = dbo.collection("Orders");
+            try {
+                order.updateMany(
+                    {
+                        custID: cust_id,
+                        custName: cust_name,
+                        from: my_from,
+                        to: my_to
+                    },
+                    {
+                        custID: new_cust_id,
+                        custName: new_cust_name
+                    }
+                );
+            } catch (err) {
+                print(err);
+            }
+        }
+    )
+}
+
 
 module.exports.init = initHotelDB;
 module.exports.addOrder = addOrder;
@@ -609,7 +634,7 @@ module.exports.deleteOrder = deleteOrder;
 module.exports.addRoom = addRoom;
 module.exports.deleteRoom = deleteRoom;
 module.exports.deleteEmployee = deleteEmployee;
-
+module.exports.updateOrder = updateOrder;
 
 
 
