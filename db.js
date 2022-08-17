@@ -563,6 +563,40 @@ let addRoom = function (roomNumber, bedsNumber, myPrice) {
         }
     )
 }
+let deleteRoom = function (roomNumber) {
+    MongoClient.connect(url, function (err, db) {
+            if (err) throw err;
+            let dbo = db.db("hotel");
+            let orders = dbo.collection("Rooms");
+            try {
+                orders.deleteOne(
+                    {
+                        room: roomNumber
+                    }
+                );
+            } catch (e) {
+                print(e);
+            }
+        }
+    )
+}
+let deleteEmployee = function (emp_ID) {
+    MongoClient.connect(url, function (err, db) {
+            if (err) throw err;
+            let dbo = db.db("hotel");
+            let orders = dbo.collection("Staff");
+            try {
+                orders.deleteOne(
+                    {
+                        empID: emp_ID
+                    }
+                );
+            } catch (e) {
+                print(e);
+            }
+        }
+    )
+}
 
 
 module.exports.init = initHotelDB;
@@ -573,7 +607,8 @@ module.exports.checkInCust = checkIn;
 module.exports.checkOutCust = checkOut;
 module.exports.deleteOrder = deleteOrder;
 module.exports.addRoom = addRoom;
-
+module.exports.deleteRoom = deleteRoom;
+module.exports.deleteEmployee = deleteEmployee;
 
 
 
