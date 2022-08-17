@@ -1,6 +1,7 @@
 let MongoClient = require('mongodb').MongoClient;
 let url = "mongodb://localhost:27017/msgs";
 const selectedRooms = [];
+
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
@@ -407,7 +408,7 @@ let initHotelDB = function () {
         });
     });
 }
-let logIn = function (id,pass,Admin) {
+let logIn = function (id,pass,Admin) { ///<-----ad encryption
     MongoClient.connect(url, function (err,db) {
         if (err) throw err;
         let dbo = db.db("hotel");

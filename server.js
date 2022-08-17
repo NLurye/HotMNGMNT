@@ -3,6 +3,7 @@ Server:
 Calling for db.js init database [V]
 Waiting for a client to connect [V]
 Sending to client index.html [] (main page) with option to login []
+Sending to client index.html []
 Handles client's requests:
 - [login] ->  send login form to a client [] -> DB query: Calling for db.js to check staff id [] -> (if confirmed) send to client page with option (nav-bar) to book and check-in/out and logout.[]
                 - [book] ->
@@ -12,7 +13,7 @@ Handles client's requests:
                           /_____________________________________________________________________________________________________________________________|
                           \
                 - [check-in] ->
-                            - send id form to a client -> DB query: Calling for db.js to extract relevant order -> send relevant order __
+                            - send id form to a client -> DB query: Calling for db.js to extract relevant orders -> send relevant order __
                                                                                                                                          |
                           /______________________________________________________________________________________________________________|
                           \
@@ -38,7 +39,7 @@ app.get("/book", function(req, res){
     let from = new Date('2022-08-01'); //<---get from url/form instead
     let to = new Date('2022-08-14'); //<---get from url/form instead
     myDB.selectRooms(from, to);
-    setTimeout(getResultFromSelectRooms,1000);
+    setTimeout(getResultFromSelectRooms,1000);//<------Callback
     function getResultFromSelectRooms() {
         console.log(myDB.selectedRooms);//<---------append to section instead
     }
@@ -46,17 +47,15 @@ app.get("/book", function(req, res){
     app.get("/book/??/reserve", function(request, response) {
         //<--- append confirmation form
         app.get("/book/??/reserve/confirm", function(request, response) {
-            myDB.addOrder(from,to,castName,castID);
+            myDB.addOrder(from,to,custName,custID);
         })
     })
-
-
 
     });
 
 
 
-app.get('', function(req, res){
+app.get("/", function(req, res){
 res.sendFile(__dirname + '/index.html');
 });
 app.listen(8080);
