@@ -409,8 +409,8 @@ let initHotelDB = function () {
         });
     });
 }
-let logIn = function (id, pass, Admin) {
-    MongoClient.connect(url, function (err, db) {
+let logIn = function (id,pass,Admin) { ///<-----ad encryption
+    MongoClient.connect(url, function (err,db) {
         if (err) throw err;
         let dbo = db.db("hotel");
         let staff = dbo.collection("Staff");
