@@ -563,6 +563,40 @@ let addRoom = function (roomNumber, bedsNumber, myPrice) {
         }
     )
 }
+let addEmployee = function (emp_id, emp_pass, is_admin) {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        let dbo = db.db("hotel");
+        let employee =
+            {
+                empID: emp_id,
+                empPass: emp_pass,
+                admin: is_admin
+            }
+            dbo.collection("Staff").insertOne(employee, function (err, res) {
+                if (err) throw err;
+            })
+        }
+    )
+}
+let changeEmpPass = function (emp_id, emp_pass, new_emp_pass) {
+    MongoClient.connect(url, function (err, db) {
+            if (err) throw err;
+            let dbo = db.db("hotel");
+            let employee = dbo.collection("Staff");
+            employee.findOneAndUpdate(
+                {
+                    empID: emp_id,
+                    empPass: emp_pass
+                },
+                {
+                    empPass: new_emp_pass
+                }
+            );
+        }
+    )
+}
+
 
 
 module.exports.init = initHotelDB;
@@ -573,6 +607,10 @@ module.exports.checkInCust = checkIn;
 module.exports.checkOutCust = checkOut;
 module.exports.deleteOrder = deleteOrder;
 module.exports.addRoom = addRoom;
+module.exports.signIn = addEmployee;
+module.exports.changeEmpPass = changeEmpPass;
+
+
 
 
 
