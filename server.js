@@ -55,7 +55,7 @@ app.get("/book", function (req,res){
 });
 
 app.get("/book.css", function (req,res){
-    res.sendFile(__dirname + '/book.css');
+    res.sendFile(__dirname + '/pages/book.css');
 });
 
 app.get("/background.jpg", function (req,res){
