@@ -26,7 +26,31 @@
             });
         }
     </script>
-
+    <script>
+        renderPage = function (page) { // spa routing using ajax
+            return $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/" + page,
+                contentType: "text/html"
+            }).success(function (data) {
+                $("#container").html(data);
+            }).fail(function (sender, message, details) {
+                alert("Sorry, something went wrong!");
+            });
+        }
+        renderHome = function (page) {
+            return $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/" + page,
+                contentType: "text/html"
+            }).success(function (data) {
+                console.log(22222);
+                $("body").html(data);
+            }).fail(function (sender, message, details) {
+                alert("Sorry, something went wrong!");
+            });
+        }
+    </script>
 <script>
 </script>
 </head>
@@ -53,10 +77,11 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                <li><a >Home</a></li>
-                <li><a id="book" onclick="bla()">Book</a></li>
-                <li><a href="checkIn" >Check-in</a></li>
-                <li><a href="checkOut" onclick="renderCheckout()">Check-out</a></li>
+                <li><a onclick="renderHome('home')">Home</a></li>
+                <li><a onclick="renderPage('book')">Book</a></li>
+                <li><a onclick="renderPage('checkIn')">Check-in</a></li>
+                <li><a onclick="renderPage('checkOut')">Check-out</a></li>
+
                 <li>
                     <a
                             class="btn btn-default btn-outline btn-circle collapsed"
@@ -87,6 +112,5 @@
 <div id="container"></div>
 <script src="model.js"></script>
 </body>
-
 
 </html>
