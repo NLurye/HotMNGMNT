@@ -9,7 +9,7 @@ socket.on('displayRooms', function (roomsArr) {
             <td>${room.numOfBeds}</td>
             <td>${room.price}</td>
         </tr>`
-        tBody.innerHTML += row;
+        //tBody.innerHTML += row;
        $('#tBody').append(row);
     }
 });
@@ -17,7 +17,7 @@ socket.on('displayRooms', function (roomsArr) {
 //Ping to server
 $(function(){
     // when the client clicks Send dates
-    $('#checkDates').click( function() {
+    $('#search-btn').click( function() {
         // tell server to execute selectRooms (and send along dates)
         let from = new Date('2022-08-01'); //<---get from url/form instead
         let to = new Date('2022-08-14'); //<---get from url/form instead

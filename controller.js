@@ -6,13 +6,6 @@ var express = require('express')
 server.listen(8080);
 
 const myDB = require("./db");
-const row = `
-        <tr>
-            <td>"Tom"</td>
-            <td>"knows all"</td>
-            <td>"about 2 types"</td>
-            <td>"of snakes"</td>
-        </tr>`
 
 app.get("/", function(req, res){
     res.sendFile(__dirname + '/index.html');
@@ -31,13 +24,18 @@ socket.on('sendDates', function (from,to) {
 });
 });
 
+app.get("/home", function (req,res){
+    res.sendFile(__dirname + '/index.html');
+});
+
 app.get("/book", function (req,res){
     res.sendFile(__dirname + '/pages/book.html');
 });
 
 app.get("/book.css", function (req,res){
-    res.sendFile(__dirname + '/book.css');
+    res.sendFile(__dirname + '/pages/book.css');
 });
+
 
 app.get("/index.css", function (req,res){
     res.sendFile(__dirname + '/index.css');
@@ -52,9 +50,21 @@ app.get("/model.js", function (req,res){
     res.sendFile(__dirname + '/model.js');
 });
 
+app.get("/checkIn", function (req,res){
+    res.sendFile(__dirname + '/pages/checkIn.html');
+});
 
+app.get("/pages/checkIn.css", function (req,res){
+    res.sendFile(__dirname + '/pages/checkIn.css');
+});
 
+app.get("/checkOut", function (req,res){
+    res.sendFile(__dirname + '/pages/checkOut.html');
+});
 
+app.get("/pages/checkOut.css", function (req,res){
+    res.sendFile(__dirname + '/pages/checkOut.css');
+});
 
 
 

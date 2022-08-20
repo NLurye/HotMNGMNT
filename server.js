@@ -33,9 +33,9 @@ const express = require('express');
 const myDB = require("./db");
 const app = express();
 
-app.get("/server.js", function (req,res){
-    res.sendFile(__dirname + '/server.js');
-});
+// app.get("/server.js", function (req,res){
+//     res.sendFile(__dirname + '/server.js');
+// });
 
 app.get("/home", function (req,res){
     res.sendFile(__dirname + '/index.html');
