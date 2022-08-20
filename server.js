@@ -33,26 +33,50 @@ const express = require('express');
 const myDB = require("./db");
 const app = express();
 
-app.set('view engine', 'ejs');
+
+
+//app.set('view engine', 'ejs');
+
+//app.use(express.static(__dirname + '/index.css'));
 
 //routing test
 
 app.get("/home", function (req,res){
-    res.sendFile(__dirname + '/pages/index.html');
+    res.sendFile(__dirname + '/index.html');
+
+});
+
+app.get("/index.css", function (req,res){
+    res.sendFile(__dirname + '/index.css');
 });
 
 app.get("/book1", function (req,res){
     res.sendFile(__dirname + '/pages/book.html');
 });
 
+app.get("/book.css", function (req,res){
+    res.sendFile(__dirname + '/book.css');
+});
+
+app.get("/background.jpg", function (req,res){
+    res.sendFile(__dirname + '/background.jpg');
+});
+
 app.get("/checkIn", function (req,res){
     res.sendFile(__dirname + '/pages/checkIn.html');
+});
+
+app.get("/pages/checkIn.css", function (req,res){
+    res.sendFile(__dirname + '/pages/checkIn.css');
 });
 
 app.get("/checkOut", function (req,res){
     res.sendFile(__dirname + '/pages/checkOut.html');
 });
 
+app.get("/pages/checkOut.css", function (req,res){
+    res.sendFile(__dirname + '/pages/checkOut.css');
+});
 
 
 //myDB.init();

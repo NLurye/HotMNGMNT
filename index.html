@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="index.css"/>
-<link   href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
-        rel="stylesheet"
-        id="bootstrap-css"/>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-<script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
-<script>
-var socket = io.connect('http://localhost:7000');
-</script>
+<head>
+    <link rel="stylesheet" href="index.css"/>
+    <link
+            href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+            rel="stylesheet"
+            id="bootstrap-css"
+    />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
 
-<script type="text/javascript">
-    // const myDB = require("./db");
-    // $(document).ready(function () {
-    //     // $('body').css('background-image', 'url("/background.jpg")');
-    //
-    //     $('container').load(myDB.selectedRooms);
-    // })
-</script>
-<body style="background-image: linear-gradient(35deg, rgba(30,144,255,0.5) 0%, rgba(244,164,96,0.5) 60%), url('background.jpg'); ">
+    <!------ Include the above in your HEAD tag ---------->
+    <!--    <script type="text/javascript">-->
+    <!--        const myDB = require("./db");-->
+    <!--        $(document).ready(function () {-->
+    <!--            // $('body').css('background-image', 'url("/background.jpg")');-->
+    <!--            $('body').append(myDB.selectedRooms);-->
+    <!--        })-->
+    <!--    </script>-->
+</head>
+
+
+<!-- Second navbar for categories -->
+<body>
 <nav class="navbar navbar-default">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -40,34 +42,32 @@ var socket = io.connect('http://localhost:7000');
             <a class="navbar-brand" href="#">hotMNGMNT</a>
         </div>
 
+        <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="home">Home</a></li>
-                <!-- <li><a href="book">Book</a></li>-->
                 <li><a href="book" onclick="window.history.pushState('/book')">Book</a></li>
-                 <li><a href="checkIn" onclick="renderCheckin()">Check-in</a></li>
-                  <li><a href="checkOut" onclick="renderCheckout()">Check-out</a></li>
-                  <li>
-                      <a
-                              class="btn btn-default btn-outline btn-circle collapsed"
-                              data-toggle="collapse"
-                              href="#nav-collapse1"
-                              aria-expanded="false"
-                              aria-controls="nav-collapse1"
-                              style="background-color:rgb(251, 162, 162)"
-                      >Log out</a
-                      >
-                  </li>
-              </ul>
-          </div>
-       </div>
-   </nav>
-   <div id="container" class="container">
+                <li><a href="checkIn" onclick="renderCheckin()">Check-in</a></li>
+                <li><a href="checkOut" onclick="renderCheckout()">Check-out</a></li>
+                <li>
+                    <a
+                            class="btn btn-default btn-outline btn-circle collapsed"
+                            data-toggle="collapse"
+                            href="#nav-collapse1"
+                            aria-expanded="false"
+                            aria-controls="nav-collapse1"
+                            style="background-color:rgb(251, 162, 162)"
+                    >Log out</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<div id="container" class="container"></div>
+
+</body>
 
 
-
-   </div>
-   </body>
-
-
-   </html>
+</html>
