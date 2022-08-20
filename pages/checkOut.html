@@ -1,0 +1,101 @@
+<link rel="stylesheet" href="book.css" />
+<link
+        href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+        rel="stylesheet"
+        id="bootstrap-css"
+/>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<!-- Second navbar for categories -->
+<nav class="navbar navbar-default">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button
+              type="button"
+              class="navbar-toggle collapsed"
+              data-toggle="collapse"
+              data-target="#navbar-collapse-1"
+      >
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">hotMNGMNT</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Book</a></li>
+        <li><a href="#">Check-in</a></li>
+        <li><a href="#">Check-out</a></li>
+        <li>
+          <a
+                  class="btn btn-default btn-outline btn-circle collapsed"
+                  data-toggle="collapse"
+                  href="#nav-collapse1"
+                  aria-expanded="false"
+                  aria-controls="nav-collapse1"
+                  style="background-color: rgb(251, 162, 162)"
+          >Log out</a
+          >
+        </li>
+      </ul>
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container -->
+</nav>
+
+<div class="wrapper bg-white">
+  <form action="#">
+    <div
+            class="form-group border-bottom d-flex align-items-center justify-content-between flex-wrap"
+    ></div>
+    <div class="form-group d-sm-flex margin">
+      <div
+              class="d-flex align-items-center flex-fill ms-sm-1 my-sm-0 my-4 border-bottom position-relative"
+      ></div>
+    </div>
+    <div class="form-group d-sm-flex margin">
+      <div
+              class="d-flex align-items-center flex-fill me-sm1 my-sm-0 border-bottom position-relative"
+      >
+        <input
+                type="date"
+                required
+                placeholder="Depart Date"
+                class="form-control"
+        />
+        <div class="label" id="depart"></div>
+      </div>
+      <div
+              class="d-flex align-items-center flex-fill ms-sm-1 my-sm-0 my-4 border-bottom position-relative"
+      >
+        <input
+                type="date"
+                required
+                placeholder="Return Date"
+                class="form-control"
+        />
+        <div class="label" id="return"></div>
+      </div>
+    </div>
+    <div
+            class="form-group border-bottom d-flex align-items-center position-relative"
+    >
+
+      <div class="form-group my-3">
+        <div
+                class="btn btn-primary rounded-0 d-flex justify-content-center text-center p-3"
+        >
+          Search Rooms
+        </div>
+      </div>
+  </form>
+</div>
