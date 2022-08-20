@@ -337,6 +337,18 @@ let initHotelDB = function () {
                     admin: 1
                 }];
             let orders = [
+                ////////////////////////////////////////////
+                //                Orders                  //
+                // ************************************** //
+                //     FROM    TO     ROOM#   CUST_NAME   //
+                // 1)  1.8     2.8     10        Tom      //
+                // 2)  1.8     5.8     11        Alon     //
+                // 3)  6.8     7.8     11     Anastasia   //
+                // 4)  8.8     12.8    11     Anastasia   //
+                // 5)  5.8     11.8    12     Anastasia   //
+                // 6)  4.8     6.8     10        Tom      //
+                // 7)  10.8    14.8    10        Tom      //
+                ////////////////////////////////////////////
                 {
                     room: 10,
                     from: new Date('2022-08-01'),
@@ -457,7 +469,7 @@ let selectRoomsByDates = function (selected_from, selected_to) {
                 },
             ).toArray(function (err, queryResult) {
                 if (err) throw err;
-                selectedRooms.push(queryResult)
+                selectedRooms.push(queryResult);
                 db.close();
             });
         });
