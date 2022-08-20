@@ -29,81 +29,27 @@ Handles client's requests:
  \
 
  */
-const express = require('express');
-const myDB = require("./db");
-const app = express();
-
-
-
-//app.set('view engine', 'ejs');
-
-//app.use(express.static(__dirname + '/index.css'));
-
-//routing test
-
-app.get("/home", function (req,res){
-    res.sendFile(__dirname + '/index.html');
-
-});
-
-app.get("/index.css", function (req,res){
-    res.sendFile(__dirname + '/index.css');
-});
-
-app.get("/book1", function (req,res){
-    res.sendFile(__dirname + '/pages/book.html');
-});
-
-app.get("/book.css", function (req,res){
-    res.sendFile(__dirname + '/book.css');
-});
-
-app.get("/background.jpg", function (req,res){
-    res.sendFile(__dirname + '/background.jpg');
-});
-
-app.get("/checkIn", function (req,res){
-    res.sendFile(__dirname + '/pages/checkIn.html');
-});
-
-app.get("/pages/checkIn.css", function (req,res){
-    res.sendFile(__dirname + '/pages/checkIn.css');
-});
-
-app.get("/checkOut", function (req,res){
-    res.sendFile(__dirname + '/pages/checkOut.html');
-});
-
-app.get("/pages/checkOut.css", function (req,res){
-    res.sendFile(__dirname + '/pages/checkOut.css');
-});
-
-
-//myDB.init();
-app.get("/book", function(req, res){
-    let from = new Date('2022-08-01'); //<---get from url/form instead
-    let to = new Date('2022-08-14'); //<---get from url/form instead
-    myDB.selectRooms(from, to);
-    setTimeout(getResultFromSelectRooms,1000);//<------Callback
-    function getResultFromSelectRooms() {
-        console.log(myDB.selectedRooms);//<---------append to section instead
-    }
-    //<--------------- add filter by num of beds + price + floor
-    app.get("/book/??/reserve", function(request, response) {
-        //<--- append confirmation form
-        app.get("/book/??/reserve/confirm", function(request, response) {
-            myDB.addOrder(from,to,custName,custID);
-        })
-    })
-
-    });
-
-
-
+const express = require('express')
+    ,app = express()
+    , http = require('http')
+    , server = http.createServer(app);
 
 app.get("/", function(req, res){
-res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/index.html');
 });
-app.listen(8080);
+let from = new Date('2022-08-01'); //<---get from url/form instead
+let to = new Date('2022-08-14'); //<---get from url/form instead myDB.selectRooms(from, to);
+//myDB.init();
+var sR = require('./selectRooms');
+app.get("/book", function(req, res){
+   //res.write(JSON.stringify(sR.selectedRooms(from,to)))
+    sR.selectedRooms(from,to)
+    });
+
+server.listen(8080)
+
+
+
+
 
 

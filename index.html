@@ -1,22 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="index.css"/>
-<link
-        href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
-        rel="stylesheet"
-        id="bootstrap-css"
-/>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-<script type="text/javascript">
-    const myDB = require("./db");
-    $(document).ready(function () {
-        // $('body').css('background-image', 'url("/background.jpg")');
-        $('body').append(myDB.selectedRooms);
-    })
-</script>
+<head>
+    <link rel="stylesheet" href="index.css"/>
+    <link
+            href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+            rel="stylesheet"
+            id="bootstrap-css"
+    />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+    <!------ Include the above in your HEAD tag ---------->
+    <!--    <script type="text/javascript">-->
+    <!--        const myDB = require("./db");-->
+    <!--        $(document).ready(function () {-->
+    <!--            // $('body').css('background-image', 'url("/background.jpg")');-->
+    <!--            $('body').append(myDB.selectedRooms);-->
+    <!--        })-->
+    <!--    </script>-->
+</head>
+
+
 <!-- Second navbar for categories -->
+<body>
 <nav class="navbar navbar-default">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -38,10 +45,10 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Book</a></li>
-                <li><a href="#">Check-in</a></li>
-                <li><a href="#">Check-out</a></li>
+                <li><a href="home">Home</a></li>
+                <li><a href="book" onclick="window.history.pushState('/book')">Book</a></li>
+                <li><a href="checkIn" onclick="renderCheckin()">Check-in</a></li>
+                <li><a href="checkOut" onclick="renderCheckout()">Check-out</a></li>
                 <li>
                     <a
                             class="btn btn-default btn-outline btn-circle collapsed"
@@ -50,8 +57,7 @@
                             aria-expanded="false"
                             aria-controls="nav-collapse1"
                             style="background-color:rgb(251, 162, 162)"
-                    >Log out</a
-                    >
+                    >Log out</a>
                 </li>
             </ul>
         </div>
@@ -59,7 +65,9 @@
     </div>
     <!-- /.container -->
 </nav>
+<div id="container" class="container"></div>
 
-</div>
+</body>
+
 
 </html>

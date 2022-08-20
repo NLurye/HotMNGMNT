@@ -1,5 +1,5 @@
 let MongoClient = require('mongodb').MongoClient;
-let url = "mongodb://localhost:27017/msgs";
+let url = "mongodb://localhost:27017/hotel";
 const selectedRooms = [];
 let validLogIn = false;
 let validReservation = [];
@@ -563,6 +563,7 @@ let addRoom = function (roomNumber, bedsNumber, myPrice) {
         }
     )
 }
+
 let deleteRoom = function (roomNumber) {
     MongoClient.connect(url, function (err, db) {
             if (err) throw err;
@@ -623,7 +624,59 @@ let updateOrder = function (cust_id, cust_name, my_from, my_to, new_cust_id, new
     )
 }
 
+let addEmployee = function (emp_id, emp_pass, is_admin) {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        let dbo = db.db("hotel");
+        let employee =
+            {
+                empID: emp_id,
+                empPass: emp_pass,
+                admin: is_admin
+            }
+            dbo.collection("Staff").insertOne(employee, function (err, res) {
+                if (err) throw err;
+            })
+        }
+    )
+}
+let changeEmpPass = function (emp_id, emp_pass, new_emp_pass) {
+    MongoClient.connect(url, function (err, db) {
+            if (err) throw err;
+            let dbo = db.db("hotel");
+            let employee = dbo.collection("Staff");
+            employee.findOneAndUpdate(
+                {
+                    empID: emp_id,
+                    empPass: emp_pass
+                },
+                {
+                    empPass: new_emp_pass
+                }
+            );
+        }
+    )
+}
+let updateRoom = function (roomNum, bedsNum, myPrice) {
+    MongoClient.connect(url, function (err, db) {
+            if (err) throw err;
+            let dbo = db.db("hotel");
+            let room = dbo.collection("Rooms");
+            room.findOneAndUpdate(
+                {
+                    room: roomNum
+                },
+                {
+                    numOfBeds: bedsNum,
+                    price: myPrice
+                }
+            );
+        }
+    )
+}
 
+
+module.exports.selectedRooms = selectedRooms;
 module.exports.init = initHotelDB;
 module.exports.addOrder = addOrder;
 module.exports.selectRooms = selectRoomsByDates;
@@ -635,6 +688,10 @@ module.exports.addRoom = addRoom;
 module.exports.deleteRoom = deleteRoom;
 module.exports.deleteEmployee = deleteEmployee;
 module.exports.updateOrder = updateOrder;
+module.exports.signIn = addEmployee;
+module.exports.changeEmpPass = changeEmpPass;
+module.exports.updateRoom = updateRoom;
+
 
 
 
