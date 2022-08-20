@@ -7,9 +7,25 @@
             rel="stylesheet"
             id="bootstrap-css"
     />
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <script>
+        renderPage = function (page) { // here the data and url are not hardcoded anymore
+            return $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/" + page,
+                contentType: "text/html"
+            }).success(function (data) {
+                console.log(22222);
+                $("#container").html(data);
+            }).fail(function (sender, message, details) {
+                alert("Sorry, something went wrong!");
+            });
+        }
+    </script>
     <script>
         renderPage = function (page) { // spa routing using ajax
             return $.ajax({
@@ -35,21 +51,13 @@
             });
         }
     </script>
-    <!------ Include the above in your HEAD tag ---------->
-    <!--    <script type="text/javascript">-->
-    <!--        const myDB = require("./db");-->
-    <!--        $(document).ready(function () {-->
-    <!--            // $('body').css('background-image', 'url("/background.jpg")');-->
-    <!--            $('body').append(myDB.selectedRooms);-->
-    <!--        })-->
-    <!--    </script>-->
+<script>
+</script>
 </head>
-
-
 <!-- Second navbar for categories -->
 <body>
 <nav class="navbar navbar-default">
-    <div class="container">
+
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button
@@ -73,6 +81,7 @@
                 <li><a onclick="renderPage('book')">Book</a></li>
                 <li><a onclick="renderPage('checkIn')">Check-in</a></li>
                 <li><a onclick="renderPage('checkOut')">Check-out</a></li>
+
                 <li>
                     <a
                             class="btn btn-default btn-outline btn-circle collapsed"
@@ -85,13 +94,23 @@
                 </li>
             </ul>
         </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
+
 </nav>
-<div id="container" class="container"></div>
+<input type="button" id="checkDates" value="Check dates" />
+<input type="button" id="book2" value="book2" />
 
+<table class="table table-striped table-hover table-bordered ">
+    <thead>
+    <tr>
+        <th>Room number</th>
+        <th>Number of beds</th>
+        <th>Price</th>
+    </tr>
+    </thead>
+    <tbody id="tBody"></tbody>
+</table>
+<div id="container"></div>
+<script src="model.js"></script>
 </body>
-
 
 </html>
