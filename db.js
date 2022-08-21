@@ -509,6 +509,63 @@ let initHotelDB = function () {
                 }
 
             ];
+            let attractions = [
+                {
+                    lat: 32.065981,
+                    lng: 34.775369,
+                    description:"hotMNGMNT Hotel"
+                },
+                {
+                    lat: 32.068893,
+                    lng: 34.772175,
+                    description: "SanYang Restaurant"
+                },
+                {
+                    lat: 32.06733,
+                    lng: 34.770141,
+                    description: "HaNasikh Bar&RoofTop"
+                },
+                {
+                    lat: 32.065147,
+                    lng: 34.761035,
+                    description:"Charles Clores Park"
+                },
+                {
+                    lat: 32.075379,
+                    lng: 34.765164,
+                    description: "Trumpeldor Beach"
+                },
+                {
+                    lat: 32.06764,
+                    lng: 34.783383,
+                    description: "TLV Fashion Mall"
+                },
+                {
+                    lat: 32.072077,
+                    lng: 34.779854,
+                    description: "HaBima Theatre"
+                },
+                {
+                    lat: 32.077645,
+                    lng: 34.768365,
+                    description: "HaBait HaTailandi"
+                },
+                {
+                    lat: 32.064412,
+                    lng: 34.772549,
+                    description: "Beit HaKnesset HaGadol"
+                },
+                {
+                    lat: 32.058691,
+                    lng: 34.762235,
+                    description: "HaTahana Park"
+                },
+                {
+                    lat: 32.073857,
+                    lng: 34.769234,
+                    description: "Pinsker 9 Bar"
+                }
+            ];
             let ordersHistory = [{
                 room: 10,
                 from: new Date('2021-09-29'),
