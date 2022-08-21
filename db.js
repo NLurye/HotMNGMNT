@@ -1,7 +1,7 @@
 let MongoClient = require('mongodb').MongoClient;
 let url = "mongodb://localhost:27017/hotel";
 const selectedRooms = [];
-let validLogIn=false;
+let validLogIn=[];
 let validReservation = [];
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
@@ -609,45 +609,32 @@ let initHotelDB = function () {
         });
 
     });}
-let logInN = function (id,pass,Admin) { ///<-----ad encryption
+let logIn = function (id,pass) { ///<-----ad encryption
     MongoClient.connect(url, function (err,db) {
         if (err) console.log( err);
         let dbo = db.db("hotel");
         let staff = dbo.collection("Staff");
-        staff.findOneAndUpdate(
-            {empID: 2, empPass: 2},
-            {$set: {access: true}}
-        );
-        // .toArray(function (err, logInRes) {
-        //     if (err) throw err;
-        //     else {
-        //         if (logInRes.length === 0)
-        //             console.log("User doesn't exist");
-        //         else {
-        //             validLogIn = true;
-        //         }
-          //  }
-       // })
+        staff.find(
+            {
+                empID: 2,
+                empPass: 2
+            }
+        ).toArray(function (err, logInRes) {
+            if (err) throw err;
+            else {
+                validLogIn.length = 0;
+                console.log(logInRes.length);
+                if (logInRes.length === 0)
+                    console.log("Login error");
+                else {
+                    validLogIn.push(logInRes);
+                }
+            }
+            db.close();
+        })
     })
 }
 
-           staff.updateOne(
-                { "empID" : 3, empPass: 3 },
-                { $set: { "login" : true } }
-           )
-    }
-    )}
-let valLogIn = function (id) { ///<-----ad encryption
-    MongoClient.connect(url, function (err,db) {
-            if (err) throw err;
-            let dbo = db.db("hotel");
-            let staff = dbo.collection("Staff");
-            staff.find({ "empID" : 3 }).toArray(function (err,found) {
-                console.log(${found.login});
-            });
-
-        }
-    )}
 
 let selectRoomsByDates = function (selected_from, selected_to) {
     //eliminate rooms that have orders that starting before selected_to and simultaneously ending after selected_from
@@ -905,7 +892,7 @@ module.exports.selectedRooms = selectedRooms;
 module.exports.init = initHotelDB;
 module.exports.addOrder = addOrder;
 module.exports.selectRooms = selectRoomsByDates;
-module.exports.logInWorker = logInN;
+module.exports.logIn = logIn;
 module.exports.checkInCust = checkIn;
 module.exports.checkOutCust = checkOut;
 module.exports.deleteOrder = deleteOrder;
@@ -916,7 +903,6 @@ module.exports.updateOrder = updateOrder;
 module.exports.signIn = addEmployee;
 module.exports.changeEmpPass = changeEmpPass;
 module.exports.updateRoom = updateRoom;
-module.exports.valLogIn = valLogIn;
 
 
 

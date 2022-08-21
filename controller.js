@@ -8,7 +8,6 @@ server.listen(8080);
 //myDB.init();
 
 //myDB.logInWorker();
-myDB.valLogIn();
 io.sockets.on('connection', function (socket) {
  //############ React to client's emit #################
     socket.on('sendDates', function (from,to) {
@@ -22,11 +21,10 @@ io.sockets.on('connection', function (socket) {
     });
     socket.on('valLogin', function (username,pw) {
        // validate login
-        myDB.logInWorker();
+        myDB.logIn();
         setTimeout(getResultFromValLogin,1000);//<------Callback
         function getResultFromValLogin() {
-            staff.find({access: true})
-            if (myDB.validLogIn)
+            if (myDB.validLogIn.length===1)
             io.sockets.emit('loginSuccess');
             else
                 io.sockets.emit('loginFail');
@@ -52,6 +50,7 @@ io.sockets.on('connection', function (socket) {
         //add email+whatsapp confirmation+maps location
     });
 });
+});
 
 //############ Routing  #################
 app.get("/", function(req, res){
@@ -63,7 +62,7 @@ app.get("/login.css", function (req,res){
 });
 
 app.get("/home", function (req,res){
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/index.html');//<---------ad login validation
 });
 
 app.get("/book", function (req,res){
