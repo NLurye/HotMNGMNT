@@ -1,7 +1,8 @@
 var lurl = 'http://localhost:8080';
 var socket = io.connect(lurl);
-// React to server's emit
+//############ React to server's emit #################
 socket.on('displayRooms', function (roomsArr) {
+    $('body').append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room number</th><th>Number of beds</th><th>Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
     for (const room of roomsArr) {
         const row = `
         <tr>
@@ -14,16 +15,18 @@ socket.on('displayRooms', function (roomsArr) {
     }
 });
 
-//Ping to server
+
+//############ Ping to server #################
 $(function(){
-    // when the client clicks Send dates
+    // when client clicks Search Rooms
     $('#search-btn').click( function() {
-        // tell server to execute selectRooms (and send along dates)
-        let from = new Date('2022-08-01'); //<---get from url/form instead
-        let to = new Date('2022-08-14'); //<---get from url/form instead
+        let from = new Date($('#fromDate').val());//2022-08-01
+        let to  = new Date($('#toDate').val());//2022-08-14
+        // trigger server to execute selectRooms by chosen dates
         socket.emit('sendDates',from,to);
     });
 });
+
 
 
 

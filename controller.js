@@ -2,26 +2,27 @@ var express = require('express')
     , app = express()
     , http = require('http')
     , server = http.createServer(app)
+    , myDB = require("./db")
     , io = require('socket.io')(server);
 server.listen(8080);
 
-const myDB = require("./db");
-
-app.get("/", function(req, res){
-    res.sendFile(__dirname + '/index.html');
-});
-
 io.sockets.on('connection', function (socket) {
 
-socket.on('sendDates', function (from,to) {
-    //prepare rooms according to dates
-    myDB.selectRooms(from, to);
-    setTimeout(getResultFromSelectRooms,2000);//<------Callback
-    function getResultFromSelectRooms() {
-       console.log(myDB.selectedRooms);//<---------append to section instead
-        io.sockets.emit('displayRooms', myDB.selectedRooms);
-    }
+ //############ React to client's emit #################
+    socket.on('sendDates', function (from,to) {
+        //prepare rooms available on those dates
+        myDB.selectRooms(from, to);
+        setTimeout(getResultFromSelectRooms,1000);//<------Callback
+        function getResultFromSelectRooms() {
+           console.log(myDB.selectedRooms);//<----remove
+            io.sockets.emit('displayRooms', myDB.selectedRooms);
+        }
+    });
 });
+
+//############ Routing  #################
+app.get("/", function(req, res){
+    res.sendFile(__dirname + '/index.html');
 });
 
 app.get("/home", function (req,res){
