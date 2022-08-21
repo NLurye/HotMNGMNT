@@ -5,7 +5,8 @@ var express = require('express')
     , myDB = require("./db")
     , io = require('socket.io')(server);
 server.listen(8080);
-
+//myDB.init();
+myDB.logInWorker();
 io.sockets.on('connection', function (socket) {
 
  //############ React to client's emit #################
@@ -27,6 +28,21 @@ io.sockets.on('connection', function (socket) {
             io.sockets.emit('loginSuccess');
             else
                 io.sockets.emit('loginFail');
+        }
+    });
+    socket.on('sendValsCheckIn',function (id,name) {
+        myDB.checkInCust(id,name);
+        setTimeout(getResultFromCheckIn,1000);//<------Callback
+        function getResultFromCheckIn() {
+                io.sockets.emit('checkInDone');
+        }
+    });
+
+    socket.on('sendValsCheckOut',function (id,name) {
+        myDB.checkOutCust(id,name);
+        setTimeout(getResultFromCheckOut,1000);//<------Callback
+        function getResultFromCheckOut() {
+            io.sockets.emit('checkOutDone', id ,name);
         }
     });
 });

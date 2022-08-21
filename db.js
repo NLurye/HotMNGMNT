@@ -284,56 +284,66 @@ let initHotelDB = function () {
                 {
                     empID: 1,
                     empPass: 1,
-                    admin: 1
+                    admin: 1,
+                    access: false
                 },
                 {
                     empID: 2,
                     empPass: 2,
-                    admin: 0
+                    admin: 0,
+                    access: false
 
                 },
                 {
                     empID: 3,
                     empPass: 3,
-                    admin: 0
+                    admin: 0,
+                    access: false
 
                 },
                 {
                     empID: 4,
                     empPass: 4,
-                    admin: 0
+                    admin: 0,
+                    access: false
                 },
                 {
                     empID: 5,
                     empPass: 5,
-                    admin: 0
+                    admin: 0,
+                    access: false
 
                 },
                 {
                     empID: 6,
                     empPass: 6,
-                    admin: 0
+                    admin: 0,
+                    access: false
 
                 },
                 {
                     empID: 7,
                     empPass: 7,
-                    admin: 0
+                    admin: 0,
+                    access: false
                 },
                 {
                     empID: 8,
                     empPass: 8,
-                    admin: 0
+                    admin: 0,
+                    access: false
                 },
                 {
                     empID: 9,
                     empPass: 9,
-                    admin: 0
+                    admin: 0,
+                    access: false
                 },
                 {
                     empID: 10,
                     empPass: 10,
-                    admin: 1
+                    admin: 1,
+                    access: false
                 }];
             let orders = [
                 ////////////////////////////////////////////
@@ -428,18 +438,20 @@ let logIn = function (id,pass,Admin) { ///<-----ad encryption
         if (err) throw err;
         let dbo = db.db("hotel");
         let staff = dbo.collection("Staff");
-        staff.findOne(
-            {empID: id, empPass: pass, admin: Admin}
-        ).toArray(function (err, logInRes) {
-            if (err) throw err;
-            else {
-                if (logInRes.length === 0)
-                    console.log("User doesn't exist");
-                else {
-                    validLogIn = true;
-                }
-            }
-        })
+        staff.findOneAndUpdate(
+            {empID: 2, empPass: 2},
+            {$set: {access: true}}
+        );
+        // .toArray(function (err, logInRes) {
+        //     if (err) throw err;
+        //     else {
+        //         if (logInRes.length === 0)
+        //             console.log("User doesn't exist");
+        //         else {
+        //             validLogIn = true;
+        //         }
+          //  }
+       // })
     })
 }
 let selectRoomsByDates = function (selected_from, selected_to) {
@@ -490,11 +502,12 @@ let checkIn = function (cust_id, cust_name) {
         if (err) throw err;
         let dbo = db.db("hotel");
         let orders = dbo.collection("Orders");
+        let now = new Date();
         let day = now.getDay();
         orders.find(
-            {custID: cust_id},
-            {custName: cust_name},
-            {from: day}
+            {custID: cust_id,
+            custName: cust_name,
+            from: day}
         ).toArray(function (err, checkInRes) {
             if (err) throw err;
             else {

@@ -14,6 +14,30 @@ socket.on('displayRooms', function (roomsArr) {
        $('#tBody').append(row);
     }
 });
+$(function () {
+    $('#check-in-btn').click(function () {
+        let id = $('#id-num').val();
+        let name = $('#cust-name').val();
+        socket.emit('sendValsCheckIn',id,name);
+    });
+});
+
+$(function () {
+    $('#check-out-btn').click(function () {
+        let id = $('#id-num-co').val();
+        let name = $('#cust-name-co').val();
+        socket.emit('sendValsCheckOut',id,name);
+    });
+});
+
+socket.on('checkInDone',function () {
+    renderHome('home');
+});
+
+socket.on('checkOutDone',function () {
+    renderHome('home');
+});
+
 socket.on('loginSuccess', function () {
 //-------> if admin add options like delete/add employee
 });
