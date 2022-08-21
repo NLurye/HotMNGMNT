@@ -348,6 +348,9 @@ let initHotelDB = function () {
                 // 6)  4.8     6.8     10        Tom      //
                 // 7)  10.8    14.8    10        Tom      //
                 ////////////////////////////////////////////
+                // TO_DO: we need to add to validations to from&to dates:
+                //        1) if(from == to) ===> alert("ERR: cant get a room for one day only)
+                //        2) if(from > to) ===> alert("ERR: fromDate needs to be prior to toDate)
                 {
                     room: 10,
                     from: new Date('2022-08-01'),
