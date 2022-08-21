@@ -6,7 +6,8 @@ var express = require('express')
     , io = require('socket.io')(server);
 server.listen(8080);
 //myDB.init();
-myDB.logInWorker();
+//myDB.logInWorker();
+myDB.valLogIn();
 io.sockets.on('connection', function (socket) {
 
  //############ React to client's emit #################
@@ -16,7 +17,7 @@ io.sockets.on('connection', function (socket) {
         setTimeout(getResultFromSelectRooms,1000);//<------Callback
         function getResultFromSelectRooms() {
            console.log(myDB.selectedRooms);//<----remove
-            io.sockets.emit('displayRooms', myDB.selectedRooms);
+            io.sockets.emit('displayRooms', myDB.selectedRooms,from,to);
         }
     });
     socket.on('valLogin', function (username,pw) {
@@ -44,6 +45,10 @@ io.sockets.on('connection', function (socket) {
         function getResultFromCheckOut() {
             io.sockets.emit('checkOutDone', id ,name);
         }
+
+    socket.on('newOrder', function (room,from,to,custName, custId) {
+        myDB.addOrder(room,from,to,custName, custId);
+        //add email+whatsapp confirmation+maps location
     });
 });
 

@@ -285,65 +285,67 @@ let initHotelDB = function () {
                     empID: 1,
                     empPass: 1,
                     admin: 1,
-                    access: false
+                    login: false
                 },
                 {
                     empID: 2,
                     empPass: 2,
                     admin: 0,
-                    access: false
+                    login: false
 
                 },
                 {
                     empID: 3,
                     empPass: 3,
                     admin: 0,
-                    access: false
+                    login: false
 
                 },
                 {
                     empID: 4,
                     empPass: 4,
                     admin: 0,
-                    access: false
+                    login: false
+
                 },
                 {
                     empID: 5,
                     empPass: 5,
                     admin: 0,
-                    access: false
+                    login: false
 
                 },
                 {
                     empID: 6,
                     empPass: 6,
                     admin: 0,
-                    access: false
+                    login: false
 
                 },
                 {
                     empID: 7,
                     empPass: 7,
                     admin: 0,
-                    access: false
+                    login: false
                 },
                 {
                     empID: 8,
                     empPass: 8,
                     admin: 0,
-                    access: false
+                    login: false
                 },
                 {
                     empID: 9,
                     empPass: 9,
                     admin: 0,
-                    access: false
+                    login: false
+                    
                 },
                 {
                     empID: 10,
                     empPass: 10,
                     admin: 1,
-                    access: false
+                    login: false
                 }];
             let orders = [
                 ////////////////////////////////////////////
@@ -431,9 +433,8 @@ let initHotelDB = function () {
                 if (err) throw err;
             });
         });
-    });
-}
-let logIn = function (id,pass,Admin) { ///<-----ad encryption
+    });}
+let logInN = function (id,pass,Admin) { ///<-----ad encryption
     MongoClient.connect(url, function (err,db) {
         if (err) throw err;
         let dbo = db.db("hotel");
@@ -454,6 +455,25 @@ let logIn = function (id,pass,Admin) { ///<-----ad encryption
        // })
     })
 }
+
+           staff.updateOne(
+                { "empID" : 3, empPass: 3 },
+                { $set: { "login" : true } }
+           )
+    }
+    )}
+let valLogIn = function (id) { ///<-----ad encryption
+    MongoClient.connect(url, function (err,db) {
+            if (err) throw err;
+            let dbo = db.db("hotel");
+            let staff = dbo.collection("Staff");
+            staff.find({ "empID" : 3 }).toArray(function (err,found) {
+                console.log(${found.login});
+            });
+
+        }
+    )}
+
 let selectRoomsByDates = function (selected_from, selected_to) {
     //eliminate rooms that have orders that starting before selected_to and simultaneously ending after selected_from
     MongoClient.connect(url, function (err, db) {
@@ -596,7 +616,6 @@ let addRoom = function (roomNumber, bedsNumber, myPrice) {
         }
     )
 }
-
 let deleteRoom = function (roomNumber) {
     MongoClient.connect(url, function (err, db) {
             if (err) throw err;
@@ -631,7 +650,6 @@ let deleteEmployee = function (emp_ID) {
         }
     )
 }
-
 let updateOrder = function (cust_id, cust_name, my_from, my_to, new_cust_id, new_cust_name) {
     MongoClient.connect(url, function (err, db) {
             if (err) throw err;
@@ -656,7 +674,6 @@ let updateOrder = function (cust_id, cust_name, my_from, my_to, new_cust_id, new
         }
     )
 }
-
 let addEmployee = function (emp_id, emp_pass, is_admin) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
@@ -707,13 +724,13 @@ let updateRoom = function (roomNum, bedsNum, myPrice) {
         }
     )
 }
-module.exports.validLogIn = validLogIn;
 
+module.exports.validLogIn = validLogIn;
 module.exports.selectedRooms = selectedRooms;
 module.exports.init = initHotelDB;
 module.exports.addOrder = addOrder;
 module.exports.selectRooms = selectRoomsByDates;
-module.exports.logInWorker = logIn;
+module.exports.logInWorker = logInN;
 module.exports.checkInCust = checkIn;
 module.exports.checkOutCust = checkOut;
 module.exports.deleteOrder = deleteOrder;
@@ -724,7 +741,7 @@ module.exports.updateOrder = updateOrder;
 module.exports.signIn = addEmployee;
 module.exports.changeEmpPass = changeEmpPass;
 module.exports.updateRoom = updateRoom;
-
+module.exports.valLogIn = valLogIn;
 
 
 
