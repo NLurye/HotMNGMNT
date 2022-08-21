@@ -37,12 +37,24 @@ const app = express();
 //     res.sendFile(__dirname + '/server.js');
 // });
 
+app.get("/login", function (req,res){
+    res.sendFile(__dirname + '/pages/login.html');
+});
+
+app.get("/login.css", function (req,res){
+    res.sendFile(__dirname + '/pages/login.css');
+});
+
 app.get("/home", function (req,res){
     res.sendFile(__dirname + '/index.html');
 });
 
 app.get("/index.css", function (req,res){
     res.sendFile(__dirname + '/index.css');
+});
+
+app.get("/book", function (req,res){
+    res.sendFile(__dirname + '/pages/book.html');
 });
 
 app.get("/book.css", function (req,res){
@@ -80,6 +92,6 @@ res.sendFile(__dirname + '/index.html');
 });
 app.listen(8080);
 
-module.exports.row = row;
+//module.exports.row = row;
 
 

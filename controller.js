@@ -33,7 +33,11 @@ io.sockets.on('connection', function (socket) {
 
 //############ Routing  #################
 app.get("/", function(req, res){
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/pages/login.html');
+});
+
+app.get("/login.css", function (req,res){
+    res.sendFile(__dirname + '/pages/login.css');
 });
 
 app.get("/home", function (req,res){
