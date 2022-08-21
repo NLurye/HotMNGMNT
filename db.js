@@ -432,7 +432,9 @@ let logIn = function (id,pass,Admin) { ///<-----ad encryption
             else {
                 if (logInRes.length === 0)
                     console.log("User doesn't exist");
-                else validLogIn = true;
+                else {
+                    validLogIn = true;
+                }
             }
         })
     })
@@ -689,6 +691,7 @@ let updateRoom = function (roomNum, bedsNum, myPrice) {
         }
     )
 }
+module.exports.validLogIn = validLogIn;
 
 module.exports.selectedRooms = selectedRooms;
 module.exports.init = initHotelDB;
