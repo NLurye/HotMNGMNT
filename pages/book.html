@@ -1,4 +1,7 @@
-<link rel="stylesheet" href="book.css"/>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="book.css"/>
 <link
         href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
         rel="stylesheet"
@@ -6,52 +9,8 @@
 />
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
 
 <body>
-<!-- Second navbar for categories -->
-<nav class="navbar navbar-default">
-    <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button
-                    type="button"
-                    class="navbar-toggle collapsed"
-                    data-toggle="collapse"
-                    data-target="#navbar-collapse-1"
-            >
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">hotMNGMNT</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Book</a></li>
-                <li><a href="#">Check-in</a></li>
-                <li><a href="#">Check-out</a></li>
-                <li>
-                    <a
-                            class="btn btn-default btn-outline btn-circle collapsed"
-                            data-toggle="collapse"
-                            href="#nav-collapse1"
-                            aria-expanded="false"
-                            aria-controls="nav-collapse1"
-                            style="background-color: rgb(251, 162, 162)"
-                    >Log out</a
-                    >
-                </li>
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
 
 <div class="wrapper bg-white">
     <form action="#">
@@ -68,6 +27,7 @@
                     class="d-flex align-items-center flex-fill me-sm1 my-sm-0 border-bottom position-relative"
             >
                 <input
+                        id="fromDate"
                         type="date"
                         required
                         placeholder="Depart Date"
@@ -79,6 +39,7 @@
                     class="d-flex align-items-center flex-fill ms-sm-1 my-sm-0 my-4 border-bottom position-relative"
             >
                 <input
+                        id="toDate"
                         type="date"
                         required
                         placeholder="Return Date"
@@ -93,6 +54,7 @@
 
             <div class="form-group my-3">
                 <div
+                        id="search-btn"
                         class="btn btn-primary rounded-0 d-flex justify-content-center text-center p-3"
                 >
                     Search Rooms
@@ -101,6 +63,28 @@
         </div>
     </form>
 </div>
-
+<script>
+    const myDB = require("./db");
+    function findRooms() {
+        let fromDate = new Date($('#fromDate').val());
+        let toDate = new Date($('#toDate').val());
+        alert(fromDate);
+        alert(toDate);
+        myDB.selectRooms(fromDate, toDate);
+        console.log()
+    }
+</script>
+<table class="table table-striped table-hover table-bordered ">
+    <thead>
+    <tr>
+        <th>Room number</th>
+        <th>Number of beds</th>
+        <th>Price</th>
+    </tr>
+    </thead>
+    <tbody id="tBody"></tbody>
+</table>
+<script src="model.js"></script>
 </body>
+</html>
 

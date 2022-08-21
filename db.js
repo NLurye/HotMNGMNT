@@ -8,7 +8,6 @@ let initHotelDB = function () {
         if (err) throw err;
         let dbo = db.db("hotel");
         dbo.dropDatabase(function () { //Delete previous db <------delete
-
             let rooms = [
                 //rooms 10-19: first floor,  100$ per night, 150$ per night if there are 4 beds in the room.
                 //rooms 20-29: second floor, 200$ per night, 250$ per night if there are 4 beds in the room.
@@ -469,7 +468,11 @@ let selectRoomsByDates = function (selected_from, selected_to) {
                 },
             ).toArray(function (err, queryResult) {
                 if (err) throw err;
-                selectedRooms.push(queryResult);
+
+                selectedRooms.length=0;
+                queryResult.forEach(item=>{
+                    selectedRooms.push(item);
+                })
                 db.close();
             });
         });
@@ -686,7 +689,6 @@ let updateRoom = function (roomNum, bedsNum, myPrice) {
         }
     )
 }
-
 
 module.exports.selectedRooms = selectedRooms;
 module.exports.init = initHotelDB;

@@ -7,25 +7,53 @@
             rel="stylesheet"
             id="bootstrap-css"
     />
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
-
-    <!------ Include the above in your HEAD tag ---------->
-    <!--    <script type="text/javascript">-->
-    <!--        const myDB = require("./db");-->
-    <!--        $(document).ready(function () {-->
-    <!--            // $('body').css('background-image', 'url("/background.jpg")');-->
-    <!--            $('body').append(myDB.selectedRooms);-->
-    <!--        })-->
-    <!--    </script>-->
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <script>
+        renderPage = function (page) { // here the data and url are not hardcoded anymore
+            return $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/" + page,
+                contentType: "text/html",
+                success: function (data) {
+                $("#container").html(data);}
+        })}
+    </script>
+    <script>
+        renderPage = function (page) { // spa routing using ajax
+            return $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/" + page,
+                contentType: "text/html"
+            }).success(function (data) {
+                $("#container").html(data);
+            }).fail(function (sender, message, details) {
+                alert("Sorry, something went wrong!");
+            });
+        }
+        renderHome = function (page) {
+            return $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/" + page,
+                contentType: "text/html"
+            }).success(function (data) {
+                console.log(22222);
+                $("body").html(data);
+            }).fail(function (sender, message, details) {
+                alert("Sorry, something went wrong!");
+            });
+        }
+    </script>
+<script>
+</script>
 </head>
-
-
 <!-- Second navbar for categories -->
 <body>
 <nav class="navbar navbar-default">
-    <div class="container">
+
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button
@@ -45,10 +73,11 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="home">Home</a></li>
-                <li><a href="book" onclick="window.history.pushState('/book')">Book</a></li>
-                <li><a href="checkIn" onclick="renderCheckin()">Check-in</a></li>
-                <li><a href="checkOut" onclick="renderCheckout()">Check-out</a></li>
+                <li><a onclick="renderHome('home')">Home</a></li>
+                <li><a onclick="renderPage('book')">Book</a></li>
+                <li><a onclick="renderPage('checkIn')">Check-in</a></li>
+                <li><a onclick="renderPage('checkOut')">Check-out</a></li>
+
                 <li>
                     <a
                             class="btn btn-default btn-outline btn-circle collapsed"
@@ -61,13 +90,14 @@
                 </li>
             </ul>
         </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
+
 </nav>
-<div id="container" class="container"></div>
+<input type="button" id="checkDates" value="Check dates" />
+<!--<input type="button" id="book2" value="book2" />-->
 
+
+<div id="container"></div>
+<script src="model.js"></script>
 </body>
-
 
 </html>
