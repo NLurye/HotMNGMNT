@@ -15,10 +15,11 @@ socket.on('displayRooms', function (roomsArr) {
     }
 });
 socket.on('loginSuccess', function () {
+    renderHome('home');
 //-------> if admin add options like delete/add employee
 });
 socket.on('loginFail', function () {
-
+    alert("Incorrect user name or password");
 });
 
 
