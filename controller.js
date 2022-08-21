@@ -6,8 +6,6 @@ var express = require('express')
     , io = require('socket.io')(server);
 server.listen(8080);
 //myDB.init();
-myDB.checkInCust();
-//myDB.logInWorker();
 io.sockets.on('connection', function (socket) {
  //############ React to client's emit #################
     socket.on('sendDates', function (from,to) {

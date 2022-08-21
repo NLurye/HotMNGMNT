@@ -1,7 +1,7 @@
 let MongoClient = require('mongodb').MongoClient;
 let url = "mongodb://localhost:27017/hotel";
 const selectedRooms = [];
-let validLogIn = [];
+let validLogIn=[];
 let validReservation = [];
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
@@ -291,6 +291,7 @@ let initHotelDB = function () {
                     empID: 2,
                     empPass: 2,
                     admin: 0,
+
 
 
                 },
@@ -602,15 +603,15 @@ let initHotelDB = function () {
 
     });
 }
-let logIn = function (id, pass) { ///<-----ad encryption
+let logIn = function (id, pass) { ///<-----add encryption, admin?
     MongoClient.connect(url, function (err, db) {
         if (err) console.log(err);
         let dbo = db.db("hotel");
         let staff = dbo.collection("Staff");
         staff.find(
             {
-                empID: 2,
-                empPass: 2
+                empID: id,
+                empPass: pass
             }
         ).toArray(function (err, logInRes) {
             if (err) throw err;
@@ -627,6 +628,7 @@ let logIn = function (id, pass) { ///<-----ad encryption
         });
     });
 }
+
 let selectRoomsByDates = function (selected_from, selected_to) {
     //eliminate rooms that have orders that starting before selected_to and simultaneously ending after selected_from
     MongoClient.connect(url, function (err, db) {
@@ -646,6 +648,7 @@ let selectRoomsByDates = function (selected_from, selected_to) {
             {
                 $group: {_id: "$room"}
             }
+
         ]).toArray(function (err, queryResult) {
             if (err) throw err;
             let interruptions = queryResult.map(a => a._id);
@@ -689,30 +692,31 @@ let checkIn = function (cust_id, cust_name) {
         });
     });
 }
-let checkOut = function (cust_id, cust_name) {
+let checkOut = function (cust_id, cust_name,sfrom,sto) {
     MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        let dbo = db.db("hotel");
-        let orders = dbo.collection("Orders");
-        let ordersHistory = dbo.collection("OrdersHistory");
-        orders.find(
-            {
-                custID: 333333333,
-                custName: "Tal"
-            }
-        ).toArray(function (err, checkOutRes) {
             if (err) throw err;
-            else {
-                if (checkOutRes.length === 0)
-                    console.log("reservation doesn't exist");
-                else {
-                    ordersHistory.push(checkOutRes);
-                    orders.remove(checkOutRes);
+            let dbo = db.db("hotel");
+            let orders = dbo.collection("Orders");
+            let ordersHistory = dbo.collection("OrdersHistory");
+            let query = { custID: cust_id, custName: cust_name, from: sfrom, to: sto};
+            orders.find(query).toArray(function (err, checkOutRes) {
+                    if (err) throw err;
+                    else {
+                        console.log(checkOutRes);
+                        if (checkOutRes.length === 0)
+                            console.log("Reservation doesn't exist");
+                        else {
+                            ordersHistory.insertMany(checkOutRes, function (err, res) {if (err) throw err;});
+                            checkOutRes.forEach(item=>{
+                                orders.deleteOne(item);
+                            });
+
+                        }
+                    }
                 }
-            }
-            db.close();
-        });
-    });
+            );
+        }
+    );
 }
 let addOrder = function (room, from, to, custName, custID) {
     MongoClient.connect(url, function (err, db) {
@@ -869,7 +873,7 @@ module.exports.addOrder = addOrder;
 module.exports.selectRooms = selectRoomsByDates;
 module.exports.logIn = logIn;
 module.exports.checkInCust = checkIn;
-module.exports.checkOutCust = checkOut;
+module.exports.checkOut = checkOut;
 module.exports.deleteOrder = deleteOrder;
 module.exports.addRoom = addRoom;
 module.exports.deleteRoom = deleteRoom;
