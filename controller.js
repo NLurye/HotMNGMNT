@@ -18,6 +18,17 @@ io.sockets.on('connection', function (socket) {
             io.sockets.emit('displayRooms', myDB.selectedRooms);
         }
     });
+    socket.on('valLogin', function (username,pw) {
+       // validate login
+        myDB.logInWorker(username,pw);
+        setTimeout(getResultFromValLogin,1000);//<------Callback
+        function getResultFromValLogin() {
+            if (myDB.validLogIn)
+            io.sockets.emit('loginSuccess');
+            else
+                io.sockets.emit('loginFail');
+        }
+    });
 });
 
 //############ Routing  #################
