@@ -6,10 +6,10 @@ var express = require('express')
     , io = require('socket.io')(server);
 server.listen(8080);
 //myDB.init();
+
 //myDB.logInWorker();
 myDB.valLogIn();
 io.sockets.on('connection', function (socket) {
-
  //############ React to client's emit #################
     socket.on('sendDates', function (from,to) {
         //prepare rooms available on those dates
@@ -22,9 +22,10 @@ io.sockets.on('connection', function (socket) {
     });
     socket.on('valLogin', function (username,pw) {
        // validate login
-        myDB.logInWorker(username,pw);
+        myDB.logInWorker();
         setTimeout(getResultFromValLogin,1000);//<------Callback
         function getResultFromValLogin() {
+            staff.find({access: true})
             if (myDB.validLogIn)
             io.sockets.emit('loginSuccess');
             else

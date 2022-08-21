@@ -1,7 +1,7 @@
 let MongoClient = require('mongodb').MongoClient;
 let url = "mongodb://localhost:27017/hotel";
 const selectedRooms = [];
-let validLogIn = false;
+let validLogIn=false;
 let validReservation = [];
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
@@ -285,19 +285,23 @@ let initHotelDB = function () {
                     empID: 1,
                     empPass: 1,
                     admin: 1,
+                    access: false,
                     login: false
                 },
                 {
                     empID: 2,
                     empPass: 2,
                     admin: 0,
+                    access: false,
                     login: false
+
 
                 },
                 {
                     empID: 3,
                     empPass: 3,
                     admin: 0,
+                    access: false,
                     login: false
 
                 },
@@ -305,13 +309,14 @@ let initHotelDB = function () {
                     empID: 4,
                     empPass: 4,
                     admin: 0,
+                    access: false,
                     login: false
-
                 },
                 {
                     empID: 5,
                     empPass: 5,
                     admin: 0,
+                    access: false,
                     login: false
 
                 },
@@ -319,6 +324,7 @@ let initHotelDB = function () {
                     empID: 6,
                     empPass: 6,
                     admin: 0,
+                    access: false,
                     login: false
 
                 },
@@ -326,25 +332,28 @@ let initHotelDB = function () {
                     empID: 7,
                     empPass: 7,
                     admin: 0,
+                    access: false,
                     login: false
                 },
                 {
                     empID: 8,
                     empPass: 8,
                     admin: 0,
+                    access: false,
                     login: false
                 },
                 {
                     empID: 9,
                     empPass: 9,
                     admin: 0,
+                    access: false,
                     login: false
-                    
                 },
                 {
                     empID: 10,
                     empPass: 10,
                     admin: 1,
+                    access: false,
                     login: false
                 }];
             let orders = [
@@ -598,10 +607,11 @@ let initHotelDB = function () {
                 if (err) throw err;
             });
         });
+
     });}
 let logInN = function (id,pass,Admin) { ///<-----ad encryption
     MongoClient.connect(url, function (err,db) {
-        if (err) throw err;
+        if (err) console.log( err);
         let dbo = db.db("hotel");
         let staff = dbo.collection("Staff");
         staff.findOneAndUpdate(

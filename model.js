@@ -41,10 +41,11 @@ socket.on('checkOutDone',function () {
 });
 
 socket.on('loginSuccess', function () {
-renderHome('home');
+    renderHome('home');
+//-------> if admin add options like delete/add employee
 });
 socket.on('loginFail', function () {
-alert("fail");
+    alert("Incorrect user name or password");
 });
 
 
