@@ -306,6 +306,7 @@ let initHotelDB = function () {
                     empPass: 4,
                     admin: 0,
                     login: false
+
                 },
                 {
                     empID: 5,
@@ -338,6 +339,7 @@ let initHotelDB = function () {
                     empPass: 9,
                     admin: 0,
                     login: false
+                    
                 },
                 {
                     empID: 10,
@@ -437,6 +439,23 @@ let logInN = function (id,pass,Admin) { ///<-----ad encryption
         if (err) throw err;
         let dbo = db.db("hotel");
         let staff = dbo.collection("Staff");
+        staff.findOneAndUpdate(
+            {empID: 2, empPass: 2},
+            {$set: {access: true}}
+        );
+        // .toArray(function (err, logInRes) {
+        //     if (err) throw err;
+        //     else {
+        //         if (logInRes.length === 0)
+        //             console.log("User doesn't exist");
+        //         else {
+        //             validLogIn = true;
+        //         }
+          //  }
+       // })
+    })
+}
+
            staff.updateOne(
                 { "empID" : 3, empPass: 3 },
                 { $set: { "login" : true } }
@@ -503,11 +522,12 @@ let checkIn = function (cust_id, cust_name) {
         if (err) throw err;
         let dbo = db.db("hotel");
         let orders = dbo.collection("Orders");
+        let now = new Date();
         let day = now.getDay();
         orders.find(
-            {custID: cust_id},
-            {custName: cust_name},
-            {from: day}
+            {custID: cust_id,
+            custName: cust_name,
+            from: day}
         ).toArray(function (err, checkInRes) {
             if (err) throw err;
             else {

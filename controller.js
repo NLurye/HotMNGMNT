@@ -31,6 +31,21 @@ io.sockets.on('connection', function (socket) {
                 io.sockets.emit('loginFail');
         }
     });
+    socket.on('sendValsCheckIn',function (id,name) {
+        myDB.checkInCust(id,name);
+        setTimeout(getResultFromCheckIn,1000);//<------Callback
+        function getResultFromCheckIn() {
+                io.sockets.emit('checkInDone');
+        }
+    });
+
+    socket.on('sendValsCheckOut',function (id,name) {
+        myDB.checkOutCust(id,name);
+        setTimeout(getResultFromCheckOut,1000);//<------Callback
+        function getResultFromCheckOut() {
+            io.sockets.emit('checkOutDone', id ,name);
+        }
+
     socket.on('newOrder', function (room,from,to,custName, custId) {
         myDB.addOrder(room,from,to,custName, custId);
         //add email+whatsapp confirmation+maps location
