@@ -285,65 +285,76 @@ let initHotelDB = function () {
                     empID: 1,
                     empPass: 1,
                     admin: 1,
-                    access: false
+                    access: false,
+                    login: false
                 },
                 {
                     empID: 2,
                     empPass: 2,
                     admin: 0,
-                    access: false
+                    access: false,
+                    login: false
+
 
                 },
                 {
                     empID: 3,
                     empPass: 3,
                     admin: 0,
-                    access: false
+                    access: false,
+                    login: false
 
                 },
                 {
                     empID: 4,
                     empPass: 4,
                     admin: 0,
-                    access: false
+                    access: false,
+                    login: false
                 },
                 {
                     empID: 5,
                     empPass: 5,
                     admin: 0,
-                    access: false
+                    access: false,
+                    login: false
 
                 },
                 {
                     empID: 6,
                     empPass: 6,
                     admin: 0,
-                    access: false
+                    access: false,
+                    login: false
 
                 },
                 {
                     empID: 7,
                     empPass: 7,
                     admin: 0,
-                    access: false
+                    access: false,
+                    login: false
                 },
                 {
                     empID: 8,
                     empPass: 8,
                     admin: 0,
-                    access: false
+                    access: false,
+                    login: false
                 },
                 {
                     empID: 9,
                     empPass: 9,
                     admin: 0,
-                    access: false
+                    access: false,
+                    login: false
                 },
                 {
                     empID: 10,
                     empPass: 10,
                     admin: 1,
-                    access: false
+                    access: false,
+                    login: false
                 }];
             let orders = [
                 ////////////////////////////////////////////
@@ -357,8 +368,24 @@ let initHotelDB = function () {
                 // 5)  5.8     11.8    12     Anastasia   //
                 // 6)  4.8     6.8     10        Tom      //
                 // 7)  10.8    14.8    10        Tom      //
+                // 8)  2.8     8.8     13        Tal      //
+                // 9)  7.8     9.8     10        Alon     //
+                //10)  8.8     13.8    13        Alon     //
+                //11)  10.8    12.8    14        Tal      //
+                //12)  17.8    19.8    10        Tom      //
+                //13)  17.8    20.8    11     Anastasia   //
+                //14)  20.8    25.8    10        Tal      //
+                //15)  20.8    25.8    13        Alon     //
+                //16)  20.8    25.8    14        Tom      //
+                //17)  21.8    22.8    11        Tom      //
+                //18)  21.8    24.8    12     Anastasia   //
+                //19)  26.8    30.8    11        Tal      //
+                //20)  27.8    29.8    10        Alon     //
                 ////////////////////////////////////////////
-                // TO_DO: we need to add to validations to from&to dates:
+                //
+                // times with NO ORDERS: 14.8-17.8, 25.8-26.8, 30.8-31.8
+                //
+                // TO_DO: we need to add validations to from&to dates:
                 //        1) if(from == to) ===> alert("ERR: cant get a room for one day only)
                 //        2) if(from > to) ===> alert("ERR: fromDate needs to be prior to toDate)
                 {
@@ -409,6 +436,155 @@ let initHotelDB = function () {
                     to: new Date('2022-08-14'),
                     custName: "Tom",
                     custID: "111111111"
+                },
+                {
+                    room: 13,
+                    from: new Date('2022-08-02'),
+                    to: new Date('2022-08-08'),
+                    custName: "Tal",
+                    custID: "333333333"
+                },
+                {
+                    room: 10,
+                    from: new Date('2022-08-07'),
+                    to: new Date('2022-08-09'),
+                    custName: "Alon",
+                    custID: "222222222"
+                },
+                {
+                    room: 13,
+                    from: new Date('2022-08-08'),
+                    to: new Date('2022-08-13'),
+                    custName: "Alon",
+                    custID: "222222222"
+                },
+                {
+                    room: 14,
+                    from: new Date('2022-08-10'),
+                    to: new Date('2022-08-12'),
+                    custName: "Tal",
+                    custID: "333333333"
+                },
+                {
+                    room: 10,
+                    from: new Date('2022-08-17'),
+                    to: new Date('2022-08-19'),
+                    custName: "Tom",
+                    custID: "111111111"
+                },
+                {
+                    room: 11,
+                    from: new Date('2022-08-17'),
+                    to: new Date('2022-08-20'),
+                    custName: "Anastasia",
+                    custID: "444444444"
+                },
+                {
+                    room: 10,
+                    from: new Date('2022-08-20'),
+                    to: new Date('2022-08-25'),
+                    custName: "Tal",
+                    custID: "333333333"
+                },
+                {
+                    room: 13,
+                    from: new Date('2022-08-20'),
+                    to: new Date('2022-08-25'),
+                    custName: "Alon",
+                    custID: "222222222"
+                },
+                {
+                    room: 14,
+                    from: new Date('2022-08-20'),
+                    to: new Date('2022-08-25'),
+                    custName: "Tom",
+                    custID: "111111111"
+                },
+                {
+                    room: 11,
+                    from: new Date('2022-08-21'),
+                    to: new Date('2022-08-22'),
+                    custName: "Tom",
+                    custID: "111111111"
+                },
+                {
+                    room: 12,
+                    from: new Date('2022-08-21'),
+                    to: new Date('2022-08-24'),
+                    custName: "Anastasia",
+                    custID: "444444444"
+                },
+                {
+                    room: 11,
+                    from: new Date('2022-08-26'),
+                    to: new Date('2022-08-30'),
+                    custName: "Tal",
+                    custID: "333333333"
+                },
+                {
+                    room: 10,
+                    from: new Date('2022-08-27'),
+                    to: new Date('2022-08-29'),
+                    custName: "Alon",
+                    custID: "222222222"
+                }
+
+            ];
+            let attractions = [
+                {
+                    lat: 32.065981,
+                    lng: 34.775369,
+                    description:"hotMNGMNT Hotel"
+                },
+                {
+                    lat: 32.068893,
+                    lng: 34.772175,
+                    description: "SanYang Restaurant"
+                },
+                {
+                    lat: 32.06733,
+                    lng: 34.770141,
+                    description: "HaNasikh Bar&RoofTop"
+                },
+                {
+                    lat: 32.065147,
+                    lng: 34.761035,
+                    description:"Charles Clores Park"
+                },
+                {
+                    lat: 32.075379,
+                    lng: 34.765164,
+                    description: "Trumpeldor Beach"
+                },
+                {
+                    lat: 32.06764,
+                    lng: 34.783383,
+                    description: "TLV Fashion Mall"
+                },
+                {
+                    lat: 32.072077,
+                    lng: 34.779854,
+                    description: "HaBima Theatre"
+                },
+                {
+                    lat: 32.077645,
+                    lng: 34.768365,
+                    description: "HaBait HaTailandi"
+                },
+                {
+                    lat: 32.064412,
+                    lng: 34.772549,
+                    description: "Beit HaKnesset HaGadol"
+                },
+                {
+                    lat: 32.058691,
+                    lng: 34.762235,
+                    description: "HaTahana Park"
+                },
+                {
+                    lat: 32.073857,
+                    lng: 34.769234,
+                    description: "Pinsker 9 Bar"
                 }
             ];
             let ordersHistory = [{
@@ -431,9 +607,9 @@ let initHotelDB = function () {
                 if (err) throw err;
             });
         });
-    });
-}
-let logIn = function (id,pass) { ///<-----ad encryption
+
+    });}
+let logInN = function (id,pass,Admin) { ///<-----ad encryption
     MongoClient.connect(url, function (err,db) {
         if (err) console.log( err);
         let dbo = db.db("hotel");
@@ -442,33 +618,37 @@ let logIn = function (id,pass) { ///<-----ad encryption
             {empID: 2, empPass: 2},
             {$set: {access: true}}
         );
-        // if(zz){
-        //     validLogIn=true;
-        //     console.log("found");
-        // }
-        // else {
-        //     validLogIn = false;
-        //     console.log("not found");
-        // }
-        // staff.find(
-        //     {
-        //         empID: 2,
-        //         empPass: 2
-        //     }
-        // ).toArray(function (err, logInRes) {
+        // .toArray(function (err, logInRes) {
         //     if (err) throw err;
         //     else {
-        //         console.log(logInRes.length);
         //         if (logInRes.length === 0)
         //             console.log("User doesn't exist");
         //         else {
-        //             validLogIn = 1;
+        //             validLogIn = true;
         //         }
-        //     }
-        //db.close();
-        })
-    //})
+          //  }
+       // })
+    })
 }
+
+           staff.updateOne(
+                { "empID" : 3, empPass: 3 },
+                { $set: { "login" : true } }
+           )
+    }
+    )}
+let valLogIn = function (id) { ///<-----ad encryption
+    MongoClient.connect(url, function (err,db) {
+            if (err) throw err;
+            let dbo = db.db("hotel");
+            let staff = dbo.collection("Staff");
+            staff.find({ "empID" : 3 }).toArray(function (err,found) {
+                console.log(${found.login});
+            });
+
+        }
+    )}
+
 let selectRoomsByDates = function (selected_from, selected_to) {
     //eliminate rooms that have orders that starting before selected_to and simultaneously ending after selected_from
     MongoClient.connect(url, function (err, db) {
@@ -517,11 +697,12 @@ let checkIn = function (cust_id, cust_name) {
         if (err) throw err;
         let dbo = db.db("hotel");
         let orders = dbo.collection("Orders");
+        let now = new Date();
         let day = now.getDay();
         orders.find(
-            {custID: cust_id},
-            {custName: cust_name},
-            {from: day}
+            {custID: cust_id,
+            custName: cust_name,
+            from: day}
         ).toArray(function (err, checkInRes) {
             if (err) throw err;
             else {
@@ -724,7 +905,7 @@ module.exports.selectedRooms = selectedRooms;
 module.exports.init = initHotelDB;
 module.exports.addOrder = addOrder;
 module.exports.selectRooms = selectRoomsByDates;
-module.exports.logInWorker = logIn;
+module.exports.logInWorker = logInN;
 module.exports.checkInCust = checkIn;
 module.exports.checkOutCust = checkOut;
 module.exports.deleteOrder = deleteOrder;
@@ -735,7 +916,7 @@ module.exports.updateOrder = updateOrder;
 module.exports.signIn = addEmployee;
 module.exports.changeEmpPass = changeEmpPass;
 module.exports.updateRoom = updateRoom;
-
+module.exports.valLogIn = valLogIn;
 
 
 

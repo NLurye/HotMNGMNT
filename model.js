@@ -1,19 +1,45 @@
 var lurl = 'http://localhost:8080';
 var socket = io.connect(lurl);
+
 //############ React to server's emit #################
-socket.on('displayRooms', function (roomsArr) {
-    $('#container').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room number</th><th>Number of beds</th><th>Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+socket.on('displayRooms', function (roomsArr,sfrom,sto) {
+    $('#container').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room number</th><th>Number of beds</th><th>Price</th><th></th></tr></thead><tbody id=\"tBody\"></tbody></table>");
     for (const room of roomsArr) {
         const row = `
         <tr>
             <td>${room.room}</td>
             <td>${room.numOfBeds}</td>
             <td>${room.price}</td>
+            <td><button onclick="handleReserve(${room.room},${sfrom},${sto})">Reserve</button></td>
         </tr>`
         //tBody.innerHTML += row;
        $('#tBody').append(row);
     }
 });
+$(function () {
+    $('#check-in-btn').click(function () {
+        let id = $('#id-num').val();
+        let name = $('#cust-name').val();
+        socket.emit('sendValsCheckIn',id,name);
+    });
+});
+
+$(function () {
+    $('#check-out-btn').click(function () {
+        let id = $('#id-num-co').val();
+        let name = $('#cust-name-co').val();
+        socket.emit('sendValsCheckOut',id,name);
+    });
+});
+
+socket.on('checkInDone',function () {
+    renderHome('home');
+});
+
+socket.on('checkOutDone',function () {
+    renderHome('home');
+});
+
 socket.on('loginSuccess', function () {
     renderHome('home');
 //-------> if admin add options like delete/add employee
@@ -42,6 +68,7 @@ $(function(){
     });
 });
 
+
 $(function(){
     // when client clicks Login
     $('#login-submit').click( function() {
@@ -52,7 +79,10 @@ $(function(){
     });
 });
 
-
+//Fixed price
+function handleReserve(room,from,to){
+    socket.emit('newOrder',room,from,to,custName, custId);
+}
 
 
 
