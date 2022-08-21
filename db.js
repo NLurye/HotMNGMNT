@@ -359,8 +359,24 @@ let initHotelDB = function () {
                 // 5)  5.8     11.8    12     Anastasia   //
                 // 6)  4.8     6.8     10        Tom      //
                 // 7)  10.8    14.8    10        Tom      //
+                // 8)  2.8     8.8     13        Tal      //
+                // 9)  7.8     9.8     10        Alon     //
+                //10)  8.8     13.8    13        Alon     //
+                //11)  10.8    12.8    14        Tal      //
+                //12)  17.8    19.8    10        Tom      //
+                //13)  17.8    20.8    11     Anastasia   //
+                //14)  20.8    25.8    10        Tal      //
+                //15)  20.8    25.8    13        Alon     //
+                //16)  20.8    25.8    14        Tom      //
+                //17)  21.8    22.8    11        Tom      //
+                //18)  21.8    24.8    12     Anastasia   //
+                //19)  26.8    30.8    11        Tal      //
+                //20)  27.8    29.8    10        Alon     //
                 ////////////////////////////////////////////
-                // TO_DO: we need to add to validations to from&to dates:
+                //
+                // times with NO ORDERS: 14.8-17.8, 25.8-26.8, 30.8-31.8
+                //
+                // TO_DO: we need to add validations to from&to dates:
                 //        1) if(from == to) ===> alert("ERR: cant get a room for one day only)
                 //        2) if(from > to) ===> alert("ERR: fromDate needs to be prior to toDate)
                 {
@@ -411,6 +427,155 @@ let initHotelDB = function () {
                     to: new Date('2022-08-14'),
                     custName: "Tom",
                     custID: "111111111"
+                },
+                {
+                    room: 13,
+                    from: new Date('2022-08-02'),
+                    to: new Date('2022-08-08'),
+                    custName: "Tal",
+                    custID: "333333333"
+                },
+                {
+                    room: 10,
+                    from: new Date('2022-08-07'),
+                    to: new Date('2022-08-09'),
+                    custName: "Alon",
+                    custID: "222222222"
+                },
+                {
+                    room: 13,
+                    from: new Date('2022-08-08'),
+                    to: new Date('2022-08-13'),
+                    custName: "Alon",
+                    custID: "222222222"
+                },
+                {
+                    room: 14,
+                    from: new Date('2022-08-10'),
+                    to: new Date('2022-08-12'),
+                    custName: "Tal",
+                    custID: "333333333"
+                },
+                {
+                    room: 10,
+                    from: new Date('2022-08-17'),
+                    to: new Date('2022-08-19'),
+                    custName: "Tom",
+                    custID: "111111111"
+                },
+                {
+                    room: 11,
+                    from: new Date('2022-08-17'),
+                    to: new Date('2022-08-20'),
+                    custName: "Anastasia",
+                    custID: "444444444"
+                },
+                {
+                    room: 10,
+                    from: new Date('2022-08-20'),
+                    to: new Date('2022-08-25'),
+                    custName: "Tal",
+                    custID: "333333333"
+                },
+                {
+                    room: 13,
+                    from: new Date('2022-08-20'),
+                    to: new Date('2022-08-25'),
+                    custName: "Alon",
+                    custID: "222222222"
+                },
+                {
+                    room: 14,
+                    from: new Date('2022-08-20'),
+                    to: new Date('2022-08-25'),
+                    custName: "Tom",
+                    custID: "111111111"
+                },
+                {
+                    room: 11,
+                    from: new Date('2022-08-21'),
+                    to: new Date('2022-08-22'),
+                    custName: "Tom",
+                    custID: "111111111"
+                },
+                {
+                    room: 12,
+                    from: new Date('2022-08-21'),
+                    to: new Date('2022-08-24'),
+                    custName: "Anastasia",
+                    custID: "444444444"
+                },
+                {
+                    room: 11,
+                    from: new Date('2022-08-26'),
+                    to: new Date('2022-08-30'),
+                    custName: "Tal",
+                    custID: "333333333"
+                },
+                {
+                    room: 10,
+                    from: new Date('2022-08-27'),
+                    to: new Date('2022-08-29'),
+                    custName: "Alon",
+                    custID: "222222222"
+                }
+
+            ];
+            let attractions = [
+                {
+                    lat: 32.065981,
+                    lng: 34.775369,
+                    description:"hotMNGMNT Hotel"
+                },
+                {
+                    lat: 32.068893,
+                    lng: 34.772175,
+                    description: "SanYang Restaurant"
+                },
+                {
+                    lat: 32.06733,
+                    lng: 34.770141,
+                    description: "HaNasikh Bar&RoofTop"
+                },
+                {
+                    lat: 32.065147,
+                    lng: 34.761035,
+                    description:"Charles Clores Park"
+                },
+                {
+                    lat: 32.075379,
+                    lng: 34.765164,
+                    description: "Trumpeldor Beach"
+                },
+                {
+                    lat: 32.06764,
+                    lng: 34.783383,
+                    description: "TLV Fashion Mall"
+                },
+                {
+                    lat: 32.072077,
+                    lng: 34.779854,
+                    description: "HaBima Theatre"
+                },
+                {
+                    lat: 32.077645,
+                    lng: 34.768365,
+                    description: "HaBait HaTailandi"
+                },
+                {
+                    lat: 32.064412,
+                    lng: 34.772549,
+                    description: "Beit HaKnesset HaGadol"
+                },
+                {
+                    lat: 32.058691,
+                    lng: 34.762235,
+                    description: "HaTahana Park"
+                },
+                {
+                    lat: 32.073857,
+                    lng: 34.769234,
+                    description: "Pinsker 9 Bar"
                 }
             ];
             let ordersHistory = [{
