@@ -84,11 +84,38 @@ function handleReserve(room,from,to){
     socket.emit('newOrder',room,from,to,custName, custId);
 }
 
+renderPage = function (page) { // here the data and url are not hardcoded anymore
+    return $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/" + page,
+        contentType: "text/html",
+        success: function (data) {
+            $("#container").html(data);}
+    })}
 
+// renderPage = function (page) { // spa routing using ajax
+//     return $.ajax({
+//         type: "GET",
+//         url: "http://localhost:8080/" + page,
+//         contentType: "text/html"
+//     }).success(function (data) {
+//         $("#container").html(data);
+//     }).fail(function (sender, message, details) {
+//         alert("Sorry, something went wrong!");
+//     });
+// }
 
-
-
-
+renderHome = function (page) {
+    return $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/" + page,
+        contentType: "text/html"
+    }).success(function (data) {
+        $("body").html(data);
+    }).fail(function (sender, message, details) {
+        alert("Sorry, something went wrong!");
+    });
+}
 
 
 
