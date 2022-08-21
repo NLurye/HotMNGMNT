@@ -45,7 +45,7 @@ socket.on('loginSuccess', function () {
 //-------> if admin add options like delete/add employee
 });
 socket.on('loginFail', function () {
-    alert("Incorrect user name or password");
+    alert("Incorrect user name or password, try again.");
 });
 
 

@@ -285,15 +285,13 @@ let initHotelDB = function () {
                     empID: 1,
                     empPass: 1,
                     admin: 1,
-                    access: false,
-                    login: false
+
                 },
                 {
                     empID: 2,
                     empPass: 2,
                     admin: 0,
-                    access: false,
-                    login: false
+
 
 
                 },
@@ -301,60 +299,52 @@ let initHotelDB = function () {
                     empID: 3,
                     empPass: 3,
                     admin: 0,
-                    access: false,
-                    login: false
+
 
                 },
                 {
                     empID: 4,
                     empPass: 4,
                     admin: 0,
-                    access: false,
-                    login: false
+
                 },
                 {
                     empID: 5,
                     empPass: 5,
                     admin: 0,
-                    access: false,
-                    login: false
+
 
                 },
                 {
                     empID: 6,
                     empPass: 6,
                     admin: 0,
-                    access: false,
-                    login: false
+
 
                 },
                 {
                     empID: 7,
                     empPass: 7,
                     admin: 0,
-                    access: false,
-                    login: false
+
                 },
                 {
                     empID: 8,
                     empPass: 8,
                     admin: 0,
-                    access: false,
-                    login: false
+
                 },
                 {
                     empID: 9,
                     empPass: 9,
                     admin: 0,
-                    access: false,
-                    login: false
+
                 },
                 {
                     empID: 10,
                     empPass: 10,
                     admin: 1,
-                    access: false,
-                    login: false
+
                 }];
             let orders = [
                 ////////////////////////////////////////////
@@ -604,6 +594,9 @@ let initHotelDB = function () {
                 if (err) throw err;
             });
             dbo.collection("OrdersHistory").insertMany(ordersHistory, function (err, res) {
+                if (err) throw err;
+            });
+            dbo.collection("Attractions").insertMany(attractions, function (err, res) {
                 if (err) throw err;
             });
         });
@@ -903,6 +896,7 @@ module.exports.updateOrder = updateOrder;
 module.exports.signIn = addEmployee;
 module.exports.changeEmpPass = changeEmpPass;
 module.exports.updateRoom = updateRoom;
+
 
 
 
