@@ -22,7 +22,7 @@ socket.on('loginFail', function () {
 });
 
 
-//
+
 // $(function(){
 //     $('').click( function() {
 //
@@ -44,12 +44,14 @@ $(function(){
 $(function(){
     // when client clicks Login
     $('#login-submit').click( function() {
-        let username = ($('#username').val());
-        let pw = ($('#password').val());
+        let username = ($('#username-l').val());
+        let pw = ($('#password-l').val());
         // trigger server to validate login
         socket.emit('valLogin',username,pw);
     });
 });
+
+
 
 
 
