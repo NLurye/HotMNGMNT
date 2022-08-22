@@ -126,3 +126,23 @@ body{
     background-color: #1CA347;
     border-color: #1CA347;
 }
+
+
+video {
+    position: absolute;
+    object-fit: cover;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+.video-wrapper {
+    position: relative;
+    width: 400px;
+    height: 200px;
+    overflow: hidden;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
