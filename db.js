@@ -1,11 +1,12 @@
 let MongoClient = require('mongodb').MongoClient;
 let url = "mongodb://localhost:27017/hotel";
 const selectedRooms = [];
-let validLogIn=[];
+let validLogIn = [];
 let validReservation = [];
 let showEmp = [];
 let employees = [];
 let roomsList = [];
+
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
@@ -293,7 +294,6 @@ let initHotelDB = function () {
                     empID: 2,
                     empPass: 2,
                     admin: 0,
-
 
 
                 },
@@ -663,7 +663,7 @@ let selectRoomsByDates = function (selected_from, selected_to) {
                 selectedRooms.length = 0;
                 queryResult.forEach(item => {
                     selectedRooms.push(item);
-                })
+                });
                 db.close();
             });
         });
@@ -700,31 +700,31 @@ let checkIn = function (cust_id, cust_name) {
         });
     });
 }
-let checkOut = function (cust_id, cust_name,sfrom,sto) {
+let checkOut = function (cust_id, cust_name, sfrom, sto) {
     MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        let dbo = db.db("hotel");
+        let orders = dbo.collection("Orders");
+        let ordersHistory = dbo.collection("OrdersHistory");
+        let query = {custID: cust_id, custName: cust_name, from: sfrom, to: sto};
+        orders.find(query).toArray(function (err, checkOutRes) {
             if (err) throw err;
-            let dbo = db.db("hotel");
-            let orders = dbo.collection("Orders");
-            let ordersHistory = dbo.collection("OrdersHistory");
-            let query = { custID: cust_id, custName: cust_name, from: sfrom, to: sto};
-            orders.find(query).toArray(function (err, checkOutRes) {
-                    if (err) throw err;
-                    else {
-                        console.log(checkOutRes);
-                        if (checkOutRes.length === 0)
-                            console.log("Reservation doesn't exist");
-                        else {
-                            ordersHistory.insertMany(checkOutRes, function (err, res) {if (err) throw err;});
-                            checkOutRes.forEach(item=>{
-                                orders.deleteOne(item);
-                            });
+            else {
+                console.log(checkOutRes);
+                if (checkOutRes.length === 0)
+                    console.log("Reservation doesn't exist");
+                else {
+                    ordersHistory.insertMany(checkOutRes, function (err, res) {
+                        if (err) throw err;
+                    });
+                    checkOutRes.forEach(item => {
+                        orders.deleteOne(item);
+                    });
 
-                        }
-                    }
                 }
-            );
-        }
-    );
+            }
+        });
+    });
 }
 let addOrder = function (room, from, to, custName, custID) {
     MongoClient.connect(url, function (err, db) {
@@ -894,15 +894,14 @@ let searchEmp = function (empID) { ///<-----add encryption, admin?
         });
     });
 }
-
 let getStaff = function () {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
         let staff = dbo.collection("Staff");
         staff.find({}).toArray(function (err, getEmpResult) {
-            if(err) throw err;
-            else{
+            if (err) throw err;
+            else {
                 getEmpResult.forEach(item => {
                     employees.push(item);
                 });
@@ -910,15 +909,14 @@ let getStaff = function () {
         });
     });
 }
-
 let getRooms = function () {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
         let rooms = dbo.collection("Rooms");
         rooms.find({}).toArray(function (err, getRoomsResult) {
-            if(err) throw err;
-            else{
+            if (err) throw err;
+            else {
                 getRoomsResult.forEach(item => {
                     roomsList.push(item);
                 });
@@ -931,41 +929,25 @@ module.exports.validLogIn = validLogIn;
 module.exports.selectedRooms = selectedRooms;
 module.exports.employees = employees;
 module.exports.roomsList = roomsList;
-module.exports.init = initHotelDB;
-module.exports.addOrder = addOrder;
-module.exports.selectRooms = selectRoomsByDates;
-module.exports.logIn = logIn;
-module.exports.checkInCust = checkIn;
-module.exports.checkOut = checkOut;
-module.exports.deleteOrder = deleteOrder;
-module.exports.addRoom = addRoom;
-module.exports.deleteRoom = deleteRoom;
-module.exports.deleteEmployee = deleteEmployee;
-module.exports.updateOrder = updateOrder;
-module.exports.signIn = addEmployee;
-module.exports.changeEmpPass = changeEmpPass;
-module.exports.updateRoom = updateRoom;
-module.exports.getStaff = getStaff;
-module.exports.getRooms = getRooms;
-module.exports.showEmp = showEmp;
-module.exports.validLogIn = validLogIn;
-module.exports.selectedRooms = selectedRooms;
 module.exports.validReservation = validReservation;
+module.exports.showEmp = showEmp;
 module.exports.init = initHotelDB;//done
-module.exports.addOrder = addOrder;//to be done
+module.exports.addOrder = addOrder;//to be done-----------------------------------------------
 module.exports.selectRooms = selectRoomsByDates;//done
 module.exports.logIn = logIn;//done
-module.exports.checkIn = checkIn;//to be done -> add an alert
+module.exports.checkIn = checkIn;//to be done -> add an alert---------------------------------
 module.exports.checkOut = checkOut;//done
-module.exports.deleteOrder = deleteOrder;//to be done
-module.exports.addRoom = addRoom;//to be done
-module.exports.deleteRoom = deleteRoom;//to be done
-module.exports.deleteEmployee = deleteEmployee;//to be done
-module.exports.updateOrder = updateOrder;//to be done
-module.exports.signIn = addEmployee;//to be done
-module.exports.changeEmpPass = changeEmpPass;//to be done
-module.exports.updateRoom = updateRoom;//to be done
-module.exports.searchEmp = searchEmp;
+module.exports.deleteOrder = deleteOrder;//to be done-----------------------------------------
+module.exports.addRoom = addRoom;//to be done-------------------------------------------------
+module.exports.deleteRoom = deleteRoom;//to be done-------------------------------------------
+module.exports.deleteEmployee = deleteEmployee;//to be done-----------------------------------
+module.exports.updateOrder = updateOrder;//to be done-----------------------------------------
+module.exports.signIn = addEmployee;//to be done----------------------------------------------
+module.exports.changeEmpPass = changeEmpPass;//to be done-------------------------------------
+module.exports.updateRoom = updateRoom;//to be done-------------------------------------------
+module.exports.searchEmp = searchEmp;//to be done---------------------------------------------
+module.exports.getStaff = getStaff;//done
+module.exports.getRooms = getRooms;//done
 //search room -> to do
 
 
