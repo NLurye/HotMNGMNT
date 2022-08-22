@@ -19,7 +19,7 @@ io.sockets.on('connection', function (socket) {
     });
     socket.on('valLogin', function (username,pw) {
        // validate login
-        myDB.logIn();
+        myDB.logIn(username,pw);
         setTimeout(getResultFromValLogin,1000);//<------Callback
         function getResultFromValLogin() {
             if (myDB.validLogIn.length===1)
@@ -37,7 +37,7 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('sendValsCheckOut',function (id,name) {
-        myDB.checkOutCust(id,name);
+        myDB.checkOut(id,name);
         setTimeout(getResultFromCheckOut,1000);//<------Callback
         function getResultFromCheckOut() {
             io.sockets.emit('checkOutDone', id ,name);

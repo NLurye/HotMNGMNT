@@ -10,12 +10,52 @@ socket.on('displayRooms', function (roomsArr,sfrom,sto) {
             <td>${room.room}</td>
             <td>${room.numOfBeds}</td>
             <td>${room.price}</td>
-            <td><button onclick="handleReserve(${room.room},${sfrom},${sto})">Reserve</button></td>
+            <td><button onclick="handleReserve('${room.room}','${sfrom}','${sto}')">Reserve</button></td>
         </tr>`
         //tBody.innerHTML += row;
-       $('#tBody').append(row);
+        $('#tBody').append(row);
     }
 });
+ handleReserve = function (room,sfrom,sto){
+let selfrom = new Date(sfrom).toLocaleDateString('en-IL');;
+let selto = new Date(sto).toLocaleDateString('en-IL');;
+     $('#container').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room number</th><th>Check-in</th><th>Check-out</th><th></th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+    const row = `
+        <tr>
+            <td>${room}</td>
+            <td>${selfrom}</td>
+            <td>${selto}</td>
+            <td><button onclick="handleConfirm(${room},${sfrom},${sto})">Confirm</button></td>
+        </tr>`
+    $('#tBody').append(row).append('<div class="dropdown-menu">\n' +
+        '  <form class="px-4 py-3">\n' +
+        '    <div class="form-group">\n' +
+        '      <label for="exampleDropdownFormEmail1">Email address</label>\n' +
+        '      <input type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@example.com">\n' +
+        '    </div>\n' +
+        '    <div class="form-group">\n' +
+        '      <label for="exampleDropdownFormPassword1">Password</label>\n' +
+        '      <input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password">\n' +
+        '    </div>\n' +
+        '    <div class="form-check">\n' +
+        '      <input type="checkbox" class="form-check-input" id="dropdownCheck">\n' +
+        '      <label class="form-check-label" for="dropdownCheck">\n' +
+        '        Remember me\n' +
+        '      </label>\n' +
+        '    </div>\n' +
+        '    <button type="submit" class="btn btn-primary">Sign in</button>\n' +
+        '  </form>\n' +
+        '  <div class="dropdown-divider"></div>\n' +
+        '  <a class="dropdown-item" href="#">New around here? Sign up</a>\n' +
+        '  <a class="dropdown-item" href="#">Forgot password?</a>\n' +
+        '</div>')
+     $('.dropdown-menu').dropdown();
+     //socket.emit('newOrder',room,from,to,custName, custId);
+}
+
+function handleConfirm(room,sfrom,sto) {
+}
+
 $(function () {
     $('#check-in-btn').click(function () {
         let id = $('#id-num').val();
@@ -82,9 +122,7 @@ $(function(){
 });
 
 //Fixed price
-function handleReserve(room,from,to){
-    socket.emit('newOrder',room,from,to,custName, custId);
-}
+
 
 renderPage = function (page) { // here the data and url are not hardcoded anymore
     return $.ajax({

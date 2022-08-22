@@ -610,14 +610,13 @@ let logIn = function (id, pass) { ///<-----add encryption, admin?
         let staff = dbo.collection("Staff");
         staff.find(
             {
-                empID: id,
-                empPass: pass
+                empID: parseInt(id),
+                empPass: parseInt(pass)
             }
         ).toArray(function (err, logInRes) {
             if (err) throw err;
             else {
                 validLogIn.length = 0;
-                console.log(logInRes.length);
                 if (logInRes.length === 0)
                     console.log("Login error");
                 else {
