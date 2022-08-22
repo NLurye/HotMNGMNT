@@ -8,6 +8,11 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+#billing{
+    border-style: solid;
+}
+
 .navbar-brand {
     position: relative;
     z-index: 2;
