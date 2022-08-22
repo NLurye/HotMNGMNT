@@ -61,15 +61,63 @@ socket.on('deleteSuccess', function (rooms) {
  handleReserve = function (room,sfrom,sto){
 let selfrom = new Date(sfrom).toLocaleDateString('en-IL');;
 let selto = new Date(sto).toLocaleDateString('en-IL');;
-     $('#container').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room number</th><th>Check-in</th><th>Check-out</th><th></th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+     $('#container').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead style='width: 50px' class='thead-dark'><tr><th style='width: 50px' scope='col'>Room number</th><th scope='col'>Check-in</th><th scope='col'>Check-out</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
     const row = `
         <tr>
             <td>${room}</td>
             <td>${selfrom}</td>
             <td>${selto}</td>
-            <td><button onclick="handleConfirm(${room},${sfrom},${sto})">Confirm</button></td>
         </tr>`
-    $('#tBody').append(row).append('<h1>HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH</h1>')
+    $('#tBody').append(row).append('<br><br><br><div id="billing" style="margin-left: 400px"><div class="row">\n' +
+        '  <div class="col-75">\n' +
+        '    <div class="container">\n' +
+        '      <form action="/action_page.php">\n' +
+        '\n' +
+        '        <div class="row">\n' +
+        '          <div class="col-50">\n' +
+        '            <h3>Billing Address</h3>\n' +
+        '            <label for="fname"><i class="fa fa-user"></i> Full Name</label>\n' +
+        '            <input type="text" id="fname" name="firstname" placeholder="John M. Doe">\n' +
+        '  <button style="margin-top: 250px" id="search-btn" type="button" class="btn btn-success">Book</button>\n' +
+
+        '          </div>\n' +
+        '\n' +
+        '          <div class="col-50">\n' +
+        '            <h3>Payment</h3>\n' +
+        '            <label for="fname">Accepted Cards</label>\n' +
+        '            <div class="icon-container">\n' +
+        '              <i class="fa-brands fa-cc-visa" style="color:navy;"></i>\n' +
+        '              <i class="fa-brands fa-cc-amex" style="color:blue;"></i>\n' +
+        '              <i class="fa-brands fa-cc-mastercard" style="color:red;"></i>\n' +
+        '              <i class="fa-brands fa-cc-discover" style="color:orange;"></i>\n' +
+        '            </div>\n' +
+        '            <label for="cname">Name on Card</label>\n' +
+        '            <input type="text" id="cname" name="cardname" placeholder="John More Doe">\n' +
+        '            <label for="ccnum">Credit card number</label>\n' +
+        '            <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">\n' +
+        '            <label for="expmonth">Exp Month</label>\n' +
+        '            <input type="text" id="expmonth" name="expmonth" placeholder="September">\n' +
+        '\n' +
+        '            <div class="row">\n' +
+        '              <div class="col-50">\n' +
+        '                <label for="expyear">Exp Year</label>\n' +
+        '                <input type="text" id="expyear" name="expyear" placeholder="2018">\n' +
+        '              </div>\n' +
+        '              <div class="col-50">\n' +
+        '                <label for="cvv">CVV</label>\n' +
+        '                <input type="text" id="cvv" name="cvv" placeholder="352">\n' +
+        '              </div>\n' +
+        '            </div>\n' +
+        '          </div>\n' +
+        '\n' +
+        '        </div>\n' +
+        '      </form>\n' +
+        '    </div>\n' +
+        '  </div>\n' +
+        '\n' +
+        '    </div>\n' +
+        '  </div>\n' +
+        '</div></div>')
      //socket.emit('newOrder',room,from,to,custName, custId);
 }
 
