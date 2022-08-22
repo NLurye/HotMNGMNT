@@ -17,8 +17,8 @@ socket.on('displayRooms', function (roomsArr,sfrom,sto) {
     }
 });
  handleReserve = function (room,sfrom,sto){
-let selfrom = new Date(sfrom).toLocaleDateString('en-IL');;
-let selto = new Date(sto).toLocaleDateString('en-IL');;
+let selfrom = new Date(sfrom).toLocaleDateString('en-IL');
+let selto = new Date(sto).toLocaleDateString('en-IL');
      $('#container').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room number</th><th>Check-in</th><th>Check-out</th><th></th></tr></thead><tbody id=\"tBody\"></tbody></table>");
     const row = `
         <tr>
@@ -75,7 +75,12 @@ $(function () {
 });
 
 socket.on('checkInDone',function () {
+    //alert("Welcome to our hotel");
     renderHome('home');
+});
+
+socket.on('checkInFailed',function () {
+    alert("reservation doesn't exist");
 });
 
 socket.on('checkOutDone',function () {

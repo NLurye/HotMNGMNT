@@ -3,6 +3,7 @@ let url = "mongodb://localhost:27017/hotel";
 const selectedRooms = [];
 let validLogIn=[];
 let validReservation = [];
+let showEmp = [];
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
@@ -285,7 +286,6 @@ let initHotelDB = function () {
                     empID: 1,
                     empPass: 1,
                     admin: 1,
-
                 },
                 {
                     empID: 2,
@@ -380,8 +380,8 @@ let initHotelDB = function () {
                 //        2) if(from > to) ===> alert("ERR: fromDate needs to be prior to toDate)
                 {
                     room: 10,
-                    from: new Date('2022-08-01'),
-                    to: new Date('2022-08-02'),
+                    from: new Date('2022-08-22').toLocaleDateString(),//'2022-08-01'
+                    to: new Date('2022-08-24').toLocaleDateString(),//2022-08-02
                     custName: "Tom",
                     custID: "111111110"
                 },
@@ -600,7 +600,6 @@ let initHotelDB = function () {
                 if (err) throw err;
             });
         });
-
     });
 }
 let logIn = function (id, pass) { ///<-----add encryption, admin?
@@ -627,7 +626,6 @@ let logIn = function (id, pass) { ///<-----add encryption, admin?
         });
     });
 }
-
 let selectRoomsByDates = function (selected_from, selected_to) {
     //eliminate rooms that have orders that starting before selected_to and simultaneously ending after selected_from
     MongoClient.connect(url, function (err, db) {
@@ -674,19 +672,27 @@ let checkIn = function (cust_id, cust_name) {
         let dbo = db.db("hotel");
         let orders = dbo.collection("Orders");
         let now = new Date();
-        let day = now.getDay();
-        orders.find(
+        orders.aggregate([
             {
-                custID: cust_id,
-                custName: cust_name,
-                from: day
+                $match:
+                    {
+                        from: {$lte: now},
+                        to: {$gt: now},
+                        custID: cust_id,
+                        custName: cust_name,
+                    }
             }
-        ).toArray(function (err, checkInRes) {
+        ]).toArray(function (err, checkInRes) {
             if (err) throw err;
             else {
+                validReservation.length = 0;
                 if (checkInRes.length === 0)
                     console.log("reservation doesn't exist");
-                else validReservation.push(checkInRes);
+                else {
+                    checkInRes.forEach(item => {
+                        validReservation.push(item);
+                    });
+                }
             }
         });
     });
@@ -864,23 +870,48 @@ let updateRoom = function (roomNum, bedsNum, myPrice) {
             });
     });
 }
+let searchEmp = function (empID) { ///<-----add encryption, admin?
+    MongoClient.connect(url, function (err, db) {
+        if (err) console.log(err);
+        let dbo = db.db("hotel");
+        let staff = dbo.collection("Staff");
+        staff.find(
+            {empID: parseInt(empID)}
+        ).toArray(function (err, searchEmpRes) {
+            if (err) throw err;
+            else {
+                showEmp.length = 0;
+                if (searchEmpRes.length === 0)
+                    console.log("Employee not found");
+                else {
+                    showEmp.push(searchEmpRes);
+                }
+            }
+            db.close();
+        });
+    });
+}
 
+module.exports.showEmp = showEmp;
 module.exports.validLogIn = validLogIn;
 module.exports.selectedRooms = selectedRooms;
-module.exports.init = initHotelDB;
-module.exports.addOrder = addOrder;
-module.exports.selectRooms = selectRoomsByDates;
-module.exports.logIn = logIn;
-module.exports.checkInCust = checkIn;
-module.exports.checkOut = checkOut;
-module.exports.deleteOrder = deleteOrder;
-module.exports.addRoom = addRoom;
-module.exports.deleteRoom = deleteRoom;
-module.exports.deleteEmployee = deleteEmployee;
-module.exports.updateOrder = updateOrder;
-module.exports.signIn = addEmployee;
-module.exports.changeEmpPass = changeEmpPass;
-module.exports.updateRoom = updateRoom;
+module.exports.validReservation = validReservation;
+module.exports.init = initHotelDB;//done
+module.exports.addOrder = addOrder;//to be done
+module.exports.selectRooms = selectRoomsByDates;//done
+module.exports.logIn = logIn;//done
+module.exports.checkIn = checkIn;//to be done -> add an alert
+module.exports.checkOut = checkOut;//done
+module.exports.deleteOrder = deleteOrder;//to be done
+module.exports.addRoom = addRoom;//to be done
+module.exports.deleteRoom = deleteRoom;//to be done
+module.exports.deleteEmployee = deleteEmployee;//to be done
+module.exports.updateOrder = updateOrder;//to be done
+module.exports.signIn = addEmployee;//to be done
+module.exports.changeEmpPass = changeEmpPass;//to be done
+module.exports.updateRoom = updateRoom;//to be done
+module.exports.searchEmp = searchEmp;
+//search room -> to do
 
 
 
