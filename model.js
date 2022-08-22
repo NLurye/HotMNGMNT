@@ -62,6 +62,7 @@ socket.on('deleteSuccess', function (rooms) {
 let selfrom = new Date(sfrom).toLocaleDateString('en-IL');;
 let selto = new Date(sto).toLocaleDateString('en-IL');;
      $('#container').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead style='width: 50px' class='thead-dark'><tr><th style='width: 50px' scope='col'>Room number</th><th scope='col'>Check-in</th><th scope='col'>Check-out</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+
     const row = `
         <tr>
             <td>${room}</td>
@@ -145,13 +146,17 @@ $(function () {
 $(function () {
     $('#emp-del-btn').click(function () {
         let id = $('#emp-id-del').val();
-
         socket.emit('deleteEmployee',id);
     });
 });
 
 socket.on('checkInDone',function () {
+    //alert("Welcome to our hotel");
     renderHome('home');
+});
+
+socket.on('checkInFailed',function () {
+    alert("reservation doesn't exist");
 });
 
 socket.on('checkOutDone',function () {
@@ -166,6 +171,10 @@ socket.on('loginFail', function () {
     alert("Incorrect user name or password, try again.");
 });
 
+socket.on('addRoomDone',function (roomNum) {
+    alert("Room " +roomNum+ " added");
+    renderHome('home');
+});
 
 
 // $(function(){
@@ -209,6 +218,15 @@ $(function(){
         let pw = ($('#password-l').val());
         // trigger server to validate login
         socket.emit('valLogin',username,pw);
+    });
+});
+
+$(function () {
+    $('#add-room-btn').click(function () {
+        let roomNum = $('#room-num').val();
+        let numOfBeds = $('#num-beds').val();
+        let price = $('#room-price').val();
+        socket.emit('addRoom',roomNum,numOfBeds,price);
     });
 });
 

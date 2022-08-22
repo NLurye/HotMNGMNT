@@ -6,6 +6,7 @@ var express = require('express')
     , io = require('socket.io')(server);
 server.listen(8080);
 //myDB.init();
+//myDB.checkIn();
 io.sockets.on('connection', function (socket) {
  //############ React to client's emit #################
     socket.on('sendDates', function (from,to) {
@@ -63,10 +64,13 @@ io.sockets.on('connection', function (socket) {
         }
     });
     socket.on('sendValsCheckIn',function (id,name) {
-        myDB.checkInCust(id,name);
+        myDB.checkIn(id,name);
         setTimeout(getResultFromCheckIn,1000);//<------Callback
         function getResultFromCheckIn() {
+            if(myDB.validReservation.length !== 0)
                 io.sockets.emit('checkInDone');
+            else
+                io.sockets.emit('checkInFailed');
         }
     });
 
@@ -76,12 +80,21 @@ io.sockets.on('connection', function (socket) {
         function getResultFromCheckOut() {
             io.sockets.emit('checkOutDone', id ,name);
         }
+    });
 
     socket.on('newOrder', function (room,from,to,custName, custId) {
         myDB.addOrder(room,from,to,custName, custId);
         //add email+whatsapp confirmation+maps location
     });
-});
+
+    socket.on('addRoom',function (roomNum,numOfBeds,price) {
+        myDB.addRoom(roomNum,numOfBeds,price);
+        setTimeout(getResultFromAddRoom,1000);//<------Callback
+        function getResultFromAddRoom() {
+            io.sockets.emit('addRoomDone',roomNum);
+        }
+    });
+
 });
 
 //############ Routing  #################
