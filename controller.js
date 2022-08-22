@@ -80,12 +80,21 @@ io.sockets.on('connection', function (socket) {
         function getResultFromCheckOut() {
             io.sockets.emit('checkOutDone', id ,name);
         }
+    });
 
     socket.on('newOrder', function (room,from,to,custName, custId) {
         myDB.addOrder(room,from,to,custName, custId);
         //add email+whatsapp confirmation+maps location
     });
-});
+
+    socket.on('addRoom',function (roomNum,numOfBeds,price) {
+        myDB.addRoom(roomNum,numOfBeds,price);
+        setTimeout(getResultFromAddRoom,1000);//<------Callback
+        function getResultFromAddRoom() {
+            io.sockets.emit('addRoomDone',roomNum);
+        }
+    });
+
 });
 
 //############ Routing  #################
