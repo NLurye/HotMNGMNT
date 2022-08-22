@@ -3,6 +3,8 @@ let url = "mongodb://localhost:27017/hotel";
 const selectedRooms = [];
 let validLogIn=[];
 let validReservation = [];
+let employees = [];
+let roomsList = [];
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
@@ -378,6 +380,7 @@ let initHotelDB = function () {
                 // TO_DO: we need to add validations to from&to dates:
                 //        1) if(from == to) ===> alert("ERR: cant get a room for one day only)
                 //        2) if(from > to) ===> alert("ERR: fromDate needs to be prior to toDate)
+                //        3) if(from == to == null) ===> alert("ERR: must enter dates)
                 {
                     room: 10,
                     from: new Date('2022-08-01'),
@@ -865,8 +868,42 @@ let updateRoom = function (roomNum, bedsNum, myPrice) {
     });
 }
 
+let getStaff = function () {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        let dbo = db.db("hotel");
+        let staff = dbo.collection("Staff");
+        staff.find({}).toArray(function (err, getEmpResult) {
+            if(err) throw err;
+            else{
+                getEmpResult.forEach(item => {
+                    employees.push(item);
+                });
+            }
+        });
+    });
+}
+
+let getRooms = function () {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        let dbo = db.db("hotel");
+        let rooms = dbo.collection("Rooms");
+        rooms.find({}).toArray(function (err, getRoomsResult) {
+            if(err) throw err;
+            else{
+                getRoomsResult.forEach(item => {
+                    roomsList.push(item);
+                });
+            }
+        });
+    });
+}
+
 module.exports.validLogIn = validLogIn;
 module.exports.selectedRooms = selectedRooms;
+module.exports.employees = employees;
+module.exports.roomsList = roomsList;
 module.exports.init = initHotelDB;
 module.exports.addOrder = addOrder;
 module.exports.selectRooms = selectRoomsByDates;
@@ -881,7 +918,8 @@ module.exports.updateOrder = updateOrder;
 module.exports.signIn = addEmployee;
 module.exports.changeEmpPass = changeEmpPass;
 module.exports.updateRoom = updateRoom;
-
+module.exports.getStaff = getStaff;
+module.exports.getRooms = getRooms;
 
 
 

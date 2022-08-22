@@ -16,6 +16,34 @@ socket.on('displayRooms', function (roomsArr,sfrom,sto) {
         $('#tBody').append(row);
     }
 });
+
+socket.on('displayEmployees', function (staff) {
+    $('#container-emp').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Employee ID</th><th>Admin: 1/0</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+    for (const emp of staff) {
+        const row = `
+        <tr>
+            <td>${emp.empID}</td>
+            <td>${emp.admin}</td>
+        </tr>`
+        //tBody.innerHTML += row;
+        $('#tBody').append(row);
+    }
+});
+
+socket.on('displayAdminRooms', function (rooms) {
+    $('#container-emp').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room Number</th><th>Number of Beds</th><th>Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+    for (const room of rooms) {
+        const row = `
+        <tr>
+            <td>${room.room}</td>
+            <td>${room.numOfBeds}</td>
+            <td>${room.price}</td>
+        </tr>`
+        tBody.innerHTML += row;
+        $('#tBody').append(row);
+    }
+});
+
  handleReserve = function (room,sfrom,sto){
 let selfrom = new Date(sfrom).toLocaleDateString('en-IL');;
 let selto = new Date(sto).toLocaleDateString('en-IL');;
@@ -110,6 +138,21 @@ $(function(){
     });
 });
 
+$(function(){
+    // when client clicks Search Rooms
+    $('#emp-list-btn').click( function() {
+        // trigger server to execute selectRooms by chosen dates
+        socket.emit('displayEmpList');
+    });
+});
+
+$(function(){
+    // when client clicks Search Rooms
+    $('#room-list-btn').click( function() {
+        // trigger server to execute selectRooms by chosen dates
+        socket.emit('displayRoomsList');
+    });
+});
 
 $(function(){
     // when client clicks Login
