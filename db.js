@@ -6,6 +6,7 @@ let validReservation = [];
 let showEmp = [];
 let employees = [];
 let roomsList = [];
+let showRoom = [];
 
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
@@ -924,6 +925,27 @@ let getRooms = function () {
         });
     });
 }
+let searchRoom = function (roomNumber) {
+    MongoClient.connect(url, function (err, db) {
+        if (err) console.log(err);
+        let dbo = db.db("hotel");
+        let rooms = dbo.collection("Rooms");
+        rooms.find(
+            {room: parseInt(roomNumber)}
+        ).toArray(function (err, searchRoomRes) {
+            if (err) throw err;
+            else {
+                showRoom.length = 0;
+                if (searchRoomRes.length === 0)
+                    console.log("Employee not found");
+                else {
+                    showRoom.push(searchRoomRes);
+                }
+            }
+            db.close();
+        });
+    });
+}
 
 module.exports.validLogIn = validLogIn;
 module.exports.selectedRooms = selectedRooms;
@@ -931,6 +953,7 @@ module.exports.employees = employees;
 module.exports.roomsList = roomsList;
 module.exports.validReservation = validReservation;
 module.exports.showEmp = showEmp;
+module.exports.showRoom = showRoom;
 module.exports.init = initHotelDB;//done
 module.exports.addOrder = addOrder;//to be done-----------------------------------------------
 module.exports.selectRooms = selectRoomsByDates;//done
@@ -948,7 +971,7 @@ module.exports.updateRoom = updateRoom;//to be done-----------------------------
 module.exports.searchEmp = searchEmp;//to be done---------------------------------------------
 module.exports.getStaff = getStaff;//done
 module.exports.getRooms = getRooms;//done
-//search room -> to do
+module.exports.searchRoom = searchRoom;//to be done---------------------------------------------
 
 
 

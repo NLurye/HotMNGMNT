@@ -97,7 +97,6 @@ $(function () {
 $(function () {
     $('#emp-del-btn').click(function () {
         let id = $('#emp-id-del').val();
-
         socket.emit('deleteEmployee',id);
     });
 });
@@ -123,6 +122,10 @@ socket.on('loginFail', function () {
     alert("Incorrect user name or password, try again.");
 });
 
+socket.on('addRoomDone',function (roomNum) {
+    alert("Room " +roomNum+ " added");
+    renderHome('home');
+});
 
 
 // $(function(){
@@ -166,6 +169,15 @@ $(function(){
         let pw = ($('#password-l').val());
         // trigger server to validate login
         socket.emit('valLogin',username,pw);
+    });
+});
+
+$(function () {
+    $('#add-room-btn').click(function () {
+        let roomNum = $('#room-num').val();
+        let numOfBeds = $('#num-beds').val();
+        let price = $('#room-price').val();
+        socket.emit('addRoom',roomNum,numOfBeds,price);
     });
 });
 
