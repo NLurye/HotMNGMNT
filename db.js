@@ -4,6 +4,8 @@ const selectedRooms = [];
 let validLogIn=[];
 let validReservation = [];
 let showEmp = [];
+let employees = [];
+let roomsList = [];
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
@@ -378,6 +380,7 @@ let initHotelDB = function () {
                 // TO_DO: we need to add validations to from&to dates:
                 //        1) if(from == to) ===> alert("ERR: cant get a room for one day only)
                 //        2) if(from > to) ===> alert("ERR: fromDate needs to be prior to toDate)
+                //        3) if(from == to == null) ===> alert("ERR: must enter dates)
                 {
                     room: 10,
                     from: new Date('2022-08-22').toLocaleDateString(),//'2022-08-01'
@@ -792,9 +795,9 @@ let deleteEmployee = function (emp_ID) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
-        let orders = dbo.collection("Staff");
+        let staff = dbo.collection("Staff");
         try {
-            orders.deleteOne(
+            staff.deleteOne(
                 {
                     empID: emp_ID
                 });
@@ -892,6 +895,58 @@ let searchEmp = function (empID) { ///<-----add encryption, admin?
     });
 }
 
+let getStaff = function () {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        let dbo = db.db("hotel");
+        let staff = dbo.collection("Staff");
+        staff.find({}).toArray(function (err, getEmpResult) {
+            if(err) throw err;
+            else{
+                getEmpResult.forEach(item => {
+                    employees.push(item);
+                });
+            }
+        });
+    });
+}
+
+let getRooms = function () {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        let dbo = db.db("hotel");
+        let rooms = dbo.collection("Rooms");
+        rooms.find({}).toArray(function (err, getRoomsResult) {
+            if(err) throw err;
+            else{
+                getRoomsResult.forEach(item => {
+                    roomsList.push(item);
+                });
+            }
+        });
+    });
+}
+
+module.exports.validLogIn = validLogIn;
+module.exports.selectedRooms = selectedRooms;
+module.exports.employees = employees;
+module.exports.roomsList = roomsList;
+module.exports.init = initHotelDB;
+module.exports.addOrder = addOrder;
+module.exports.selectRooms = selectRoomsByDates;
+module.exports.logIn = logIn;
+module.exports.checkInCust = checkIn;
+module.exports.checkOut = checkOut;
+module.exports.deleteOrder = deleteOrder;
+module.exports.addRoom = addRoom;
+module.exports.deleteRoom = deleteRoom;
+module.exports.deleteEmployee = deleteEmployee;
+module.exports.updateOrder = updateOrder;
+module.exports.signIn = addEmployee;
+module.exports.changeEmpPass = changeEmpPass;
+module.exports.updateRoom = updateRoom;
+module.exports.getStaff = getStaff;
+module.exports.getRooms = getRooms;
 module.exports.showEmp = showEmp;
 module.exports.validLogIn = validLogIn;
 module.exports.selectedRooms = selectedRooms;
@@ -912,7 +967,6 @@ module.exports.changeEmpPass = changeEmpPass;//to be done
 module.exports.updateRoom = updateRoom;//to be done
 module.exports.searchEmp = searchEmp;
 //search room -> to do
-
 
 
 
