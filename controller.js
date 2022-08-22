@@ -38,6 +38,19 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
+    socket.on('deleteEmployee', function (id) {
+        //prepare rooms available on those dates
+        myDB.deleteEmployee(id);
+        setTimeout(deleteEmp,1000);//<------Callback
+        function deleteEmp() {
+
+            if (myDB.validLogIn.length===1)
+                io.sockets.emit('loginSuccess');
+            else
+                io.sockets.emit('loginFail');
+        }
+    });
+
     socket.on('valLogin', function (username,pw) {
        // validate login
         myDB.logIn(username,pw);

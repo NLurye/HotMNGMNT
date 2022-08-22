@@ -789,9 +789,9 @@ let deleteEmployee = function (emp_ID) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
-        let orders = dbo.collection("Staff");
+        let staff = dbo.collection("Staff");
         try {
-            orders.deleteOne(
+            staff.deleteOne(
                 {
                     empID: emp_ID
                 });
