@@ -17,6 +17,40 @@ io.sockets.on('connection', function (socket) {
             io.sockets.emit('displayRooms', myDB.selectedRooms,from,to);
         }
     });
+
+    socket.on('displayEmpList', function () {
+        //prepare rooms available on those dates
+        myDB.getStaff();
+        setTimeout(getEmpList,1000);//<------Callback
+        function getEmpList() {
+            console.log(myDB.employees);//<----remove
+            io.sockets.emit('displayEmployees', myDB.employees);
+        }
+    });
+
+    socket.on('displayRoomsList', function () {
+        //prepare rooms available on those dates
+        myDB.getRooms();
+        setTimeout(getRoomsList,1000);//<------Callback
+        function getRoomsList() {
+            console.log(myDB.roomsList);//<----remove
+            io.sockets.emit('displayAdminRooms', myDB.roomsList);
+        }
+    });
+
+    socket.on('deleteEmployee', function (id) {
+        //prepare rooms available on those dates
+        myDB.deleteEmployee(id);
+        setTimeout(deleteEmp,1000);//<------Callback
+        function deleteEmp() {
+
+            if (myDB.validLogIn.length===1)
+                io.sockets.emit('loginSuccess');
+            else
+                io.sockets.emit('loginFail');
+        }
+    });
+
     socket.on('valLogin', function (username,pw) {
        // validate login
         myDB.logIn(username,pw);
@@ -100,6 +134,11 @@ app.get("/checkOut", function (req,res){
 app.get("/pages/checkOut.css", function (req,res){
     res.sendFile(__dirname + '/pages/checkOut.css');
 });
+
+app.get("/admin", function (req,res){
+    res.sendFile(__dirname + '/pages/admin.html');
+});
+
 
 
 

@@ -16,6 +16,48 @@ socket.on('displayRooms', function (roomsArr,sfrom,sto) {
         $('#tBody').append(row);
     }
 });
+
+socket.on('displayEmployees', function (staff) {
+    $('#container-emp').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Employee ID</th><th>Admin: 1/0</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+    for (const emp of staff) {
+        const row = `
+        <tr>
+            <td>${emp.empID}</td>
+            <td>${emp.admin}</td>
+        </tr>`
+        //tBody.innerHTML += row;
+        $('#tBody').append(row);
+    }
+});
+
+socket.on('displayAdminRooms', function (rooms) {
+    $('#container-emp').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room Number</th><th>Number of Beds</th><th>Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+    for (const room of rooms) {
+        const row = `
+        <tr>
+            <td>${room.room}</td>
+            <td>${room.numOfBeds}</td>
+            <td>${room.price}</td>
+        </tr>`
+        tBody.innerHTML += row;
+        $('#tBody').append(row);
+    }
+});
+
+socket.on('deleteSuccess', function (rooms) {
+    $('#container-emp').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room Number</th><th>Number of Beds</th><th>Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+    for (const room of rooms) {
+        const row = `
+        <tr>
+            <td>${room.room}</td>
+            <td>${room.numOfBeds}</td>
+            <td>${room.price}</td>
+        </tr>`
+        tBody.innerHTML += row;
+        $('#tBody').append(row);
+    }
+});
+
  handleReserve = function (room,sfrom,sto){
 let selfrom = new Date(sfrom).toLocaleDateString('en-IL');;
 let selto = new Date(sto).toLocaleDateString('en-IL');;
@@ -27,29 +69,7 @@ let selto = new Date(sto).toLocaleDateString('en-IL');;
             <td>${selto}</td>
             <td><button onclick="handleConfirm(${room},${sfrom},${sto})">Confirm</button></td>
         </tr>`
-    $('#tBody').append(row).append('<div class="dropdown-menu">\n' +
-        '  <form class="px-4 py-3">\n' +
-        '    <div class="form-group">\n' +
-        '      <label for="exampleDropdownFormEmail1">Email address</label>\n' +
-        '      <input type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@example.com">\n' +
-        '    </div>\n' +
-        '    <div class="form-group">\n' +
-        '      <label for="exampleDropdownFormPassword1">Password</label>\n' +
-        '      <input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password">\n' +
-        '    </div>\n' +
-        '    <div class="form-check">\n' +
-        '      <input type="checkbox" class="form-check-input" id="dropdownCheck">\n' +
-        '      <label class="form-check-label" for="dropdownCheck">\n' +
-        '        Remember me\n' +
-        '      </label>\n' +
-        '    </div>\n' +
-        '    <button type="submit" class="btn btn-primary">Sign in</button>\n' +
-        '  </form>\n' +
-        '  <div class="dropdown-divider"></div>\n' +
-        '  <a class="dropdown-item" href="#">New around here? Sign up</a>\n' +
-        '  <a class="dropdown-item" href="#">Forgot password?</a>\n' +
-        '</div>')
-     $('.dropdown-menu').dropdown();
+    $('#tBody').append(row).append('<h1>HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH</h1>')
      //socket.emit('newOrder',room,from,to,custName, custId);
 }
 
@@ -71,6 +91,14 @@ $(function () {
         // let from = new Date($('#fromOutDate').val());
         // let to  = new Date($('#toOutDate').val());
         socket.emit('sendValsCheckOut',id,name,from,to);
+    });
+});
+
+$(function () {
+    $('#emp-del-btn').click(function () {
+        let id = $('#emp-id-del').val();
+
+        socket.emit('deleteEmployee',id);
     });
 });
 
@@ -110,6 +138,21 @@ $(function(){
     });
 });
 
+$(function(){
+    // when client clicks Search Rooms
+    $('#emp-list-btn').click( function() {
+        // trigger server to execute selectRooms by chosen dates
+        socket.emit('displayEmpList');
+    });
+});
+
+$(function(){
+    // when client clicks Search Rooms
+    $('#room-list-btn').click( function() {
+        // trigger server to execute selectRooms by chosen dates
+        socket.emit('displayRoomsList');
+    });
+});
 
 $(function(){
     // when client clicks Login
