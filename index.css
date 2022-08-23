@@ -14,6 +14,8 @@ html{
     background-size: cover;
 }
 
+
+
 .navbar-brand {
     position: relative;
     z-index: 2;
@@ -124,7 +126,6 @@ html{
 }
 
 
-
 .viewport-header {
     position: relative;
     text-align: center;
@@ -132,6 +133,7 @@ html{
     align-items: center;
     justify-content: center;
 }
+
 
 h1 {
     font-family: 'Syncopate', sans-serif;
