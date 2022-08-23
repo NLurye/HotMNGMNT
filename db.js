@@ -2,6 +2,7 @@ let MongoClient = require('mongodb').MongoClient;
 let url = "mongodb://localhost:27017/hotel";
 const selectedRooms = [];
 let validLogIn = [];
+let validSignIn = [];
 let validReservation = [];
 let showEmp = [];
 let employees = [];
@@ -829,15 +830,15 @@ let updateOrder = function (cust_id, cust_name, my_from, my_to, new_cust_id, new
         }
     });
 }
-let addEmployee = function (emp_id, emp_pass, is_admin) {
+let addEmployee = function (emp_id, emp_pass) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
         let employee =
             {
-                empID: emp_id,
-                empPass: emp_pass,
-                admin: is_admin
+                empID: parseInt(emp_id),
+                empPass: parseInt(emp_pass),
+                admin: 0
             }
         dbo.collection("Staff").insertOne(employee, function (err, res) {
             if (err) throw err;
@@ -961,6 +962,7 @@ module.exports.logIn = logIn;//done
 module.exports.checkIn = checkIn;//to be done -> add an alert---------------------------------
 module.exports.checkOut = checkOut;//done
 module.exports.deleteOrder = deleteOrder;//to be done-----------------------------------------
+//admin actions
 module.exports.addRoom = addRoom;//to be done-------------------------------------------------
 module.exports.deleteRoom = deleteRoom;//to be done-------------------------------------------
 module.exports.deleteEmployee = deleteEmployee;//to be done-----------------------------------
