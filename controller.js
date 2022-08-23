@@ -77,6 +77,16 @@ io.sockets.on('connection', function (socket) {
                 io.sockets.emit('loginFail');
         }
     });
+
+    socket.on('valRegister', function (username,pw) {
+        // validate login
+        myDB.signIn(username,pw);
+        setTimeout(getResultFromSignIn,1000);//<------Callback
+        function getResultFromSignIn() {
+            io.sockets.emit('registerSuccess', username);
+        }
+    });
+
     socket.on('sendValsCheckIn',function (id,name) {
         myDB.checkIn(id,name);
         setTimeout(getResultFromCheckIn,1000);//<------Callback

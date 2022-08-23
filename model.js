@@ -205,6 +205,12 @@ socket.on('loginFail', function () {
     alert("Incorrect user name or password, try again.");
 });
 
+
+socket.on('registerSuccess', function (username) {
+    alert(username + "has registered");
+});
+
+
 socket.on('addRoomDone',function (roomNum) {
     alert("Room " +roomNum+ " added");
     renderHome('home');
@@ -267,6 +273,16 @@ $(function(){
         let pw = ($('#password-l').val());
         // trigger server to validate login
         socket.emit('valLogin',username,pw);
+    });
+});
+
+$(function(){
+    // when client clicks Register
+    $('#register-submit').click( function() {
+        let username = ($('#username-r').val());
+        let pw = ($('#password-r').val());
+        // trigger server to validate login
+        socket.emit('valRegister',username,pw);
     });
 });
 
