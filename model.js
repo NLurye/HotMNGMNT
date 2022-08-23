@@ -18,7 +18,7 @@ socket.on('displayRooms', function (roomsArr,sfrom,sto) {
 });
 
 socket.on('displayEmployees', function (staff) {
-    $('#container-emp').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Employee ID</th><th>Admin: 1/0</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+    $('#container-emp').empty().append("<table style='margin-right: 100px' class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Employee ID</th><th>Admin</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
     for (const emp of staff) {
         const row = `
         <tr>
@@ -192,6 +192,11 @@ socket.on('deleteOrderDone',function () {
     renderHome('home');
 });
 
+socket.on('deleteEmployeeDone',function () {
+    alert('employee deleted');
+    renderHome('home');
+});
+
 socket.on('loginSuccess', function () {
     renderHome('home');
 //-------> if admin add options like delete/add employee
@@ -212,6 +217,11 @@ socket.on('deleteRoomDone',function (roomNum) {
 
 socket.on('orderAdded',function (room,from,to, name) {
     alert("room number " + room + " is reserved to " + name + " from " + from + " until " + to);
+    renderHome('home');
+});
+
+socket.on('updateRoomDone',function (newRoomNum) {
+    alert("room number " + newRoomNum + " updated ");
     renderHome('home');
 });
 
@@ -261,7 +271,7 @@ $(function(){
 });
 
 $(function () {
-    $('#add-room-btn').click(function () {
+    $('#room-add-btn').click(function () {
         let roomNum = $('#room-num').val();
         let numOfBeds = $('#num-beds').val();
         let price = $('#room-price').val();
@@ -275,6 +285,17 @@ $(function () {
         socket.emit('deleteRoom',roomNum);
     });
 });
+
+$(function () {
+    $('#room-upd-btn').click(function () {
+        let newRoomNum = $('#room-num-upd').val();
+        let newNumBeds = $('#new-num-beds').val();
+        let newPrice = $('#new-price').val();
+        socket.emit('updateRoom',newRoomNum, newNumBeds, newPrice);
+    });
+});
+
+
 
 //Fixed price
 

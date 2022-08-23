@@ -961,6 +961,7 @@ module.exports.logIn = logIn;//done
 module.exports.checkIn = checkIn;//to be done -> add an alert---------------------------------
 module.exports.checkOut = checkOut;//done
 module.exports.deleteOrder = deleteOrder;//to be done-----------------------------------------
+//admin actions
 module.exports.addRoom = addRoom;//to be done-------------------------------------------------
 module.exports.deleteRoom = deleteRoom;//to be done-------------------------------------------
 module.exports.deleteEmployee = deleteEmployee;//to be done-----------------------------------

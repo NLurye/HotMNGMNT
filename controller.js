@@ -53,11 +53,16 @@ io.sockets.on('connection', function (socket) {
         myDB.deleteEmployee(id);
         setTimeout(deleteEmp,1000);//<------Callback
         function deleteEmp() {
+            io.sockets.emit('deleteEmployeeDone'); //need to catch error
+        }
+    });
 
-            if (myDB.validLogIn.length===1)
-                io.sockets.emit('loginSuccess');
-            else
-                io.sockets.emit('loginFail');
+    socket.on('updateRoom', function (newRoomNum, newNumBeds, newPrice) {
+        //prepare rooms available on those dates
+        myDB.updateRoom(newRoomNum, newNumBeds, newPrice);
+        setTimeout(updRoom,1000);//<------Callback
+        function updRoom() {
+            io.sockets.emit('updateRoomDone',newRoomNum); //need to catch error
         }
     });
 
@@ -84,11 +89,11 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
-    socket.on('sendValsCheckOut',function (id,name, from, to) {
+    socket.on('sendValsCheckOut',function (id,name) { //from-to
         myDB.checkOut(id,name);
         setTimeout(getResultFromCheckOut,1000);//<------Callback
         function getResultFromCheckOut() {
-            io.sockets.emit('checkOutDone', id ,name, from, to);
+            io.sockets.emit('checkOutDone', id ,name);
         }
     });
 
