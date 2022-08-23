@@ -836,8 +836,8 @@ let addEmployee = function (emp_id, emp_pass) {
         let dbo = db.db("hotel");
         let employee =
             {
-                empID: emp_id,
-                empPass: emp_pass,
+                empID: parseInt(emp_id),
+                empPass: parseInt(emp_pass),
                 admin: 0
             }
         dbo.collection("Staff").insertOne(employee, function (err, res) {

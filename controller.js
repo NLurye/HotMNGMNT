@@ -5,7 +5,7 @@ var express = require('express')
     , myDB = require("./db")
     , io = require('socket.io')(server);
 server.listen(8080);
-//myDB.init();
+// myDB.init();
 //myDB.checkIn();
 io.sockets.on('connection', function (socket) {
  //############ React to client's emit #################
