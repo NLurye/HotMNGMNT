@@ -88,8 +88,8 @@ $(function () {
     $('#check-out-btn').click(function () {
         let id = $('#id-num-co').val();
         let name = $('#cust-name-co').val();
-        // let from = new Date($('#fromOutDate').val());
-        // let to  = new Date($('#toOutDate').val());
+        let from = new Date($('#fromOutDate').val());
+        let to  = new Date($('#toOutDate').val());
         socket.emit('sendValsCheckOut',id,name,from,to);
     });
 });

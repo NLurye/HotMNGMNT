@@ -384,8 +384,8 @@ let initHotelDB = function () {
                 //        3) if(from == to == null) ===> alert("ERR: must enter dates)
                 {
                     room: 10,
-                    from: new Date('2022-08-22').toLocaleDateString(),//'2022-08-01'
-                    to: new Date('2022-08-24').toLocaleDateString(),//2022-08-02
+                    from: new Date('2022-08-22'),//'2022-08-01'
+                    to: new Date('2022-08-24'),//2022-08-02
                     custName: "Tom",
                     custID: "111111110"
                 },
@@ -676,17 +676,16 @@ let checkIn = function (cust_id, cust_name) {
         let dbo = db.db("hotel");
         let orders = dbo.collection("Orders");
         let now = new Date();
-        orders.aggregate([
-            {
-                $match:
+        console.log(now);
+        console.log(typeof now);
+        orders.find(
                     {
                         from: {$lte: now},
                         to: {$gt: now},
                         custID: cust_id,
                         custName: cust_name,
                     }
-            }
-        ]).toArray(function (err, checkInRes) {
+        ).toArray(function (err, checkInRes) {
             if (err) throw err;
             else {
                 validReservation.length = 0;
