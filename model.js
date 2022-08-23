@@ -58,39 +58,39 @@ socket.on('deleteSuccess', function (rooms) {
     }
 });
 
- handleReserve = function (room,sfrom,sto){
-let selfrom = new Date(sfrom).toLocaleDateString('en-IL');;
-let selto = new Date(sto).toLocaleDateString('en-IL');;
-     $('#container').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead style='width: 50px' class='thead-dark'><tr><th style='width: 50px' scope='col'>Room number</th><th scope='col'>Check-in</th><th scope='col'>Check-out</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+let handleReserve = function (room,sfrom,sto){
+let selfrom = new Date(sfrom).toLocaleDateString('en-IL');
+let selto = new Date(sto).toLocaleDateString('en-IL');
+     $('#container').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead class='thead-dark'><tr><th scope='col'>Room number</th><th scope='col'>Check-in</th><th scope='col'>Check-out</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
 
     const row = `
         <tr>
-            <td>${room}</td>
-            <td>${selfrom}</td>
-            <td>${selto}</td>
+            <td id="selected-room-num">${room}</td>
+            <td id="selected-from">${selfrom}</td>
+            <td id="selected-to">${selto}</td>
         </tr>`
-    $('#tBody').append(row).append('<br><br><br><div id="billing" style="margin-left: 400px"><div class="row">\n' +
+    $('#tBody').append(row).append('<div>\n' +
         '  <div class="col-75">\n' +
-        '    <div id="container-bill">\n' +
-        '      <form action="/action_page.php">\n' +
+        '    <div class="container">\n' +
+        '      <form>\n' +
         '\n' +
         '        <div class="row">\n' +
         '          <div class="col-50">\n' +
         '            <h3>Billing Address</h3>\n' +
         '            <label for="fname"><i class="fa fa-user"></i> Full Name</label>\n' +
-        '            <input type="text" id="fname" name="firstname" placeholder="John M. Doe">\n' +
-        '  <button style="margin-top: 250px" id="search-btn" type="button" class="btn btn-success">Book</button>\n' +
-
+        '            <input type="text" id="cust-name" name="firstname" placeholder="John M. Doe">\n' +
+        '            <label for="id"><i class="fa fa-user"></i> Identification Number</label>\n' +
+        '            <input type="text" id="cust-id" name="id" placeholder="123456789">\n' +
         '          </div>\n' +
         '\n' +
         '          <div class="col-50">\n' +
         '            <h3>Payment</h3>\n' +
         '            <label for="fname">Accepted Cards</label>\n' +
         '            <div class="icon-container">\n' +
-        '              <i class="fa-brands fa-cc-visa" style="color:navy;"></i>\n' +
-        '              <i class="fa-brands fa-cc-amex" style="color:blue;"></i>\n' +
-        '              <i class="fa-brands fa-cc-mastercard" style="color:red;"></i>\n' +
-        '              <i class="fa-brands fa-cc-discover" style="color:orange;"></i>\n' +
+        '              <i class="fa fa-cc-visa" style="color:navy;"></i>\n' +
+        '              <i class="fa fa-cc-amex" style="color:blue;"></i>\n' +
+        '              <i class="fa fa-cc-mastercard" style="color:red;"></i>\n' +
+        '              <i class="fa fa-cc-discover" style="color:orange;"></i>\n' +
         '            </div>\n' +
         '            <label for="cname">Name on Card</label>\n' +
         '            <input type="text" id="cname" name="cardname" placeholder="John More Doe">\n' +
@@ -112,18 +112,31 @@ let selto = new Date(sto).toLocaleDateString('en-IL');;
         '          </div>\n' +
         '\n' +
         '        </div>\n' +
+        '       <button id="book-btn-success" type="button" class="btn btn-success">Book</button>\n' +
         '      </form>\n' +
         '    </div>\n' +
         '  </div>\n' +
         '\n' +
-        '    </div>\n' +
-        '  </div>\n' +
-        '</div></div>')
+        '</div>')
      //socket.emit('newOrder',room,from,to,custName, custId);
+
 }
 
 function handleConfirm(room,sfrom,sto) {
 }
+
+$(function () {
+    $('#book-btn-success').click(function () {
+        renderHome('home');
+        let id = $('#cust-id').val();
+        let name = $('#cust-name').val();
+        let from = $('#selected-from').val();
+        let to = $('#selected-to').val();
+        let room = $('#selected-room-num').val();
+        console.log('blablabla2');
+        socket.emit('sendOrderVals',room,from,to, name, id);
+    });
+});
 
 $(function () {
     $('#check-in-btn').click(function () {
@@ -137,11 +150,22 @@ $(function () {
     $('#check-out-btn').click(function () {
         let id = $('#id-num-co').val();
         let name = $('#cust-name-co').val();
-        // let from = new Date($('#fromOutDate').val());
-        // let to  = new Date($('#toOutDate').val());
+        let from = new Date($('#fromOutDate').val());
+        let to  = new Date($('#toOutDate').val());
         socket.emit('sendValsCheckOut',id,name,from,to);
     });
 });
+
+$(function () {
+    $('#del-check-out-btn').click(function () {
+        let id = $('#id-num-co').val();
+        let name = $('#cust-name-co').val();
+        let from = new Date($('#fromOutDate').val());
+        let to  = new Date($('#toOutDate').val());
+        socket.emit('sendDeleteOrder',id,name,from,to);
+    });
+});
+
 
 $(function () {
     $('#emp-del-btn').click(function () {
@@ -163,6 +187,11 @@ socket.on('checkOutDone',function () {
     renderHome('home');
 });
 
+socket.on('deleteOrderDone',function () {
+    alert('order deleted');
+    renderHome('home');
+});
+
 socket.on('loginSuccess', function () {
     renderHome('home');
 //-------> if admin add options like delete/add employee
@@ -173,6 +202,11 @@ socket.on('loginFail', function () {
 
 socket.on('addRoomDone',function (roomNum) {
     alert("Room " +roomNum+ " added");
+    renderHome('home');
+});
+
+socket.on('orderAdded',function (room,from,to, name) {
+    alert("room number " + room + " is reserved to " + name + " from " + from + " until " + to);
     renderHome('home');
 });
 

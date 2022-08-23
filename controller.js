@@ -19,6 +19,15 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
+    socket.on('sendOrderVals', function (room,from,to, name, id) {
+        myDB.addOrder(room,from,to, name, id);
+        setTimeout(getResultFromAddOrder,1000);//<------Callback
+        function getResultFromAddOrder() {
+            console.log('blablabla');
+            io.sockets.emit('OrderAdded', room,from,to, name);
+        }
+    });
+
     socket.on('displayEmpList', function () {
         //prepare rooms available on those dates
         myDB.getStaff();
@@ -74,13 +83,22 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
-    socket.on('sendValsCheckOut',function (id,name) {
+    socket.on('sendValsCheckOut',function (id,name, from, to) {
         myDB.checkOut(id,name);
         setTimeout(getResultFromCheckOut,1000);//<------Callback
         function getResultFromCheckOut() {
-            io.sockets.emit('checkOutDone', id ,name);
+            io.sockets.emit('checkOutDone', id ,name, from, to);
         }
     });
+
+    socket.on('sendDeleteOrder',function (id,name, from, to) {
+        myDB.deleteOrder(id,name, from, to);
+        setTimeout(getResultFromDeleteOrder,1000);//<------Callback
+        function getResultFromDeleteOrder() {
+            io.sockets.emit('deleteOrderDone', id ,name, from, to);
+        }
+    });
+
 
     socket.on('newOrder', function (room,from,to,custName, custId) {
         myDB.addOrder(room,from,to,custName, custId);
