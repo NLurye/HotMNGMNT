@@ -728,13 +728,13 @@ let checkOut = function (cust_id, cust_name, sfrom, sto) {
         });
     });
 }
-let addOrder = function (room, from, to, custName, custID) {
+let addOrder = function (curRoom, from, to, custName, custID) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
         let order =
             {
-                room: room,
+                room: parseInt(curRoom),
                 from: new Date(from),
                 to: new Date(to),
                 custName: custName,
