@@ -7,6 +7,7 @@ var express = require('express')
 server.listen(8080);
 //myDB.init();
 //myDB.checkIn();
+//myDB.checkOut();
 io.sockets.on('connection', function (socket) {
  //############ React to client's emit #################
     socket.on('sendDates', function (from,to) {
@@ -44,11 +45,7 @@ io.sockets.on('connection', function (socket) {
         myDB.deleteEmployee(id);
         setTimeout(deleteEmp,1000);//<------Callback
         function deleteEmp() {
-
-            if (myDB.validLogIn.length===1)
-                io.sockets.emit('loginSuccess');
-            else
-                io.sockets.emit('loginFail');
+            //need to catch if err
         }
     });
 
@@ -75,11 +72,11 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
-    socket.on('sendValsCheckOut',function (id,name) {
-        myDB.checkOut(id,name);
+    socket.on('sendValsCheckOut',function (id,name,from,to) {
+        myDB.checkOut(id,name,from,to);
         setTimeout(getResultFromCheckOut,1000);//<------Callback
         function getResultFromCheckOut() {
-            io.sockets.emit('checkOutDone', id ,name);
+            io.sockets.emit('checkOutDone');
         }
     });
 

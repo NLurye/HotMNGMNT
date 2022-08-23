@@ -239,7 +239,8 @@ renderPage = function (page) { // here the data and url are not hardcoded anymor
         url: "http://localhost:8080/" + page,
         contentType: "text/html",
         success: function (data) {
-            $("#container").html(data);}
+            $("#container").html(data);
+        }
     })}
 
 // renderPage = function (page) { // spa routing using ajax
@@ -254,17 +255,17 @@ renderPage = function (page) { // here the data and url are not hardcoded anymor
 //     });
 // }
 
-renderHome = function (page) {
+renderHome = function (page) { // here the data and url are not hardcoded anymore
     return $.ajax({
         type: "GET",
         url: "http://localhost:8080/" + page,
-        contentType: "text/html"
-    }).success(function (data) {
-        $("body").html(data);
-    }).fail(function (sender, message, details) {
-        alert("Sorry, something went wrong!");
+        contentType: "text/html",
+        success: function (data) {
+            $("body").html(data);
+        }
     });
 }
+
 
 
 

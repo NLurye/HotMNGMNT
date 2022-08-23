@@ -384,7 +384,7 @@ let initHotelDB = function () {
                 //        3) if(from == to == null) ===> alert("ERR: must enter dates)
                 {
                     room: 10,
-                    from: new Date('2022-08-22'),//'2022-08-01'
+                    from: new Date('2022-08-21'),//'2022-08-01'
                     to: new Date('2022-08-24'),//2022-08-02
                     custName: "Tom",
                     custID: "111111110"
@@ -676,8 +676,6 @@ let checkIn =function(cust_id,cust_name){
         let dbo = db.db("hotel");
         let orders = dbo.collection("Orders");
         let now = new Date();
-        console.log(now);
-        console.log(typeof now);
         orders.find(
                     {
                         from: {$lte: now},
@@ -706,13 +704,20 @@ let checkOut = function (cust_id, cust_name, sfrom, sto) {
         let dbo = db.db("hotel");
         let orders = dbo.collection("Orders");
         let ordersHistory = dbo.collection("OrdersHistory");
-        let query = {custID: cust_id, custName: cust_name, from: sfrom, to: sto};
-        orders.find(query).toArray(function (err, checkOutRes) {
+        orders.find(
+            {
+                from: {$eq: new Date(sfrom)},
+                to: {$eq: new Date(sto)},
+                custID: cust_id,
+                custName: cust_name,
+            }
+        ).toArray(function (err,checkOutRes) {
             if (err) throw err;
             else {
                 console.log(checkOutRes);
-                if (checkOutRes.length === 0)
+                if (checkOutRes.length === 0) {
                     console.log("Reservation doesn't exist");
+                }
                 else {
                     ordersHistory.insertMany(checkOutRes, function (err, res) {
                         if (err) throw err;
