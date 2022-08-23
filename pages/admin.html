@@ -1,185 +1,177 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
-  <link rel="stylesheet" href="book.css"/>
-  <link
-          href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
-          rel="stylesheet"
-          id="bootstrap-css"
-  />
-
+    <link rel="stylesheet" href="book.css"/>
+    <link
+            href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+            rel="stylesheet"
+            id="bootstrap-css"
+    />
 <body>
 
 <h1 class="display-3" style="margin-top: 50px; color: whitesmoke; font-family: Georgia">Admin actions</h1>
-
 <div class="container" id="container-emp">
-  <div class="row">
-    <div class="col-sm-3">
-      <div class="box" style="margin-top: 20px">
-        <button id="emp-list-btn" type="button" class="btn btn-info">Employee list</button>
-      </div>
-    </div>
-    <div class="col-sm-3">
-      <div class="box" style="margin-top: 20px">
-        <div
-                class="d-flex align-items-center flex-fill ms-sm-1 my-sm-0 my-4 border-bottom position-relative"
-        >
-          <input
-                  id="emp-id-del"
-                  type="text"
-                  required
-                  placeholder="Emp ID"
-                  class="form-control"
-          />
-          <button id="emp-del-btn" type="button" class="btn btn-info">Delete Employee</button>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-3">
-      <div class="box" style="margin-top: 20px">
-        <div
-                class="d-flex align-items-center flex-fill ms-sm-1 my-sm-0 my-4 border-bottom position-relative"
-        >
-          <input
-                  id="emp-id-upd"
-                  type="text"
-                  required
-                  placeholder="Emp ID"
-                  class="form-control"
-          />
-          <button id="emp-upd-btn" type="button" class="btn btn-info">Update Employee</button>
-        </div>
-      </div>
-    </div>
-
-
-
-
     <div class="row">
-      <div class="col-sm-3">
-        <div class="box" style="margin-top: 20px">
-          <input
-                  id="emp-id-search"
-                  type="text"
-                  required
-                  placeholder="Emp ID"
-                  class="form-control"
-          />
-          <button id="emp-search-btn" type="button" class="btn btn-info">Search Employee</button>
+        <div class="col-sm-3">
+            <div class="box" style="margin-top: 20px">
+                <button id="emp-list-btn" type="button" class="btn btn-info">Employee list</button>
+            </div>
         </div>
-      </div>
-      <div class="col-sm-3">
-        <div class="box" style="margin-top: 20px">
-          <div
-                  class="d-flex align-items-center flex-fill ms-sm-1 my-sm-0 my-4 border-bottom position-relative"
-          >
-            <button id="room-list-btn" type="button" class="btn btn-info">Rooms List</button>
-
-          </div>
+        <div class="col-sm-3">
+            <div class="box" style="margin-top: 20px">
+                <div
+                        class="d-flex align-items-center flex-fill ms-sm-1 my-sm-0 my-4 border-bottom position-relative"
+                >
+                    <input
+                            id="emp-id-del"
+                            type="text"
+                            required
+                            placeholder="Emp ID"
+                            class="form-control"
+                    />
+                    <button id="emp-del-btn" type="button" class="btn btn-info">Delete Employee</button>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col-sm-3">
-        <div class="box" style="margin-top: 20px">
-          <div
-                  class="d-flex align-items-center flex-fill ms-sm-1 my-sm-0 my-4 border-bottom position-relative"
-          >
-            <input
-                    id="room-num"
-                    type="text"
-                    required
-                    placeholder="Room Num"
-                    class="form-control"
-            />
-            <input
-                    id="num-beds"
-                    type="text"
-                    required
-                    placeholder="Number Of Beds"
-                    class="form-control"
-            />
-            <input
-                    id="room-price"
-                    type="text"
-                    required
-                    placeholder="Room Price"
-                    class="form-control"
-            />
-            <button id="add-room-btn" type="button" class="btn btn-info">Add Room</button>
-          </div>
+        <div class="col-sm-3">
+            <div class="box" style="margin-top: 20px">
+                <div
+                        class="d-flex align-items-center flex-fill ms-sm-1 my-sm-0 my-4 border-bottom position-relative"
+                >
+                    <input
+                            id="emp-id-upd"
+                            type="text"
+                            required
+                            placeholder="Emp ID"
+                            class="form-control"
+                    />
+                    <button id="emp-upd-btn" type="button" class="btn btn-info">Update Employee</button>
+                </div>
+            </div>
         </div>
-      </div>
 
 
-  <div class="row">
-    <div class="col-sm-3">
-      <div class="box" style="margin-top: 20px">
-        <div
-                class="d-flex align-items-center flex-fill ms-sm-1 my-sm-0 my-4 border-bottom position-relative"
-        >
-          <input
-                  id="del-room"
-                  type="text"
-                  required
-                  placeholder="Room Number"
-                  class="form-control"
-          />
-          <button id="room-del-btn" type="button" class="btn btn-info">Delete Room</button>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="box" style="margin-top: 20px">
+                    <input
+                            id="emp-id-search"
+                            type="text"
+                            required
+                            placeholder="Emp ID"
+                            class="form-control"
+                    />
+                    <button id="emp-search-btn" type="button" class="btn btn-info">Search Employee</button>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="box" style="margin-top: 20px">
+                    <div
+                            class="d-flex align-items-center flex-fill ms-sm-1 my-sm-0 my-4 border-bottom position-relative"
+                    >
+                        <button id="room-list-btn" type="button" class="btn btn-info">Rooms List</button>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="box" style="margin-top: 20px">
+                    <div
+                            class="d-flex align-items-center flex-fill ms-sm-1 my-sm-0 my-4 border-bottom position-relative"
+                    >
+                        <input
+                                id="room-num"
+                                type="text"
+                                required
+                                placeholder="Room Num"
+                                class="form-control"
+                        />
+                        <input
+                                id="num-beds"
+                                type="text"
+                                required
+                                placeholder="Number Of Beds"
+                                class="form-control"
+                        />
+                        <input
+                                id="room-price"
+                                type="text"
+                                required
+                                placeholder="Room Price"
+                                class="form-control"
+                        />
+                        <button id="add-room-btn" type="button" class="btn btn-info">Add Room</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="box" style="margin-top: 20px">
+                        <div
+                                class="d-flex align-items-center flex-fill ms-sm-1 my-sm-0 my-4 border-bottom position-relative"
+                        >
+                            <input
+                                    id="del-room"
+                                    type="text"
+                                    required
+                                    placeholder="Room Number"
+                                    class="form-control"
+                            />
+                            <button id="room-del-btn" type="button" class="btn btn-info">Delete Room</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="box" style="margin-top: 20px">
+                        <div
+                                class="d-flex align-items-center flex-fill ms-sm-1 my-sm-0 my-4 border-bottom position-relative"
+                        >
+                            <input
+                                    id="room-num-upd"
+                                    type="text"
+                                    required
+                                    placeholder="Room Number"
+                                    class="form-control"
+                            />
+                            <input
+                                    id="new-num-beds"
+                                    type="text"
+                                    required
+                                    placeholder="New Number Of Beds"
+                                    class="form-control"
+                            />
+                            <input
+                                    id="new-price"
+                                    type="text"
+                                    required
+                                    placeholder="New Price"
+                                    class="form-control"
+                            />
+                            <button id="update-room-btn" type="button" class="btn btn-info">Update Room</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="box" style="margin-top: 20px">
+                        <div
+                                class="d-flex align-items-center flex-fill ms-sm-1 my-sm-0 my-4 border-bottom position-relative"
+                        >
+                            <input
+                                    id="room-search"
+                                    type="text"
+                                    required
+                                    placeholder="Room Number"
+                                    class="form-control"
+                            />
+                            <button id="room-search-btn" type="button" class="btn btn-info">Search Room</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-    <div class="col-sm-3">
-      <div class="box" style="margin-top: 20px">
-        <div
-                class="d-flex align-items-center flex-fill ms-sm-1 my-sm-0 my-4 border-bottom position-relative"
-        >
-          <input
-                  id="room-num-upd"
-                  type="text"
-                  required
-                  placeholder="Room Number"
-                  class="form-control"
-          />
-          <input
-                  id="new-num-beds"
-                  type="text"
-                  required
-                  placeholder="New Number Of Beds"
-                  class="form-control"
-          />
-          <input
-                  id="new-price"
-                  type="text"
-                  required
-                  placeholder="New Price"
-                  class="form-control"
-          />
-          <button id="update-room-btn" type="button" class="btn btn-info">Update Room</button>
-        </div>
-      </div>
-    </div><div class="col-sm-3">
-    <div class="box" style="margin-top: 20px">
-      <div
-              class="d-flex align-items-center flex-fill ms-sm-1 my-sm-0 my-4 border-bottom position-relative"
-      >
-        <input
-                id="room-search"
-                type="text"
-                required
-                placeholder="Room Number"
-                class="form-control"
-        />
-        <button id="room-search-btn" type="button" class="btn btn-info">Search Room</button>
-      </div>
-    </div>
-  </div>
-    </div>
-  </div>
 </div>
-
-
-
-
-<script src="model.js"></script>
+    <script src="model.js"></script>
 </body>
 <div id="container"></div>
 </html>

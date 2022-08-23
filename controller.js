@@ -71,6 +71,7 @@ io.sockets.on('connection', function (socket) {
                 io.sockets.emit('checkInDone');
             else
                 io.sockets.emit('checkInFailed');
+            myDB.validReservation.length = 0;
         }
     });
 

@@ -58,7 +58,7 @@ socket.on('deleteSuccess', function (rooms) {
     }
 });
 
- handleReserve = function (room,sfrom,sto){
+handleReserve = function (room,sfrom,sto){
 let selfrom = new Date(sfrom).toLocaleDateString('en-IL');
 let selto = new Date(sto).toLocaleDateString('en-IL');
      $('#container').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room number</th><th>Check-in</th><th>Check-out</th><th></th></tr></thead><tbody id=\"tBody\"></tbody></table>");
@@ -88,8 +88,8 @@ $(function () {
     $('#check-out-btn').click(function () {
         let id = $('#id-num-co').val();
         let name = $('#cust-name-co').val();
-        // let from = new Date($('#fromOutDate').val());
-        // let to  = new Date($('#toOutDate').val());
+        let from = new Date($('#fromOutDate').val());
+        let to  = new Date($('#toOutDate').val());
         socket.emit('sendValsCheckOut',id,name,from,to);
     });
 });

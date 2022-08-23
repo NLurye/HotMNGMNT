@@ -384,8 +384,8 @@ let initHotelDB = function () {
                 //        3) if(from == to == null) ===> alert("ERR: must enter dates)
                 {
                     room: 10,
-                    from: new Date('2022-08-22').toLocaleDateString(),//'2022-08-01'
-                    to: new Date('2022-08-24').toLocaleDateString(),//2022-08-02
+                    from: new Date('2022-08-22'),//'2022-08-01'
+                    to: new Date('2022-08-24'),//2022-08-02
                     custName: "Tom",
                     custID: "111111110"
                 },
@@ -670,37 +670,37 @@ let selectRoomsByDates = function (selected_from, selected_to) {
         });
     });
 }
-let checkIn = function (cust_id, cust_name) {
+let checkIn =function(cust_id,cust_name){
     MongoClient.connect(url, function (err, db) {
+    if (err) console.log(err);
+    let dbo = db.db("hotel");
+    let now = new Date();
+    let orders = dbo.collection("Orders");
+        orders.find(
+        {
+            from: {$lte: now},
+            to: {$gt: now},
+            custID: cust_id,
+            custName: cust_name,
+        }
+    ).toArray(function (err, CheckInRes) {
         if (err) throw err;
-        let dbo = db.db("hotel");
-        let orders = dbo.collection("Orders");
-        let now = new Date();
-        orders.aggregate([
-            {
-                $match:
-                    {
-                        from: {$lte: now},
-                        to: {$gt: now},
-                        custID: cust_id,
-                        custName: cust_name,
-                    }
-            }
-        ]).toArray(function (err, checkInRes) {
-            if (err) throw err;
+        else {
+            validReservation.length = 0;
+            if (CheckInRes.length === 0)
+                console.log("Check in error");
             else {
-                validReservation.length = 0;
-                if (checkInRes.length === 0)
-                    console.log("reservation doesn't exist");
-                else {
-                    checkInRes.forEach(item => {
-                        validReservation.push(item);
-                    });
-                }
+                CheckInRes.forEach(item => {
+                    validReservation.push(item);
+                });
+
             }
-        });
+        }
+        db.close();
     });
+});
 }
+
 let checkOut = function (cust_id, cust_name, sfrom, sto) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
