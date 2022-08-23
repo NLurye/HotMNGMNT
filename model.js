@@ -205,6 +205,11 @@ socket.on('addRoomDone',function (roomNum) {
     renderHome('home');
 });
 
+socket.on('deleteRoomDone',function (roomNum) {
+    alert("Room " +roomNum+ " deleted");
+    renderHome('home');
+});
+
 socket.on('orderAdded',function (room,from,to, name) {
     alert("room number " + room + " is reserved to " + name + " from " + from + " until " + to);
     renderHome('home');
@@ -261,6 +266,13 @@ $(function () {
         let numOfBeds = $('#num-beds').val();
         let price = $('#room-price').val();
         socket.emit('addRoom',roomNum,numOfBeds,price);
+    });
+});
+
+$(function () {
+    $('#room-del-btn').click(function () {
+        let roomNum = $('#del-room').val();
+        socket.emit('deleteRoom',roomNum);
     });
 });
 

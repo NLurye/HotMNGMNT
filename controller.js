@@ -113,6 +113,14 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
+    socket.on('deleteRoom',function (roomNum) {
+        myDB.deleteRoom(roomNum);
+        setTimeout(getResultFromDeleteRoom,1000);//<------Callback
+        function getResultFromDeleteRoom() {
+            io.sockets.emit('deleteRoomDone',roomNum);
+        }
+    });
+
 });
 
 //############ Routing  #################
