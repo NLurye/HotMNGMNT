@@ -71,7 +71,7 @@ let selto = new Date(sto).toLocaleDateString('en-IL');;
         </tr>`
     $('#tBody').append(row).append('<br><br><br><div id="billing" style="margin-left: 400px"><div class="row">\n' +
         '  <div class="col-75">\n' +
-        '    <div class="container">\n' +
+        '    <div id="container-bill">\n' +
         '      <form action="/action_page.php">\n' +
         '\n' +
         '        <div class="row">\n' +
@@ -258,12 +258,11 @@ renderHome = function (page) {
     return $.ajax({
         type: "GET",
         url: "http://localhost:8080/" + page,
-        contentType: "text/html"
-    }).success(function (data) {
-        $("body").html(data);
-    }).fail(function (sender, message, details) {
-        alert("Sorry, something went wrong!");
-    });
+        contentType: "text/html",
+        success: function (data) {
+            $("body").html(data);}
+    })
+
 }
 
 
