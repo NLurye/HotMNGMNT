@@ -1,13 +1,20 @@
+body{
+    padding-top: 0px;
+    background-image: linear-gradient(35deg, rgba(30,144,255,0.5) 0%, rgba(244,164,96,0.5) 100%), url('background.jpg');
+
+}
+
 html{
     /* Full height. */
     height: 100%;
 
-    background-image: linear-gradient(35deg, rgba(30,144,255,0.5) 0%, rgba(244,164,96,0.5) 60%), url('background.jpg');
     /* Center and scale the image nicely */
-    background-position: center;
+    background-position: top;
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+
 
 .navbar-brand {
     position: relative;
@@ -58,7 +65,7 @@ html{
 }
 
 .btn.btn-circle {
-    border-radius: 50px;
+    border-radius: 10px;
 }
 .btn.btn-outline {
     background-color: transparent;
@@ -115,4 +122,31 @@ html{
     .navbar.navbar-inverse .nav-collapse.in.slide-down {
         transform: translate(0px, 0px);
     }
+
 }
+
+
+.viewport-header {
+    position: relative;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+h1 {
+    font-family: 'Syncopate', sans-serif;
+    color: #4a3a27;
+    text-transform: uppercase;
+    letter-spacing: 3vw;
+    line-height: 1.2;
+    font-size: 3vw;
+    text-align: center;
+}
+span {
+    display: block;
+    font-size: 10vw;
+    letter-spacing: -1.3vw;
+}
+

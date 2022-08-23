@@ -1,13 +1,18 @@
 body {
-    background-image: linear-gradient(35deg, rgba(30,144,255,0.5) 0%, rgba(244,164,96,0.5) 60%), url('background.jpg');
     /* Full height */
     height: 100%;
+    background-image: url('background.jpg');
 
     /* Center and scale the image nicely */
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+#billing{
+    border-style: solid;
+}
+
 .navbar-brand {
     position: relative;
     z-index: 2;
@@ -273,7 +278,7 @@ input[type="date"] {
 /* Media Queries */
 @media (max-width: 575.5px) {
     .wrapper {
-        margin: 10px;
+        margin: 0px;
     }
 
     .wrapper form {

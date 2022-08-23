@@ -670,7 +670,7 @@ let selectRoomsByDates = function (selected_from, selected_to) {
         });
     });
 }
-let checkIn = function (cust_id, cust_name) {
+let checkIn =function(cust_id,cust_name){
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
