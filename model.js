@@ -3,7 +3,7 @@ var socket = io.connect(lurl);
 
 //############ React to server's emit #################
 socket.on('displayRooms', function (roomsArr,sfrom,sto) {
-    $('#container').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room number</th><th>Number of beds</th><th>Price</th><th></th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+    $('#container').empty().append("<table id=\"myTable\" class=\"table table-striped table-hover table-bordered \"><thead><tr><th onclick=\"sortTable(0)\">Room number</th><th onclick=\"sortTable(1)\">Number of beds</th><th onclick=\"sortTable(2)\">Price</th><th></th></tr></thead><tbody id=\"tBody\"></tbody></table>");
     for (const room of roomsArr) {
         const row = `
         <tr>
@@ -348,5 +348,41 @@ renderHome = function (page) {
 
 }
 
+    function sortTable(n) {
+    var table, rows, swapped, i, x, y, shouldSwitch, dir, switchcount = 0;
+    table = document.getElementById("myTable");
+    swapped = true;
+    dir = "asc";
+    while (swapped) {
+    swapped = false;
+    rows = table.rows;
+    for (i = 1; i < (rows.length - 1); i++) {
+    shouldSwitch = false;
+    x = rows[i].getElementsByTagName("TD")[n];
+    y = rows[i + 1].getElementsByTagName("TD")[n];
+    if (dir === "asc") {
+    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+    shouldSwitch = true;
+    break;
+}
+} else if (dir === "desc") {
+    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+    shouldSwitch = true;
+    break;
+}
+}
+}
+    if (shouldSwitch) {
+    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+    swapped = true;
+    switchcount ++;
+} else {
+    if (switchcount === 0 && dir === "asc") {
+    dir = "desc";
+    swapped = true;
+}
+}
+}
+}
 
 
