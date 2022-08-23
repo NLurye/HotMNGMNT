@@ -39,23 +39,42 @@ socket.on('displayAdminRooms', function (rooms) {
             <td>${room.numOfBeds}</td>
             <td>${room.price}</td>
         </tr>`
+        $('#tBody').append(row);
+    }
+});
+
+
+
+// socket.on('deleteSuccess', function (rooms) {
+//     $('#container-emp').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room Number</th><th>Number of Beds</th><th>Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+//     for (const room of rooms) {
+//         const row = `
+//         <tr>
+//             <td>${room.room}</td>
+//             <td>${room.numOfBeds}</td>
+//             <td>${room.price}</td>
+//         </tr>`
+//         tBody.innerHTML += row;
+//         $('#tBody').append(row);
+//     }
+// });
+
+socket.on('searchRoomDone', function (room) {
+    $('#container-emp').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room Number</th><th>Number of Beds</th><th>Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+    for (const r of room) {
+        const row = `
+        <tr>
+            <td>${r.room}</td>
+            <td>${r.numOfBeds}</td>
+            <td>${r.price}</td>
+        </tr>`
         tBody.innerHTML += row;
         $('#tBody').append(row);
     }
 });
 
-socket.on('deleteSuccess', function (rooms) {
-    $('#container-emp').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room Number</th><th>Number of Beds</th><th>Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
-    for (const room of rooms) {
-        const row = `
-        <tr>
-            <td>${room.room}</td>
-            <td>${room.numOfBeds}</td>
-            <td>${room.price}</td>
-        </tr>`
-        tBody.innerHTML += row;
-        $('#tBody').append(row);
-    }
+socket.on('searchRoomFailed',function (roomNum) {
+    alert("There is no room "+roomNum+" in your hotel.");
 });
 
 handleReserve = function (room,sfrom,sto){
@@ -147,6 +166,13 @@ $(function () {
     $('#emp-del-btn').click(function () {
         let id = $('#emp-id-del').val();
         socket.emit('deleteEmployee',id);
+    });
+});
+
+$(function () {
+    $('#room-search-btn').click(function () {
+        let roomNum = $('#room-search').val();
+        socket.emit('sendValsSearchRoom',roomNum);
     });
 });
 
@@ -267,5 +293,16 @@ renderHome = function (page) { // here the data and url are not hardcoded anymor
 }
 
 
+async function useWeatherAPI() {
+    const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=32.52&longitude=34.41&hourly=temperature_2m').then(res => res.json())
 
+    for (let i = 0; i < res.hourly.time.length; i++) {
+        document.querySelector("#weather-table tbody").innerHTML += `
+        <tr>
+            <td>${new Date(res.hourly.time[i]).toLocaleString()}</td>
+            <td>${res.hourly.temperature_2m[i]}</td>
+        </tr>
+    `
+    }
+}
 

@@ -653,7 +653,7 @@ let selectRoomsByDates = function (selected_from, selected_to) {
         ]).toArray(function (err, queryResult) {
             if (err) throw err;
             let interruptions = queryResult.map(a => a._id);
-            console.log("Booked rooms on those dates: " + interruptions);
+            //console.log("Booked rooms on those dates: " + interruptions);
             let rooms = dbo.collection("Rooms");
             rooms.find(
                 {
@@ -714,7 +714,7 @@ let checkOut = function (cust_id, cust_name, sfrom, sto) {
         ).toArray(function (err,checkOutRes) {
             if (err) throw err;
             else {
-                console.log(checkOutRes);
+                //console.log(checkOutRes);
                 if (checkOutRes.length === 0) {
                     console.log("Reservation doesn't exist");
                 }
@@ -914,7 +914,7 @@ let getStaff = function () {
         });
     });
 }
-let getRooms = function () {
+let getRooms = function (onRes) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
@@ -922,10 +922,10 @@ let getRooms = function () {
         rooms.find({}).toArray(function (err, getRoomsResult) {
             if (err) throw err;
             else {
-                getRoomsResult.forEach(item => {
-                    roomsList.push(item);
-                });
+
+                onRes(getRoomsResult);
             }
+            //console.log(roomsList);
         });
     });
 }
@@ -940,9 +940,13 @@ let searchRoom = function (roomNumber) {
             if (err) throw err;
             else {
                 showRoom.length = 0;
-                if (searchRoomRes.length === 0)
-                    console.log("Employee not found");
+                if (searchRoomRes.length === 0) {
+                    console.log("Room not found");
+                    //console.log(typeof roomNumber);
+                    //console.log(roomNumber);
+                }
                 else {
+                    console.log("Roommmmm");
                     showRoom.push(searchRoomRes);
                 }
             }
@@ -976,7 +980,8 @@ module.exports.searchEmp = searchEmp;//to be done-------------------------------
 module.exports.getStaff = getStaff;//done
 module.exports.getRooms = getRooms;//done
 module.exports.searchRoom = searchRoom;//to be done---------------------------------------------
-
+//room-num
+//room-search-btn
 
 
 
