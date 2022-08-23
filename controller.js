@@ -20,10 +20,10 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('sendOrderVals', function (room,from,to, name, id) {
-        myDB.addOrder(room,from,to, name, id);
+        myDB.addOrder(parseInt(room),from,to, name, id);
         setTimeout(getResultFromAddOrder,1000);//<------Callback
         function getResultFromAddOrder() {
-            console.log('blablabla');
+            console.log('blablabla' + room + typeof room);
             io.sockets.emit('OrderAdded', room,from,to, name);
         }
     });

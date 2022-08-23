@@ -112,7 +112,7 @@ let selto = new Date(sto).toLocaleDateString('en-IL');
         '          </div>\n' +
         '\n' +
         '        </div>\n' +
-        '       <button id="book-btn-success" type="button" class="btn btn-success">Book</button>\n' +
+        '       <button id="book-btn-success" type="button" class="btn btn-success" onclick="completeBook()">Book</button>\n' +
         '      </form>\n' +
         '    </div>\n' +
         '  </div>\n' +
@@ -125,16 +125,23 @@ let selto = new Date(sto).toLocaleDateString('en-IL');
 function handleConfirm(room,sfrom,sto) {
 }
 
-$(function () {
-    $('#book-btn-success').click(function () {
-        renderHome('home');
-        let id = $('#cust-id').val();
-        let name = $('#cust-name').val();
-        let from = $('#selected-from').val();
-        let to = $('#selected-to').val();
-        let room = $('#selected-room-num').val();
-        console.log('blablabla2');
-        socket.emit('sendOrderVals',room,from,to, name, id);
+
+
+function completeBook() {
+    let id = ($('#cust-id').val());
+    let name = ($('#cust-name').val());
+    let from = ($('#selected-from').val());
+    let to = ($('#selected-to').val());
+    let room = ($('#selected-room-num').val());
+    socket.emit('sendOrderVals',room,from,to, name, id);
+}
+$(function(){
+    // when client clicks Register
+    $('#register-submit').click( function() {
+        let username = ($('#username-r').val());
+        let pw = ($('#password-r').val());
+        // trigger server to validate login
+        socket.emit('valRegister',username,pw);
     });
 });
 
@@ -221,8 +228,8 @@ socket.on('deleteRoomDone',function (roomNum) {
     renderHome('home');
 });
 
-socket.on('orderAdded',function (room,from,to, name) {
-    alert("room number " + room + " is reserved to " + name + " from " + from + " until " + to);
+socket.on('OrderAdded',function (room,from,to, name) {
+    alert("room number " + room + " is reserved to " + name + " from " + new Date(from) + " until " + to);
     renderHome('home');
 });
 
@@ -250,6 +257,13 @@ $(function(){
     });
 });
 
+function onBookClick() {
+    let from = new Date($('#fromDate').val());//2022-08-01
+    let to  = new Date($('#toDate').val());//2022-08-14
+    // trigger server to execute selectRooms by chosen dates
+    socket.emit('sendDates',from,to);
+}
+
 $(function(){
     // when client clicks Search Rooms
     $('#emp-list-btn').click( function() {
@@ -276,15 +290,7 @@ $(function(){
     });
 });
 
-$(function(){
-    // when client clicks Register
-    $('#register-submit').click( function() {
-        let username = ($('#username-r').val());
-        let pw = ($('#password-r').val());
-        // trigger server to validate login
-        socket.emit('valRegister',username,pw);
-    });
-});
+
 
 $(function () {
     $('#room-add-btn').click(function () {
