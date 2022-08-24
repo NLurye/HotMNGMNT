@@ -873,13 +873,16 @@ let changeEmpPass = function (emp_id, emp_pass, new_emp_pass) {
         console.log('here')
         let dbo = db.db("hotel");
         let employee = dbo.collection("Staff");
-        employee.findOneAndUpdate(
+        employee.updateOne(
             {
                 empID: parseInt(emp_id),
                 empPass: parseInt(emp_pass)
             },
             {
-                empPass: parseInt(new_emp_pass)
+                $set:
+                    {
+                        empPass: parseInt(new_emp_pass)
+                    }
             });
     });
 }
