@@ -374,6 +374,7 @@ renderPage = function (page) { // here the data and url are not hardcoded anymor
         url: "http://localhost:8080/" + page,
         contentType: "text/html",
         success: function (data) {
+            $("#main").empty();
             $("#container").html(data);
         }
     })}
