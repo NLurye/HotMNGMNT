@@ -16,7 +16,7 @@ socket.on('displayRooms', function (roomsArr,sfrom,sto) {
         $('#tBody').append(row);
     }
 });
-socket.on('AdminSearchRoomDoneTest', function (roomsArr,roomNum) {
+socket.on('AdminSearchRoomDoneTest', function (roomsArr) {
     $('#container').empty().append("<table id=\"myTable\" class=\"table table-striped table-hover table-bordered \"><thead><tr><th onclick=\"sortTable(0)\">Room number</th><th onclick=\"sortTable(1)\">Number of beds</th><th onclick=\"sortTable(2)\">Price</th><th></th></tr></thead><tbody id=\"tBody\"></tbody></table>");
     for (const room of roomsArr) {
         const row = `
@@ -56,6 +56,7 @@ socket.on('displayAdminRooms', function (rooms) {
         $('#tBody').append(row);
     }
 });
+
 
 
 

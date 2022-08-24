@@ -180,11 +180,16 @@ io.sockets.on('connection', function (socket) {
         }
     });
     socket.on('SearchRoomTest',function (roomNum,beds,price) {
-        myDB.searchRoom(roomNum);
+        console.log(roomNum,beds,price)
+        myDB.searchRoom(roomNum,beds,price);
         setTimeout(getResultFromSrcRoom,1000);//<------Callback
         function getResultFromSrcRoom() {
-            if(myDB.showRoom.length===1)
-                io.sockets.emit('AdminSearchRoomDoneTest',myDB.showRoom,roomNum);
+            console.log("????" + myDB.showRoom.length)
+            if(myDB.showRoom.length===1){
+                console.log(myDB.showRoom);
+                io.sockets.emit('AdminSearchRoomDoneTest',myDB.showRoom[0]);
+            }
+
             else
                 io.sockets.emit('AdminSearchRoomFailed',roomNum);
 

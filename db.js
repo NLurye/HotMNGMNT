@@ -689,19 +689,7 @@ let checkIn =function(cust_id,cust_name, room_num){
     let now = new Date();
         let orders = dbo.collection("Orders");
         orders.find({
-                $and: [{
-                    $or:
-                        [
-                            {custID: cust_id},
-                            {custName: cust_name},
-                            {room: room_num}
-                        ]
-                },
-                    {
-                        from: {$lte: now},
-                        to: {$gt: now}
-                    }
-                ]
+
             }).toArray(function (err, CheckInRes) {
             if (err) throw err;
             else {
@@ -952,14 +940,16 @@ let getRooms = function () {
         });
     });
 }
-let searchRoom = function (roomNumber) {
+let searchRoom = function (roomNumber,beds,price) {
     MongoClient.connect(url, function (err, db) {
         if (err) console.log(err);
         let dbo = db.db("hotel");
         let rooms = dbo.collection("Rooms");
         rooms.find(
             {
-                room: parseInt(roomNumber),
+                numOfBeds: {$gte: parseInt(beds)},
+                price: {$lte: parseInt(price)},
+                room: {$gte: parseInt(roomNumber)}
             }
         ).toArray(function (err, searchRoomRes) {
             if (err) throw err;
@@ -969,6 +959,7 @@ let searchRoom = function (roomNumber) {
                     console.log("Employee not found");
                 else {
                     showRoom.push(searchRoomRes);
+                    console.log("showrooom length " + showRoom.length);
                 }
             }
             db.close();
