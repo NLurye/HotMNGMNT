@@ -2,12 +2,13 @@ let MongoClient = require('mongodb').MongoClient;
 let url = "mongodb://localhost:27017/hotel";
 const selectedRooms = [];
 let validLogIn = [];
-let validSignIn = [];
 let validReservation = [];
 let showEmp = [];
 let employees = [];
 let roomsList = [];
 let showRoom = [];
+let locations = [];
+
 
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
@@ -975,7 +976,20 @@ let searchRoom = function (roomNumber) {
         });
     });
 }
-
+let getLocations = function () {
+    MongoClient.connect(url, function (err, db) {
+        if (err) console.log(err);
+        let dbo = db.db("hotel");
+        let attractions = dbo.collection("Attractions");
+        attractions.find({}).toArray(function (err, attractionsRes) {
+            if (err) throw err;
+            else attractionsRes.forEach(item => {
+                locations.push(item)
+            });
+        });
+    });
+}
+module.exports.locations = locations;
 module.exports.validLogIn = validLogIn;
 module.exports.selectedRooms = selectedRooms;
 module.exports.employees = employees;
@@ -1002,6 +1016,7 @@ module.exports.searchEmp = searchEmp;//to be done-------------------------------
 module.exports.getStaff = getStaff;//done
 module.exports.getRooms = getRooms;//done
 module.exports.searchRoom = searchRoom;//to be done---------------------------------------------
+module.exports.getLocations = getLocations;
 
 
 
