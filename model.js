@@ -164,13 +164,6 @@ function onCIClick() {
     socket.emit('sendValsCheckIn', id,name);
 }
 
-// $(function () {
-//     $('#check-in-btn').click(function () {
-//         let id = $('#id-num').val();
-//         let name = $('#cust-name').val();
-//         socket.emit('sendValsCheckIn',id,name);
-//     });
-// });
 
 function onCOClick() {
     let id = $('#id-num-co').val();
@@ -179,17 +172,6 @@ function onCOClick() {
     let to  = new Date($('#toOutDate').val());
     socket.emit('sendValsCheckOut', id,name,from,to);
 }
-
-// $(function () {
-//     $('#check-out-btn').click(function () {
-//         let id = $('#id-num-co').val();
-//         let name = $('#cust-name-co').val();
-//         let from = new Date($('#fromOutDate').val());
-//         let to  = new Date($('#toOutDate').val());
-//         socket.emit('sendValsCheckOut',id,name,from,to);
-//     });
-// });
-
 
 
 $(function () {
@@ -263,13 +245,6 @@ socket.on('updateRoomDone',function (newRoomNum) {
 });
 
 
-// $(function(){
-//     $('').click( function() {
-//
-//     });
-// });
-
-
 //############ Ping to server #################
 $(function(){
     // when client clicks Search Rooms
@@ -308,25 +283,11 @@ function onEmpSrcClick() {
     socket.emit('displayEmpList');
 }
 
-// $(function(){
-//     // when client clicks Search Rooms
-//     $('#emp-list-btn').click( function() {
-//         // trigger server to execute selectRooms by chosen dates
-//         socket.emit('displayEmpList');
-//     });
-// });
 
 function onRoomsListClick() {
     socket.emit('displayRoomsList');
 }
 
-// $(function(){
-//     // when client clicks Search Rooms
-//     $('#room-list-btn').click( function() {
-//         // trigger server to execute selectRooms by chosen dates
-//         socket.emit('displayRoomsList');
-//     });
-// });
 
 $(function(){
     // when client clicks Login
@@ -337,7 +298,6 @@ $(function(){
         socket.emit('valLogin',username,pw);
     });
 });
-
 
 
 $(function () {
@@ -378,17 +338,6 @@ renderPage = function (page) { // here the data and url are not hardcoded anymor
         }
     })}
 
-// renderPage = function (page) { // spa routing using ajax
-//     return $.ajax({
-//         type: "GET",
-//         url: "http://localhost:8080/" + page,
-//         contentType: "text/html"
-//     }).success(function (data) {
-//         $("#container").html(data);
-//     }).fail(function (sender, message, details) {
-//         alert("Sorry, something went wrong!");
-//     });
-// }
 
 renderHome = function (page) { // here the data and url are not hardcoded anymore
     return $.ajax({
@@ -441,7 +390,7 @@ renderHome = function (page) { // here the data and url are not hardcoded anymor
 async function useWeatherAPI() {
     const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=32.52&longitude=34.41&hourly=temperature_2m').then(res => res.json())
 
-    for (let i = 0; i < res.hourly.time.length; i++) {
+    for (let i = 0; i < res.hourly.time.length; i+=24) {
         document.querySelector("#weather-table tbody").innerHTML += `
         <tr>
             <td>${new Date(res.hourly.time[i]).toLocaleString()}</td>
