@@ -804,10 +804,11 @@ let deleteEmployee = function (emp_ID) {
         if (err) throw err;
         let dbo = db.db("hotel");
         let staff = dbo.collection("Staff");
+        console.log(emp_ID)
         try {
             staff.deleteOne(
                 {
-                    empID: emp_ID
+                    empID: parseInt(emp_ID)
                 });
         } catch (e) {
             print(e);
@@ -853,16 +854,18 @@ let addEmployee = function (emp_id, emp_pass) {
 }
 let changeEmpPass = function (emp_id, emp_pass, new_emp_pass) {
     MongoClient.connect(url, function (err, db) {
+        console.log(emp_id, emp_pass, new_emp_pass)
         if (err) throw err;
+        console.log('here')
         let dbo = db.db("hotel");
         let employee = dbo.collection("Staff");
         employee.findOneAndUpdate(
             {
-                empID: emp_id,
-                empPass: emp_pass
+                empID: parseInt(emp_id),
+                empPass: parseInt(emp_pass)
             },
             {
-                empPass: new_emp_pass
+                empPass: parseInt(new_emp_pass)
             });
     });
 }

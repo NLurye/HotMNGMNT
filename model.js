@@ -213,8 +213,13 @@ socket.on('deleteOrderDone',function () {
     renderHome('home');
 });
 
-socket.on('deleteEmployeeDone',function () {
-    alert('employee deleted');
+socket.on('deleteEmployeeDone',function (id) {
+    alert('employee ' + id + ' deleted');
+    renderHome('home');
+});
+
+socket.on('updateEmployeeDone',function (id) {
+    alert('employee ' + id + ' updated');
     renderHome('home');
 });
 
@@ -279,6 +284,22 @@ function onBookClick() {
 }
 
 function onEmpListClick() {
+    socket.emit('displayEmpList');
+}
+
+function onEmpDelClick() {
+    let id = $('#emp-id-del').val();
+    socket.emit('deleteEmployee',id);
+}
+
+function onEmpUpdClick() {
+    let id = $('#emp-id-del').val();
+    let emp_pass = $('#emp-id-oldp').val();
+    let new_emp_pass = $('#emp-id-newp').val();
+    socket.emit('updateEmployee', id,emp_pass, new_emp_pass);
+}
+
+function onEmpSrcClick() {
     socket.emit('displayEmpList');
 }
 

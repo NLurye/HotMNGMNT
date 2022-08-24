@@ -52,7 +52,16 @@ io.sockets.on('connection', function (socket) {
         myDB.deleteEmployee(id);
         setTimeout(deleteEmp,1000);//<------Callback
         function deleteEmp() {
-            io.sockets.emit('deleteEmployeeDone'); //need to catch error
+            io.sockets.emit('deleteEmployeeDone', id); //need to catch error
+        }
+    });
+
+    socket.on('updateEmployee', function (emp_id, emp_pass, new_emp_pass) {
+        //prepare rooms available on those dates
+        myDB.changeEmpPass(emp_id, emp_pass, new_emp_pass);
+        setTimeout(updateEmp,1000);//<------Callback
+        function updateEmp() {
+            io.sockets.emit('updateEmployeeDone', emp_id); //need to catch error
         }
     });
 
