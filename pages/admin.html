@@ -231,12 +231,19 @@
                     /></td>
                     <td>
                         <button id="room-list-btn" type="button" class="btn btn-info"onclick="onRoomsListClick()">Rooms list</button>
-                        <button id="room-add-btn" type="button" class="btn btn-info">Add Room</button>
-                        <button id="room-del-btn" type="button" class="btn btn-info">Delete Room</button>
-                        <button id="room-search-btn" type="button" class="btn btn-info">Search Room</button>
+                        <button id="room-add-btn" type="button" class="btn btn-info" onclick="onAddRoomClick()">Add Room</button>
+                        <button id="room-del-btn" type="button" class="btn btn-info" onclick="onDelRoomClick()">Delete Room</button>
+                        <button id="room-search-btn" type="button" class="btn btn-info" onclick="onSrcRoomClickTest()">Search Rooms</button>
                     </td>
                 </tr>
                 <tr style="height: 50px;border: none">
+                    <th scope="row"><input
+                            id="room-num-upd"
+                            type="text"
+                            required
+                            placeholder="Room Number"
+                            class="form-control"
+                    /></th>
                     <th scope="row"><input
                             id="room-new-beds"
                             type="text"
@@ -248,12 +255,11 @@
                             id="room-new-price"
                             type="text"
 
-                            placeholder="New Price"
+                            placeholder="New Room Price"
                             class="form-control"
                     /></td>
-                    <td></td>
                     <td>
-                        <button id="room-upd-btn" type="button" class="btn btn-info">Update Room</button>
+                        <button id="room-upd-btn" type="button" class="btn btn-info" onclick="onUpdRoomClick()">Update Room</button>
                     </td>
                 </tr>
                 </tbody>

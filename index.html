@@ -7,24 +7,12 @@
     <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
     <script defer src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
     <script defer src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-
     <script defer src="model.js"></script>
-
-
     <script defer src="pages/maps/code.js"></script>
-
     <script defer src="index.js"></script>
-
-    <script defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAC4HSkQqHjyWCc9wP_xSvgtuOOHIJEw0A&callback=initMap&v=weekly"
-    ></script>
-
-
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAC4HSkQqHjyWCc9wP_xSvgtuOOHIJEw0A&callback=initMap&v=weekly"></script>
 </head>
 <body>
-
-
-
 
 
 <nav class="navbar navbar-default">
@@ -42,7 +30,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand">hotMNGMNT</a>
+            <a onclick="useWeatherAPI()" class="navbar-brand">Show weather</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -86,7 +74,6 @@
 
 <main id="main">
           <footer class="footer"><div id="map"></div></footer>
-           <div id="weather"></div>
 </main>
 
 </body>

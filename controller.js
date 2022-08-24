@@ -9,9 +9,9 @@ server.listen(8080);
 
 io.sockets.on('connection', function (socket) {
  //############ React to client's emit #################
-    socket.on('sendDates', function (from,to) {
+    socket.on('sendDates', function (from,to,price,beds) { //price+beds
         //prepare rooms available on those dates
-        myDB.selectRooms(from, to);
+        myDB.selectRooms(from, to,price,beds); //price+beds
         setTimeout(getResultFromSelectRooms,1000);//<------Callback
         function getResultFromSelectRooms() {
           // console.log(myDB.selectedRooms);//<----remove
@@ -39,12 +39,9 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('displayRoomsList', function () {
         //prepare rooms available on those dates
-        myDB.getRooms(function onRes(arr) {
-            io.sockets.emit('displayAdminRooms', arr);
-        });
-        //setTimeout(getRoomsList,1000);//<------Callback
+        myDB.getRooms();
+        setTimeout(getRoomsList,1000);//<------Callback
         function getRoomsList() {
-            //console.log(myDB.roomsList);//<----remove
             io.sockets.emit('displayAdminRooms', myDB.roomsList);
         }
     });
@@ -67,14 +64,29 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
-    socket.on('updateRoom', function (newRoomNum, newNumBeds, newPrice) {
+    socket.on('searchEmployee', function (id) {
         //prepare rooms available on those dates
-        myDB.updateRoom(newRoomNum, newNumBeds, newPrice);
-        setTimeout(updRoom,1000);//<------Callback
-        function updRoom() {
-            io.sockets.emit('updateRoomDone',newRoomNum); //need to catch error
+        myDB.searchEmp(id);
+        setTimeout(srcEmp,1000);//<------Callback
+        function srcEmp() {
+            if(myDB.showEmp.length !== 0)
+                io.sockets.emit('searchEmployeeDone', id);
+            else
+                io.sockets.emit('searchEmployeeFailed', id);
+            myDB.showEmp.length = 0;
         }
     });
+
+    socket.on('UpdateRoom', function (RoomNum, newNumBeds, newPrice) {
+        //prepare rooms available on those dates
+        myDB.updateRoom(RoomNum, newNumBeds, newPrice);
+        setTimeout(updRoom,1000);//<------Callback
+        function updRoom() {
+            io.sockets.emit('updateRoomDone',RoomNum); //need to catch error
+        }
+    });
+
+
 
     socket.on('valLogin', function (username,pw) {
        // validate login
@@ -97,9 +109,8 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
-    socket.on('sendValsCheckIn',function (id,name) {
-        console.log(id, name, typeof id, typeof name);
-        myDB.checkIn(id,name);
+    socket.on('sendValsCheckIn',function (id,name,roomNum) {
+        myDB.checkIn(id,name,roomNum);
         setTimeout(getResultFromCheckIn,1000);//<------Callback
         function getResultFromCheckIn() {
             if(myDB.validReservation.length !== 0)
@@ -136,6 +147,14 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
+    socket.on('DeleteRoom',function (roomNum) {
+        myDB.deleteRoom(roomNum);
+        setTimeout(getResultFromDelRoom,1000);//<------Callback
+        function getResultFromDelRoom() {
+            io.sockets.emit('deleteRoomDone',roomNum);
+        }
+    });
+
 
     socket.on('sendValsSearchRoom',function (roomNum) {
         myDB.searchRoom(roomNum);
@@ -148,11 +167,26 @@ io.sockets.on('connection', function (socket) {
                         }
     });
 
-    socket.on('deleteRoom',function (roomNum) {
-        myDB.deleteRoom(roomNum);
-        setTimeout(getResultFromDeleteRoom,1000);//<------Callback
-        function getResultFromDeleteRoom() {
-            io.sockets.emit('deleteRoomDone',roomNum);
+
+    socket.on('SearchRoom',function (roomNum) {
+        myDB.searchRoom(roomNum);
+        setTimeout(getResultFromSrcRoom,1000);//<------Callback
+        function getResultFromSrcRoom() {
+            if(myDB.showRoom.length===1)
+                io.sockets.emit('AdminSearchRoomDone',roomNum);
+            else
+                io.sockets.emit('AdminSearchRoomFailed',roomNum);
+
+        }
+    });
+    socket.on('SearchRoomTest',function (roomNum,beds,price) {
+        myDB.searchRoom(roomNum);
+        setTimeout(getResultFromSrcRoom,1000);//<------Callback
+        function getResultFromSrcRoom() {
+            if(myDB.showRoom.length===1)
+                io.sockets.emit('AdminSearchRoomDoneTest',myDB.showRoom,roomNum);
+            else
+                io.sockets.emit('AdminSearchRoomFailed',roomNum);
 
         }
     });
