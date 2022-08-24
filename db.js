@@ -691,6 +691,11 @@ let checkIn =function(cust_id,cust_name, room_num){
         let orders = dbo.collection("Orders");
         orders.find({
 
+            custID: cust_id,
+            custName: cust_name,
+            from: {$lte: now},
+            to: {$gt: now}
+
             }).toArray(function (err, CheckInRes) {
             if (err) throw err;
             else {
