@@ -39,23 +39,42 @@ socket.on('displayAdminRooms', function (rooms) {
             <td>${room.numOfBeds}</td>
             <td>${room.price}</td>
         </tr>`
-        //tBody.innerHTML += row;
         $('#tBody').append(row);
     }
 });
 
-socket.on('deleteSuccess', function (rooms) {
+
+
+// socket.on('deleteSuccess', function (rooms) {
+//     $('#container-emp').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room Number</th><th>Number of Beds</th><th>Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+//     for (const room of rooms) {
+//         const row = `
+//         <tr>
+//             <td>${room.room}</td>
+//             <td>${room.numOfBeds}</td>
+//             <td>${room.price}</td>
+//         </tr>`
+//         tBody.innerHTML += row;
+//         $('#tBody').append(row);
+//     }
+// });
+
+socket.on('searchRoomDone', function (room) {
     $('#container-emp').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room Number</th><th>Number of Beds</th><th>Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
-    for (const room of rooms) {
+    for (const r of room) {
         const row = `
         <tr>
-            <td>${room.room}</td>
-            <td>${room.numOfBeds}</td>
-            <td>${room.price}</td>
+            <td>${r.room}</td>
+            <td>${r.numOfBeds}</td>
+            <td>${r.price}</td>
         </tr>`
-        //tBody.innerHTML += row;
         $('#tBody').append(row);
     }
+});
+
+
+socket.on('searchRoomFailed',function (roomNum) {
+    alert("There is no room "+roomNum+" in your hotel.");
 });
 
 let handleReserve = function (sroom,sfrom,sto){
@@ -116,17 +135,12 @@ let selto = new Date(sto).toLocaleDateString('en-IL');
               </form>
             </div>
           </div>
-        
         </div>`
     
     $('#tBody').append(row).append(row2)
      //socket.emit('newOrder',room,from,to,custName, custId);
 
 }
-
-function handleConfirm(room,sfrom,sto) {
-}
-
 
 
 function completeBook(room,from,to) {
@@ -176,15 +190,6 @@ function onCOClick() {
 //     });
 // });
 
-$(function () {
-    $('#del-check-out-btn').click(function () {
-        let id = $('#id-num-co').val();
-        let name = $('#cust-name-co').val();
-        let from = new Date($('#fromOutDate').val());
-        let to  = new Date($('#toOutDate').val());
-        socket.emit('sendDeleteOrder',id,name,from,to);
-    });
-});
 
 
 $(function () {
@@ -363,15 +368,14 @@ $(function () {
 
 
 //Fixed price
-
-
 renderPage = function (page) { // here the data and url are not hardcoded anymore
     return $.ajax({
         type: "GET",
         url: "http://localhost:8080/" + page,
         contentType: "text/html",
         success: function (data) {
-            $("#container").html(data);}
+            $("#container").html(data);
+        }
     })}
 
 // renderPage = function (page) { // spa routing using ajax
@@ -386,15 +390,15 @@ renderPage = function (page) { // here the data and url are not hardcoded anymor
 //     });
 // }
 
-renderHome = function (page) {
+renderHome = function (page) { // here the data and url are not hardcoded anymore
     return $.ajax({
         type: "GET",
         url: "http://localhost:8080/" + page,
         contentType: "text/html",
         success: function (data) {
-            $("body").html(data);}
-    })
-
+            $("body").html(data);
+        }
+    });
 }
 
     function sortTable(n) {
@@ -434,4 +438,16 @@ renderHome = function (page) {
 }
 }
 
+async function useWeatherAPI() {
+    const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=32.52&longitude=34.41&hourly=temperature_2m').then(res => res.json())
+
+    for (let i = 0; i < res.hourly.time.length; i++) {
+        document.querySelector("#weather-table tbody").innerHTML += `
+        <tr>
+            <td>${new Date(res.hourly.time[i]).toLocaleString()}</td>
+            <td>${res.hourly.temperature_2m[i]}</td>
+        </tr>
+    `
+    }
+}
 

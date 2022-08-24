@@ -5,8 +5,8 @@ let express = require('express')
     , myDB = require("./db")
     , io = require('socket.io')(server);
 server.listen(8080);
-// myDB.init();
-//myDB.checkIn();
+//myDB.init();
+
 io.sockets.on('connection', function (socket) {
  //############ React to client's emit #################
     socket.on('sendDates', function (from,to) {
@@ -14,7 +14,7 @@ io.sockets.on('connection', function (socket) {
         myDB.selectRooms(from, to);
         setTimeout(getResultFromSelectRooms,1000);//<------Callback
         function getResultFromSelectRooms() {
-           console.log(myDB.selectedRooms);//<----remove
+          // console.log(myDB.selectedRooms);//<----remove
             io.sockets.emit('displayRooms', myDB.selectedRooms,from,to);
         }
     });
@@ -32,17 +32,19 @@ io.sockets.on('connection', function (socket) {
         myDB.getStaff();
         setTimeout(getEmpList,1000);//<------Callback
         function getEmpList() {
-            console.log(myDB.employees);//<----remove
+            //console.log(myDB.employees);//<----remove
             io.sockets.emit('displayEmployees', myDB.employees);
         }
     });
 
     socket.on('displayRoomsList', function () {
         //prepare rooms available on those dates
-        myDB.getRooms();
-        setTimeout(getRoomsList,1000);//<------Callback
+        myDB.getRooms(function onRes(arr) {
+            io.sockets.emit('displayAdminRooms', arr);
+        });
+        //setTimeout(getRoomsList,1000);//<------Callback
         function getRoomsList() {
-            console.log(myDB.roomsList);//<----remove
+            //console.log(myDB.roomsList);//<----remove
             io.sockets.emit('displayAdminRooms', myDB.roomsList);
         }
     });
@@ -108,11 +110,12 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
-    socket.on('sendValsCheckOut',function (id,name,from,to) { //from-to
+
+    socket.on('sendValsCheckOut',function (id,name,from,to) {
         myDB.checkOut(id,name,from,to);
         setTimeout(getResultFromCheckOut,1000);//<------Callback
         function getResultFromCheckOut() {
-            io.sockets.emit('checkOutDone', id ,name);
+            io.sockets.emit('checkOutDone');
         }
     });
 
@@ -133,11 +136,26 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
+
+    socket.on('sendValsSearchRoom',function (roomNum) {
+        myDB.searchRoom(roomNum);
+        setTimeout(getResultFromSearchRoom,1000);//<------Callback
+        function getResultFromSearchRoom() {
+            if(myDB.showRoom.length===1)
+                io.sockets.emit('searchRoomDone',myDB.showRoom);
+            else
+                io.sockets.emit('searchRoomFailed',roomNum);
+                        }
+    });
+
+});
+
     socket.on('deleteRoom',function (roomNum) {
         myDB.deleteRoom(roomNum);
         setTimeout(getResultFromDeleteRoom,1000);//<------Callback
         function getResultFromDeleteRoom() {
             io.sockets.emit('deleteRoomDone',roomNum);
+
         }
     });
 
