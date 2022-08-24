@@ -6,7 +6,7 @@ let express = require('express')
     , io = require('socket.io')(server);
 server.listen(8080);
 //myDB.init();
-
+myDB.selectRooms(new Date('2022-08-01'),new Date('2022-08-03'),'','');
 io.sockets.on('connection', function (socket) {
  //############ React to client's emit #################
     socket.on('sendDates', function (from,to,price,beds) { //price+beds
@@ -15,7 +15,8 @@ io.sockets.on('connection', function (socket) {
         setTimeout(getResultFromSelectRooms,1000);//<------Callback
         function getResultFromSelectRooms() {
           // console.log(myDB.selectedRooms);//<----remove
-            io.sockets.emit('displayRooms', myDB.selectedRooms,from,to);
+            console.log(myDB.popRoom, myDB.selectedRooms);
+            io.sockets.emit('displayRooms', myDB.popRoom, myDB.selectedRooms,from,to);
         }
     });
 
