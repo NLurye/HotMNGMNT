@@ -87,19 +87,20 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('sendValsCheckIn',function (id,name) {
+        console.log(id, name, typeof id, typeof name);
         myDB.checkIn(id,name);
         setTimeout(getResultFromCheckIn,1000);//<------Callback
         function getResultFromCheckIn() {
             if(myDB.validReservation.length !== 0)
-                io.sockets.emit('checkInDone');
+                io.sockets.emit('checkInDone', name);
             else
                 io.sockets.emit('checkInFailed');
             myDB.validReservation.length = 0;
         }
     });
 
-    socket.on('sendValsCheckOut',function (id,name) { //from-to
-        myDB.checkOut(id,name);
+    socket.on('sendValsCheckOut',function (id,name,from,to) { //from-to
+        myDB.checkOut(id,name,from,to);
         setTimeout(getResultFromCheckOut,1000);//<------Callback
         function getResultFromCheckOut() {
             io.sockets.emit('checkOutDone', id ,name);
