@@ -16,6 +16,20 @@ socket.on('displayRooms', function (roomsArr,sfrom,sto) {
         $('#tBody').append(row);
     }
 });
+socket.on('AdminSearchRoomDoneTest', function (roomsArr,roomNum) {
+    $('#container').empty().append("<table id=\"myTable\" class=\"table table-striped table-hover table-bordered \"><thead><tr><th onclick=\"sortTable(0)\">Room number</th><th onclick=\"sortTable(1)\">Number of beds</th><th onclick=\"sortTable(2)\">Price</th><th></th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+    for (const room of roomsArr) {
+        const row = `
+        <tr>
+            <td>${room.room}</td>
+            <td>${room.numOfBeds}</td>
+            <td>${room.price}</td>
+        </tr>`
+        //tBody.innerHTML += row;
+        $('#tBody').append(row);
+    }
+});
+
 
 socket.on('displayEmployees', function (staff) {
     $('#container-emp').empty().append("<table style='margin-right: 100px' class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Employee ID</th><th>Admin</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
@@ -59,18 +73,18 @@ socket.on('displayAdminRooms', function (rooms) {
 //     }
 // });
 
-socket.on('searchRoomDone', function (room) {
-    $('#container-emp').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room Number</th><th>Number of Beds</th><th>Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
-    for (const r of room) {
-        const row = `
-        <tr>
-            <td>${r.room}</td>
-            <td>${r.numOfBeds}</td>
-            <td>${r.price}</td>
-        </tr>`
-        $('#tBody').append(row);
-    }
-});
+// socket.on('searchRoomDone', function (room) {
+//     $('#container-emp').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room Number</th><th>Number of Beds</th><th>Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+//     for (const r of room) {
+//         const row = `
+//         <tr>
+//             <td>${r.room}</td>
+//             <td>${r.numOfBeds}</td>
+//             <td>${r.price}</td>
+//         </tr>`
+//         $('#tBody').append(row);
+//     }
+// });
 
 
 socket.on('searchRoomFailed',function (roomNum) {
@@ -161,7 +175,14 @@ $(function(){
 function onCIClick() {
     let id = $('#id-num-ci').val();
     let name = $('#cust-name-ci').val();
-    socket.emit('sendValsCheckIn', id,name);
+    let roomNum = $('#room-num-ci').val();
+    socket.emit('sendValsCheckIn', id,name,roomNum);
+}
+function onCIClickTest() {
+    let id = $('#id-num-ci').val();
+    let name = $('#cust-name-ci').val();
+    let roomNum = $('#room-num-ci').val();
+    socket.emit('sendValsCheckIn', id,name,roomNum);
 }
 
 
@@ -174,12 +195,12 @@ function onCOClick() {
 }
 
 
-$(function () {
-    $('#emp-del-btn').click(function () {
-        let id = $('#emp-id-del').val();
-        socket.emit('deleteEmployee',id);
-    });
-});
+// $(function () {
+//     $('#emp-del-btn').click(function () {
+//         let id = $('#emp-id-del').val();
+//         socket.emit('deleteEmployee',id);
+//     });
+// });
 
 socket.on('checkInDone',function (name) {
     alert("Welcome to our hotel " + name);
@@ -210,6 +231,26 @@ socket.on('updateEmployeeDone',function (id) {
     renderHome('home');
 });
 
+socket.on('searchEmployeeDone',function (id) {
+    alert('employee ' + id + ' has found');
+    renderPage('admin');
+});
+
+socket.on('AdminSearchRoomDone',function (roomNum) {
+    alert('room ' + roomNum + ' has found');
+    renderPage('admin');
+});
+
+socket.on('AdminSearchRoomFailed',function (roomNum) {
+    alert('room ' + roomNum + ' has not found');
+    renderPage('admin');
+});
+
+socket.on('searchEmployeeFailed',function (id) {
+    alert('employee ' + id + ' has not found');
+    renderPage('admin');
+});
+
 socket.on('loginSuccess', function () {
     renderHome('home');
 //-------> if admin add options like delete/add employee
@@ -234,33 +275,41 @@ socket.on('deleteRoomDone',function (roomNum) {
     renderHome('home');
 });
 
+socket.on('deleteRoomDone',function (roomNum) {
+    alert("Room " +roomNum+ " deleted");
+    renderHome('home');
+});
+
 socket.on('OrderAdded',function (room,from,to, name) {
     alert("room number " + room + " is reserved to " + name + " from " + new Date(from) + " until " + to);
     renderHome('home');
 });
 
-socket.on('updateRoomDone',function (newRoomNum) {
-    alert("room number " + newRoomNum + " updated ");
+socket.on('updateRoomDone',function (RoomNum) {
+    alert("room number " + RoomNum + " updated ");
     renderHome('home');
 });
 
 
 //############ Ping to server #################
-$(function(){
-    // when client clicks Search Rooms
-    $('#search-btn').click( function() {
-        let from = new Date($('#fromDate').val());//2022-08-01
-        let to  = new Date($('#toDate').val());//2022-08-14
-        // trigger server to execute selectRooms by chosen dates
-        socket.emit('sendDates',from,to);
-    });
-});
+// $(function(){
+//     // when client clicks Search Rooms
+//     $('#search-btn').click( function() {
+//         let from = new Date($('#fromDate').val());//2022-08-01
+//         let to  = new Date($('#toDate').val());//2022-08-14
+//         // trigger server to execute selectRooms by chosen dates
+//         socket.emit('sendDates',from,to);
+//     });
+// });
 
 function onBookClick() {
     let from = new Date($('#fromDate').val());//2022-08-01
     let to  = new Date($('#toDate').val());//2022-08-14
+    let price  = $('#price-book').val();//2022-08-14
+    let beds  = $('#beds-book').val();//2022-08-14
+
     // trigger server to execute selectRooms by chosen dates
-    socket.emit('sendDates',from,to);
+    socket.emit('sendDates',from,to,price,beds);
 }
 
 function onEmpListClick() {
@@ -280,13 +329,56 @@ function onEmpUpdClick() {
 }
 
 function onEmpSrcClick() {
-    socket.emit('displayEmpList');
+    let id = $('#emp-id-del').val();
+    socket.emit('searchEmployee', id);
 }
 
 
 function onRoomsListClick() {
     socket.emit('displayRoomsList');
 }
+
+
+function onAddRoomClick() {
+    let roomNum = $("#room-num").val();
+    let beds = $("#room-num-beds").val();
+    let price = $("#room-price").val();
+    socket.emit('addRoom' , roomNum, beds,price);
+}
+
+function onDelRoomClick() {
+    let roomNum = $("#room-num").val();
+    socket.emit('DeleteRoom' , roomNum);
+}
+
+function onSrcRoomClick() {
+    let roomNum = $("#room-num").val();
+    socket.emit('SearchRoom' , roomNum);
+}
+function onSrcRoomClickTest() {
+    let roomNum = $("#room-num").val();
+    let beds = $("#room-num-beds").val();
+    let price = $("#room-price").val();
+    socket.emit('SearchRoomTest' , roomNum,beds,price);
+}
+
+function onUpdRoomClick() {
+    let roomNum = $("#room-num-upd").val();
+    let newBeds = $("#room-new-beds").val();
+    let newPrice = $("#room-new-price").val();
+    socket.emit('UpdateRoom' ,roomNum, newBeds, newPrice);
+}
+
+
+
+
+// $(function(){
+//     // when client clicks Search Rooms
+//     $('#room-list-btn').click( function() {
+//         // trigger server to execute selectRooms by chosen dates
+//         socket.emit('displayRoomsList');
+//     });
+// });
 
 
 $(function(){
@@ -300,6 +392,17 @@ $(function(){
 });
 
 
+
+
+// $(function () {
+//     $('#room-add-btn').click(function () {
+//         let roomNum = $('#room-num').val();
+//         let numOfBeds = $('#num-beds').val();
+//         let price = $('#room-price').val();
+//         socket.emit('addRoom',roomNum,numOfBeds,price);
+//     });
+// });
+
 $(function () {
     $('#room-add-btn').click(function () {
         let roomNum = $('#room-num').val();
@@ -309,21 +412,22 @@ $(function () {
     });
 });
 
-$(function () {
-    $('#room-del-btn').click(function () {
-        let roomNum = $('#del-room').val();
-        socket.emit('deleteRoom',roomNum);
-    });
-});
 
-$(function () {
-    $('#room-upd-btn').click(function () {
-        let newRoomNum = $('#room-num-upd').val();
-        let newNumBeds = $('#new-num-beds').val();
-        let newPrice = $('#new-price').val();
-        socket.emit('updateRoom',newRoomNum, newNumBeds, newPrice);
-    });
-});
+// $(function () {
+//     $('#room-del-btn').click(function () {
+//         let roomNum = $('#del-room').val();
+//         socket.emit('deleteRoom',roomNum);
+//     });
+// });
+
+// $(function () {
+//     $('#room-upd-btn').click(function () {
+//         let newRoomNum = $('#room-num-upd').val();
+//         let newNumBeds = $('#new-num-beds').val();
+//         let newPrice = $('#new-price').val();
+//         socket.emit('updateRoom',newRoomNum, newNumBeds, newPrice);
+//     });
+// });
 
 
 
@@ -334,6 +438,8 @@ renderPage = function (page) { // here the data and url are not hardcoded anymor
         url: "http://localhost:8080/" + page,
         contentType: "text/html",
         success: function (data) {
+            $("#main").empty();
+            $("#weather-table").empty();
             $("#container").html(data);
         }
     })}
