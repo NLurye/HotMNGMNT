@@ -1,5 +1,5 @@
-var lurl = 'http://localhost:8080';
-var socket = io.connect(lurl);
+let lurl = 'http://localhost:8080';
+let socket = io.connect(lurl);
 
 //############ React to server's emit #################
 socket.on('displayRooms', function (roomsArr,sfrom,sto) {
@@ -58,14 +58,14 @@ socket.on('deleteSuccess', function (rooms) {
     }
 });
 
-let handleReserve = function (room,sfrom,sto){
+let handleReserve = function (curRoom,sfrom,sto){
 let selfrom = new Date(sfrom).toLocaleDateString('en-IL');
 let selto = new Date(sto).toLocaleDateString('en-IL');
      $('#container').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead class='thead-dark'><tr><th scope='col'>Room number</th><th scope='col'>Check-in</th><th scope='col'>Check-out</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
 
     const row = `
         <tr>
-            <td id="selected-room-num">${room}</td>
+            <td id="selected-room-num">${curRoom}</td>
             <td id="selected-from">${selfrom}</td>
             <td id="selected-to">${selto}</td>
         </tr>`
@@ -122,18 +122,18 @@ let selto = new Date(sto).toLocaleDateString('en-IL');
 
 }
 
-function handleConfirm(room,sfrom,sto) {
-}
+// function handleConfirm(room,sfrom,sto) {
+// }
 
 
 
 function completeBook() {
     let id = ($('#cust-id').val());
     let name = ($('#cust-name').val());
-    let from = ($('#selected-from').val());
-    let to = ($('#selected-to').val());
+    let from = ($('#fromDate').val());
+    let to = ($('#toDate').val());
     let room = ($('#selected-room-num').val());
-    socket.emit('sendOrderVals',room,from,to, name, id);
+    socket.emit('sendOrderVals',room, from  ,to, name, id);
 }
 $(function(){
     // when client clicks Register
@@ -229,7 +229,7 @@ socket.on('deleteRoomDone',function (roomNum) {
 });
 
 socket.on('OrderAdded',function (room,from,to, name) {
-    alert("room number " + room + " is reserved to " + name + " from " + new Date(from) + " until " + to);
+    alert("room number " + room + " is reserved to " + name + " from " + new Date(from).toLocaleDateString() + " until " + new Date(to).toLocaleDateString());
     renderHome('home');
 });
 
@@ -247,15 +247,15 @@ socket.on('updateRoomDone',function (newRoomNum) {
 
 
 //############ Ping to server #################
-$(function(){
-    // when client clicks Search Rooms
-    $('#search-btn').click( function() {
-        let from = new Date($('#fromDate').val());//2022-08-01
-        let to  = new Date($('#toDate').val());//2022-08-14
-        // trigger server to execute selectRooms by chosen dates
-        socket.emit('sendDates',from,to);
-    });
-});
+// $(function(){
+//     // when client clicks Search Rooms
+//     $('#search-btn').click( function() {
+//         let from = new Date($('#fromDate').val());//2022-08-01
+//         let to  = new Date($('#toDate').val());//2022-08-14
+//         // trigger server to execute selectRooms by chosen dates
+//         socket.emit('sendDates',from,to);
+//     });
+// });
 
 function onBookClick() {
     let from = new Date($('#fromDate').val());//2022-08-01
@@ -264,13 +264,20 @@ function onBookClick() {
     socket.emit('sendDates',from,to);
 }
 
-$(function(){
-    // when client clicks Search Rooms
-    $('#emp-list-btn').click( function() {
-        // trigger server to execute selectRooms by chosen dates
-        socket.emit('displayEmpList');
-    });
-});
+function empListClick() {
+    // trigger server to execute selectRooms by chosen dates
+    socket.emit('displayEmpList');
+}
+
+
+// $(function(){
+//     // when client clicks Employee List
+//     $('#emp-list-btn').click( function() {
+//         // trigger server to execute selectRooms by chosen dates
+//         console.log('button clicked')
+//         socket.emit('displayEmpList');
+//     });
+// });
 
 $(function(){
     // when client clicks Search Rooms

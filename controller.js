@@ -1,4 +1,4 @@
-var express = require('express')
+let express = require('express')
     , app = express()
     , http = require('http')
     , server = http.createServer(app)
@@ -20,10 +20,9 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('sendOrderVals', function (room,from,to, name, id) {
-        myDB.addOrder(parseInt(room),from,to, name, id);
+        myDB.addOrder(room,from,to, name, id);
         setTimeout(getResultFromAddOrder,1000);//<------Callback
         function getResultFromAddOrder() {
-            console.log('blablabla' + room + typeof room);
             io.sockets.emit('OrderAdded', room,from,to, name);
         }
     });
@@ -115,11 +114,6 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
-
-    socket.on('newOrder', function (room,from,to,custName, custId) {
-        myDB.addOrder(room,from,to,custName, custId);
-        //add email+whatsapp confirmation+maps location
-    });
 
     socket.on('addRoom',function (roomNum,numOfBeds,price) {
         myDB.addRoom(roomNum,numOfBeds,price);
