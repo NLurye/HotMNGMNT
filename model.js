@@ -158,23 +158,37 @@ $(function(){
     });
 });
 
-$(function () {
-    $('#check-in-btn').click(function () {
-        let id = $('#id-num').val();
-        let name = $('#cust-name').val();
-        socket.emit('sendValsCheckIn',id,name);
-    });
-});
+function onCIClick() {
+    let id = $('#id-num-ci').val();
+    let name = $('#cust-name-ci').val();
+    socket.emit('sendValsCheckIn', id,name);
+}
 
-$(function () {
-    $('#check-out-btn').click(function () {
-        let id = $('#id-num-co').val();
-        let name = $('#cust-name-co').val();
-        let from = new Date($('#fromOutDate').val());
-        let to  = new Date($('#toOutDate').val());
-        socket.emit('sendValsCheckOut',id,name,from,to);
-    });
-});
+// $(function () {
+//     $('#check-in-btn').click(function () {
+//         let id = $('#id-num').val();
+//         let name = $('#cust-name').val();
+//         socket.emit('sendValsCheckIn',id,name);
+//     });
+// });
+
+function onCOClick() {
+    let id = $('#id-num-co').val();
+    let name = $('#cust-name-co').val();
+    let from = new Date($('#fromOutDate').val());
+    let to  = new Date($('#toOutDate').val());
+    socket.emit('sendValsCheckOut', id,name,from,to);
+}
+
+// $(function () {
+//     $('#check-out-btn').click(function () {
+//         let id = $('#id-num-co').val();
+//         let name = $('#cust-name-co').val();
+//         let from = new Date($('#fromOutDate').val());
+//         let to  = new Date($('#toOutDate').val());
+//         socket.emit('sendValsCheckOut',id,name,from,to);
+//     });
+// });
 
 
 
@@ -185,15 +199,8 @@ $(function () {
     });
 });
 
-$(function () {
-    $('#room-search-btn').click(function () {
-        let roomNum = $('#room-search').val();
-        socket.emit('sendValsSearchRoom',roomNum);
-    });
-});
-
-socket.on('checkInDone',function () {
-    //alert("Welcome to our hotel");
+socket.on('checkInDone',function (name) {
+    alert("Welcome to our hotel " + name);
     renderHome('home');
 });
 
@@ -201,7 +208,8 @@ socket.on('checkInFailed',function () {
     alert("reservation doesn't exist");
 });
 
-socket.on('checkOutDone',function () {
+socket.on('checkOutDone',function (id,name) {
+    alert(name + " has checked out");
     renderHome('home');
 });
 
@@ -210,8 +218,13 @@ socket.on('deleteOrderDone',function () {
     renderHome('home');
 });
 
-socket.on('deleteEmployeeDone',function () {
-    alert('employee deleted');
+socket.on('deleteEmployeeDone',function (id) {
+    alert('employee ' + id + ' deleted');
+    renderHome('home');
+});
+
+socket.on('updateEmployeeDone',function (id) {
+    alert('employee ' + id + ' updated');
     renderHome('home');
 });
 
@@ -240,7 +253,7 @@ socket.on('deleteRoomDone',function (roomNum) {
 });
 
 socket.on('OrderAdded',function (room,from,to, name) {
-    alert("room number " + room + " is reserved for " + name + " from " + new Date(from).toLocaleDateString('en-IL') + " to " + new Date(to).toLocaleDateString('en-IL'));
+    alert("room number " + room + " is reserved to " + name + " from " + new Date(from) + " until " + to);
     renderHome('home');
 });
 
@@ -275,21 +288,45 @@ function onBookClick() {
     socket.emit('sendDates',from,to);
 }
 
-$(function(){
-    // when client clicks Search Rooms
-    $('#emp-list-btn').click( function() {
-        // trigger server to execute selectRooms by chosen dates
-        socket.emit('displayEmpList');
-    });
-});
+function onEmpListClick() {
+    socket.emit('displayEmpList');
+}
 
-$(function(){
-    // when client clicks Search Rooms
-    $('#room-list-btn').click( function() {
-        // trigger server to execute selectRooms by chosen dates
-        socket.emit('displayRoomsList');
-    });
-});
+function onEmpDelClick() {
+    let id = $('#emp-id-del').val();
+    socket.emit('deleteEmployee',id);
+}
+
+function onEmpUpdClick() {
+    let id = $('#emp-id-del').val();
+    let emp_pass = $('#emp-id-oldp').val();
+    let new_emp_pass = $('#emp-id-newp').val();
+    socket.emit('updateEmployee', id,emp_pass, new_emp_pass);
+}
+
+function onEmpSrcClick() {
+    socket.emit('displayEmpList');
+}
+
+// $(function(){
+//     // when client clicks Search Rooms
+//     $('#emp-list-btn').click( function() {
+//         // trigger server to execute selectRooms by chosen dates
+//         socket.emit('displayEmpList');
+//     });
+// });
+
+function onRoomsListClick() {
+    socket.emit('displayRoomsList');
+}
+
+// $(function(){
+//     // when client clicks Search Rooms
+//     $('#room-list-btn').click( function() {
+//         // trigger server to execute selectRooms by chosen dates
+//         socket.emit('displayRoomsList');
+//     });
+// });
 
 $(function(){
     // when client clicks Login

@@ -37,53 +37,53 @@ const app = express();
 //     res.sendFile(__dirname + '/server.js');
 // });
 
-app.get("/login", function (req,res){
-    res.sendFile(__dirname + '/pages/login.html');
-});
-
-app.get("/login.css", function (req,res){
-    res.sendFile(__dirname + '/pages/login.css');
-});
-
-app.get("/home", function (req,res){
-    res.sendFile(__dirname + '/index.html');
-});
-
-app.get("/index.css", function (req,res){
-    res.sendFile(__dirname + '/index.css');
-});
-
-app.get("/book", function (req,res){
-    res.sendFile(__dirname + '/pages/book.html');
-});
-
-app.get("/book.css", function (req,res){
-    res.sendFile(__dirname + '/pages/book.css');
-});
-
-app.get("/background.jpg", function (req,res){
-    res.sendFile(__dirname + '/background.jpg');
-});
-
-app.get("/checkIn", function (req,res){
-    res.sendFile(__dirname + '/pages/checkIn.html');
-});
-
-app.get("/pages/checkIn.css", function (req,res){
-    res.sendFile(__dirname + '/pages/checkIn.css');
-});
-
-app.get("/checkOut", function (req,res){
-    res.sendFile(__dirname + '/pages/checkOut.html');
-});
-
-app.get("/pages/checkOut.css", function (req,res){
-    res.sendFile(__dirname + '/pages/checkOut.css');
-});
-
-app.get("/model.js", function (req,res){
-    res.sendFile(__dirname + '/model.js');
-});
+// app.get("/login", function (req,res){
+//     res.sendFile(__dirname + '/pages/login.html');
+// });
+//
+// app.get("/login.css", function (req,res){
+//     res.sendFile(__dirname + '/pages/login.css');
+// });
+//
+// app.get("/home", function (req,res){
+//     res.sendFile(__dirname + '/index.html');
+// });
+//
+// app.get("/index.css", function (req,res){
+//     res.sendFile(__dirname + '/index.css');
+// });
+//
+// app.get("/book", function (req,res){
+//     res.sendFile(__dirname + '/pages/book.html');
+// });
+//
+// app.get("/book.css", function (req,res){
+//     res.sendFile(__dirname + '/pages/book.css');
+// });
+//
+// app.get("/background.jpg", function (req,res){
+//     res.sendFile(__dirname + '/background.jpg');
+// });
+//
+// app.get("/checkIn", function (req,res){
+//     res.sendFile(__dirname + '/pages/checkIn.html');
+// });
+//
+// app.get("/pages/checkIn.css", function (req,res){
+//     res.sendFile(__dirname + '/pages/checkIn.css');
+// });
+//
+// app.get("/checkOut", function (req,res){
+//     res.sendFile(__dirname + '/pages/checkOut.html');
+// });
+//
+// app.get("/pages/checkOut.css", function (req,res){
+//     res.sendFile(__dirname + '/pages/checkOut.css');
+// });
+//
+// app.get("/model.js", function (req,res){
+//     res.sendFile(__dirname + '/model.js');
+// });
 
 //myDB.init();
 

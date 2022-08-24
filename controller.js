@@ -1,4 +1,4 @@
-var express = require('express')
+let express = require('express')
     , app = express()
     , http = require('http')
     , server = http.createServer(app)
@@ -23,7 +23,6 @@ io.sockets.on('connection', function (socket) {
         myDB.addOrder(room,from,to, name, id);
         setTimeout(getResultFromAddOrder,1000);//<------Callback
         function getResultFromAddOrder() {
-            console.log('blablabla' + room + typeof room);
             io.sockets.emit('OrderAdded', room,from,to, name);
         }
     });
@@ -55,8 +54,16 @@ io.sockets.on('connection', function (socket) {
         myDB.deleteEmployee(id);
         setTimeout(deleteEmp,1000);//<------Callback
         function deleteEmp() {
-            //need to catch if err
-            io.sockets.emit('deleteEmployeeDone'); //need to catch error
+            io.sockets.emit('deleteEmployeeDone', id); //need to catch error
+        }
+    });
+
+    socket.on('updateEmployee', function (emp_id, emp_pass, new_emp_pass) {
+        //prepare rooms available on those dates
+        myDB.changeEmpPass(emp_id, emp_pass, new_emp_pass);
+        setTimeout(updateEmp,1000);//<------Callback
+        function updateEmp() {
+            io.sockets.emit('updateEmployeeDone', emp_id); //need to catch error
         }
     });
 
@@ -91,16 +98,18 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('sendValsCheckIn',function (id,name) {
+        console.log(id, name, typeof id, typeof name);
         myDB.checkIn(id,name);
         setTimeout(getResultFromCheckIn,1000);//<------Callback
         function getResultFromCheckIn() {
             if(myDB.validReservation.length !== 0)
-                io.sockets.emit('checkInDone');
+                io.sockets.emit('checkInDone', name);
             else
                 io.sockets.emit('checkInFailed');
             myDB.validReservation.length = 0;
         }
     });
+
 
     socket.on('sendValsCheckOut',function (id,name,from,to) {
         myDB.checkOut(id,name,from,to);
