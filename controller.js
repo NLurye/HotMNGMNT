@@ -99,11 +99,11 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
-    socket.on('sendValsCheckOut',function (id,name) { //from-to
+    socket.on('sendValsCheckOut',function (id,name,from,to) { //from-to
         myDB.checkOut(id,name);
         setTimeout(getResultFromCheckOut,1000);//<------Callback
         function getResultFromCheckOut() {
-            io.sockets.emit('checkOutDone', id ,name);
+            io.sockets.emit('checkOutDone', id ,name,from,to);
         }
     });
 
