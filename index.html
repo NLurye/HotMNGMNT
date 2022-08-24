@@ -74,18 +74,20 @@
     <span>MNGMNT</span>
 </h1>
 
+
+<table id="weather-table">
+    <tbody>
+        <tr>
+            <th>time</th>
+            <th>temp</th>
+        </tr>
+    </tbody>
+</table>
+
 <main>
           <footer class="footer"><div id="map"></div></footer>
            <div id="weather"></div>
 </main>
-
-<!--
- The `defer` attribute causes the callback to execute after the full HTML
- document has been parsed. For non-blocking uses, avoiding race conditions,
- and consistent behavior across browsers, consider loading using Promises
- with https://www.npmjs.com/package/@googlemaps/js-api-loader.
--->
-
 
 </body>
 <div id="container"></div>

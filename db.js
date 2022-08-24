@@ -2,11 +2,13 @@ let MongoClient = require('mongodb').MongoClient;
 let url = "mongodb://localhost:27017/hotel";
 const selectedRooms = [];
 let validLogIn = [];
+let validSignIn = [];
 let validReservation = [];
 let showEmp = [];
 let employees = [];
 let roomsList = [];
 let showRoom = [];
+let locations = [];
 
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
@@ -384,7 +386,7 @@ let initHotelDB = function () {
                 //        3) if(from == to == null) ===> alert("ERR: must enter dates)
                 {
                     room: 10,
-                    from: new Date('2022-08-22'),//'2022-08-01'
+                    from: new Date('2022-08-21'),//'2022-08-01'
                     to: new Date('2022-08-24'),//2022-08-02
                     custName: "Tom",
                     custID: "111111110"
@@ -606,6 +608,20 @@ let initHotelDB = function () {
         });
     });
 }
+
+let getLocations = function () {
+    MongoClient.connect(url, function (err, db) {
+        if (err) console.log(err);
+        let dbo = db.db("hotel");
+        let attractions = dbo.collection("Attractions");
+        attractions.find({}).toArray(function (err, attractionsRes) {
+            if (err) throw err;
+            else attractionsRes.forEach(item => {
+                locations.push(item)
+            });
+        });
+    });
+}
 let logIn = function (id, pass) { ///<-----add encryption, admin?
     MongoClient.connect(url, function (err, db) {
         if (err) console.log(err);
@@ -653,7 +669,7 @@ let selectRoomsByDates = function (selected_from, selected_to) {
         ]).toArray(function (err, queryResult) {
             if (err) throw err;
             let interruptions = queryResult.map(a => a._id);
-            console.log("Booked rooms on those dates: " + interruptions);
+            //console.log("Booked rooms on those dates: " + interruptions);
             let rooms = dbo.collection("Rooms");
             rooms.find(
                 {
@@ -672,48 +688,53 @@ let selectRoomsByDates = function (selected_from, selected_to) {
 }
 let checkIn =function(cust_id,cust_name){
     MongoClient.connect(url, function (err, db) {
-    if (err) console.log(err);
-    let dbo = db.db("hotel");
-    let now = new Date();
-    let orders = dbo.collection("Orders");
-        orders.find(
-        {
-            from: {$lte: now},
-            to: {$gt: now},
-            custID: cust_id,
-            custName: cust_name,
-        }
-    ).toArray(function (err, CheckInRes) {
         if (err) throw err;
-        else {
-            validReservation.length = 0;
-            if (CheckInRes.length === 0)
-                console.log("Check in error");
+        let dbo = db.db("hotel");
+        let orders = dbo.collection("Orders");
+        let now = new Date();
+        orders.find(
+                    {
+                        from: {$lte: now},
+                        to: {$gt: now},
+                        custID: cust_id,
+                        custName: cust_name,
+                    }
+        ).toArray(function (err, checkInRes) {
+            if (err) throw err;
             else {
-                CheckInRes.forEach(item => {
-                    validReservation.push(item);
-                });
-
+                validReservation.length = 0;
+                if (checkInRes.length === 0)
+                    console.log("reservation doesn't exist");
+                else {
+                    checkInRes.forEach(item => {
+                        validReservation.push(item);
+                    });
+                }
             }
-        }
-        db.close();
+        });
     });
-});
 }
-
 let checkOut = function (cust_id, cust_name, sfrom, sto) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
         let orders = dbo.collection("Orders");
         let ordersHistory = dbo.collection("OrdersHistory");
-        let query = {custID: cust_id, custName: cust_name, from: sfrom, to: sto};
-        orders.find(query).toArray(function (err, checkOutRes) {
+        orders.find(
+            {
+                from: {$eq: new Date(sfrom)},
+                to: {$eq: new Date(sto)},
+                custID: cust_id,
+                custName: cust_name,
+            }
+        ).toArray(function (err, checkOutRes) {
+
             if (err) throw err;
             else {
-                console.log(checkOutRes);
-                if (checkOutRes.length === 0)
+                //console.log(checkOutRes);
+                if (checkOutRes.length === 0) {
                     console.log("Reservation doesn't exist");
+                }
                 else {
                     ordersHistory.insertMany(checkOutRes, function (err, res) {
                         if (err) throw err;
@@ -727,13 +748,13 @@ let checkOut = function (cust_id, cust_name, sfrom, sto) {
         });
     });
 }
-let addOrder = function (room, from, to, custName, custID) {
+let addOrder = function (curRoom, from, to, custName, custID) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
         let order =
             {
-                room: room,
+                room: parseInt(curRoom),
                 from: new Date(from),
                 to: new Date(to),
                 custName: custName,
@@ -797,10 +818,11 @@ let deleteEmployee = function (emp_ID) {
         if (err) throw err;
         let dbo = db.db("hotel");
         let staff = dbo.collection("Staff");
+        console.log(emp_ID)
         try {
             staff.deleteOne(
                 {
-                    empID: emp_ID
+                    empID: parseInt(emp_ID)
                 });
         } catch (e) {
             print(e);
@@ -829,15 +851,15 @@ let updateOrder = function (cust_id, cust_name, my_from, my_to, new_cust_id, new
         }
     });
 }
-let addEmployee = function (emp_id, emp_pass, is_admin) {
+let addEmployee = function (emp_id, emp_pass) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
         let employee =
             {
-                empID: emp_id,
-                empPass: emp_pass,
-                admin: is_admin
+                empID: parseInt(emp_id),
+                empPass: parseInt(emp_pass),
+                admin: 0
             }
         dbo.collection("Staff").insertOne(employee, function (err, res) {
             if (err) throw err;
@@ -846,16 +868,18 @@ let addEmployee = function (emp_id, emp_pass, is_admin) {
 }
 let changeEmpPass = function (emp_id, emp_pass, new_emp_pass) {
     MongoClient.connect(url, function (err, db) {
+        console.log(emp_id, emp_pass, new_emp_pass)
         if (err) throw err;
+        console.log('here')
         let dbo = db.db("hotel");
         let employee = dbo.collection("Staff");
         employee.findOneAndUpdate(
             {
-                empID: emp_id,
-                empPass: emp_pass
+                empID: parseInt(emp_id),
+                empPass: parseInt(emp_pass)
             },
             {
-                empPass: new_emp_pass
+                empPass: parseInt(new_emp_pass)
             });
     });
 }
@@ -910,7 +934,7 @@ let getStaff = function () {
         });
     });
 }
-let getRooms = function () {
+let getRooms = function (onRes) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
@@ -918,10 +942,10 @@ let getRooms = function () {
         rooms.find({}).toArray(function (err, getRoomsResult) {
             if (err) throw err;
             else {
-                getRoomsResult.forEach(item => {
-                    roomsList.push(item);
-                });
+
+                onRes(getRoomsResult);
             }
+            //console.log(roomsList);
         });
     });
 }
@@ -936,9 +960,13 @@ let searchRoom = function (roomNumber) {
             if (err) throw err;
             else {
                 showRoom.length = 0;
-                if (searchRoomRes.length === 0)
-                    console.log("Employee not found");
+                if (searchRoomRes.length === 0) {
+                    console.log("Room not found");
+                    //console.log(typeof roomNumber);
+                    //console.log(roomNumber);
+                }
                 else {
+                    console.log("Roommmmm");
                     showRoom.push(searchRoomRes);
                 }
             }
@@ -947,6 +975,7 @@ let searchRoom = function (roomNumber) {
     });
 }
 
+module.exports.locations = locations;
 module.exports.validLogIn = validLogIn;
 module.exports.selectedRooms = selectedRooms;
 module.exports.employees = employees;
@@ -961,6 +990,7 @@ module.exports.logIn = logIn;//done
 module.exports.checkIn = checkIn;//to be done -> add an alert---------------------------------
 module.exports.checkOut = checkOut;//done
 module.exports.deleteOrder = deleteOrder;//to be done-----------------------------------------
+//admin actions
 module.exports.addRoom = addRoom;//to be done-------------------------------------------------
 module.exports.deleteRoom = deleteRoom;//to be done-------------------------------------------
 module.exports.deleteEmployee = deleteEmployee;//to be done-----------------------------------
@@ -972,7 +1002,7 @@ module.exports.searchEmp = searchEmp;//to be done-------------------------------
 module.exports.getStaff = getStaff;//done
 module.exports.getRooms = getRooms;//done
 module.exports.searchRoom = searchRoom;//to be done---------------------------------------------
-
+module.exports.getLocations = getLocations;
 
 
 
