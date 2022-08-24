@@ -1,9 +1,9 @@
-let lurl = 'http://localhost:8080';
-let socket = io.connect(lurl);
+var lurl = 'http://localhost:8080';
+var socket = io.connect(lurl);
 
 //############ React to server's emit #################
 socket.on('displayRooms', function (roomsArr,sfrom,sto) {
-    $('#container').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room number</th><th>Number of beds</th><th>Price</th><th></th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+    $('#container').empty().append("<table id=\"myTable\" class=\"table table-striped table-hover table-bordered \"><thead><tr><th onclick=\"sortTable(0)\">Room number</th><th onclick=\"sortTable(1)\">Number of beds</th><th onclick=\"sortTable(2)\">Price</th><th></th></tr></thead><tbody id=\"tBody\"></tbody></table>");
     for (const room of roomsArr) {
         const row = `
         <tr>
@@ -39,7 +39,7 @@ socket.on('displayAdminRooms', function (rooms) {
             <td>${room.numOfBeds}</td>
             <td>${room.price}</td>
         </tr>`
-        tBody.innerHTML += row;
+        //tBody.innerHTML += row;
         $('#tBody').append(row);
     }
 });
@@ -53,11 +53,12 @@ socket.on('deleteSuccess', function (rooms) {
             <td>${room.numOfBeds}</td>
             <td>${room.price}</td>
         </tr>`
-        tBody.innerHTML += row;
+        //tBody.innerHTML += row;
         $('#tBody').append(row);
     }
 });
 
+let handleReserve = function (sroom,sfrom,sto){
 let handleReserve = function (curRoom,sfrom,sto){
 let selfrom = new Date(sfrom).toLocaleDateString('en-IL');
 let selto = new Date(sto).toLocaleDateString('en-IL');
@@ -65,75 +66,74 @@ let selto = new Date(sto).toLocaleDateString('en-IL');
 
     const row = `
         <tr>
-            <td id="selected-room-num">${curRoom}</td>
+            <td id="selected-room-num">${sroom}</td>
             <td id="selected-from">${selfrom}</td>
             <td id="selected-to">${selto}</td>
         </tr>`
-    $('#tBody').append(row).append('<div>\n' +
-        '  <div class="col-75">\n' +
-        '    <div class="container">\n' +
-        '      <form>\n' +
-        '\n' +
-        '        <div class="row">\n' +
-        '          <div class="col-50">\n' +
-        '            <h3>Billing Address</h3>\n' +
-        '            <label for="fname"><i class="fa fa-user"></i> Full Name</label>\n' +
-        '            <input type="text" id="cust-name" name="firstname" placeholder="John M. Doe">\n' +
-        '            <label for="id"><i class="fa fa-user"></i> Identification Number</label>\n' +
-        '            <input type="text" id="cust-id" name="id" placeholder="123456789">\n' +
-        '          </div>\n' +
-        '\n' +
-        '          <div class="col-50">\n' +
-        '            <h3>Payment</h3>\n' +
-        '            <label for="fname">Accepted Cards</label>\n' +
-        '            <div class="icon-container">\n' +
-        '              <i class="fa fa-cc-visa" style="color:navy;"></i>\n' +
-        '              <i class="fa fa-cc-amex" style="color:blue;"></i>\n' +
-        '              <i class="fa fa-cc-mastercard" style="color:red;"></i>\n' +
-        '              <i class="fa fa-cc-discover" style="color:orange;"></i>\n' +
-        '            </div>\n' +
-        '            <label for="cname">Name on Card</label>\n' +
-        '            <input type="text" id="cname" name="cardname" placeholder="John More Doe">\n' +
-        '            <label for="ccnum">Credit card number</label>\n' +
-        '            <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">\n' +
-        '            <label for="expmonth">Exp Month</label>\n' +
-        '            <input type="text" id="expmonth" name="expmonth" placeholder="September">\n' +
-        '\n' +
-        '            <div class="row">\n' +
-        '              <div class="col-50">\n' +
-        '                <label for="expyear">Exp Year</label>\n' +
-        '                <input type="text" id="expyear" name="expyear" placeholder="2018">\n' +
-        '              </div>\n' +
-        '              <div class="col-50">\n' +
-        '                <label for="cvv">CVV</label>\n' +
-        '                <input type="text" id="cvv" name="cvv" placeholder="352">\n' +
-        '              </div>\n' +
-        '            </div>\n' +
-        '          </div>\n' +
-        '\n' +
-        '        </div>\n' +
-        '       <button id="book-btn-success" type="button" class="btn btn-success" onclick="completeBook()">Book</button>\n' +
-        '      </form>\n' +
-        '    </div>\n' +
-        '  </div>\n' +
-        '\n' +
-        '</div>')
+    const row2 = `<div>
+          <div class="col-75">
+            <div class="container">
+              <form>
+        
+                <div class="row">
+                  <div class="col-50">
+                    <h3>Billing Address</h3>
+                    <label for="fname"><i class="fa fa-user"></i> Full Name</label>
+                    <input type="text" id="cust-name" name="firstname" placeholder="John M. Doe">
+                    <label for="id"><i class="fa fa-user"></i> Identification Number</label>
+                    <input type="text" id="cust-id" name="id" placeholder="123456789">
+                  </div>
+        
+                  <div class="col-50">
+                    <h3>Payment</h3>
+                    <label for="fname">Accepted Cards</label>
+                    <div class="icon-container">
+                      <i class="fa fa-cc-visa" style="color:navy;"></i>
+                      <i class="fa fa-cc-amex" style="color:blue;"></i>
+                      <i class="fa fa-cc-mastercard" style="color:red;"></i>
+                      <i class="fa fa-cc-discover" style="color:orange;"></i>
+                    </div>
+                    <label for="cname">Name on Card</label>
+                    <input type="text" id="cname" name="cardname" placeholder="John More Doe">
+                    <label for="ccnum">Credit card number</label>
+                    <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">
+                    <label for="expmonth">Exp Month</label>
+                    <input type="text" id="expmonth" name="expmonth" placeholder="September">
+        
+                    <div class="row">
+                      <div class="col-50">
+                        <label for="expyear">Exp Year</label>
+                        <input type="text" id="expyear" name="expyear" placeholder="2018">
+                      </div>
+                      <div class="col-50">
+                        <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" name="cvv" placeholder="352">
+                      </div>
+                    </div>
+                  </div>
+        
+                </div>
+               <button id="book-btn-success" type="button" class="btn btn-success" onclick="completeBook('${sroom}','${sfrom}','${sto}')">Book</button>
+              </form>
+            </div>
+          </div>
+        
+        </div>`
+    
+    $('#tBody').append(row).append(row2)
      //socket.emit('newOrder',room,from,to,custName, custId);
 
 }
 
-// function handleConfirm(room,sfrom,sto) {
-// }
+function handleConfirm(room,sfrom,sto) {
+}
 
 
 
-function completeBook() {
+function completeBook(room,from,to) {
     let id = ($('#cust-id').val());
     let name = ($('#cust-name').val());
-    let from = ($('#fromDate').val());
-    let to = ($('#toDate').val());
-    let room = ($('#selected-room-num').val());
-    socket.emit('sendOrderVals',room, from  ,to, name, id);
+    socket.emit('sendOrderVals',room,from,to, name, id);
 }
 $(function(){
     // when client clicks Register
@@ -229,7 +229,7 @@ socket.on('deleteRoomDone',function (roomNum) {
 });
 
 socket.on('OrderAdded',function (room,from,to, name) {
-    alert("room number " + room + " is reserved to " + name + " from " + new Date(from).toLocaleDateString() + " until " + new Date(to).toLocaleDateString());
+    alert("room number " + room + " is reserved to " + name + " from " + new Date(from) + " until " + to);
     renderHome('home');
 });
 
@@ -247,15 +247,15 @@ socket.on('updateRoomDone',function (newRoomNum) {
 
 
 //############ Ping to server #################
-// $(function(){
-//     // when client clicks Search Rooms
-//     $('#search-btn').click( function() {
-//         let from = new Date($('#fromDate').val());//2022-08-01
-//         let to  = new Date($('#toDate').val());//2022-08-14
-//         // trigger server to execute selectRooms by chosen dates
-//         socket.emit('sendDates',from,to);
-//     });
-// });
+$(function(){
+    // when client clicks Search Rooms
+    $('#search-btn').click( function() {
+        let from = new Date($('#fromDate').val());//2022-08-01
+        let to  = new Date($('#toDate').val());//2022-08-14
+        // trigger server to execute selectRooms by chosen dates
+        socket.emit('sendDates',from,to);
+    });
+});
 
 function onBookClick() {
     let from = new Date($('#fromDate').val());//2022-08-01
@@ -264,20 +264,13 @@ function onBookClick() {
     socket.emit('sendDates',from,to);
 }
 
-function empListClick() {
-    // trigger server to execute selectRooms by chosen dates
-    socket.emit('displayEmpList');
-}
-
-
-// $(function(){
-//     // when client clicks Employee List
-//     $('#emp-list-btn').click( function() {
-//         // trigger server to execute selectRooms by chosen dates
-//         console.log('button clicked')
-//         socket.emit('displayEmpList');
-//     });
-// });
+$(function(){
+    // when client clicks Search Rooms
+    $('#emp-list-btn').click( function() {
+        // trigger server to execute selectRooms by chosen dates
+        socket.emit('displayEmpList');
+    });
+});
 
 $(function(){
     // when client clicks Search Rooms
@@ -361,5 +354,41 @@ renderHome = function (page) {
 
 }
 
+    function sortTable(n) {
+    var table, rows, swapped, i, x, y, shouldSwitch, dir, switchcount = 0;
+    table = document.getElementById("myTable");
+    swapped = true;
+    dir = "asc";
+    while (swapped) {
+    swapped = false;
+    rows = table.rows;
+    for (i = 1; i < (rows.length - 1); i++) {
+    shouldSwitch = false;
+    x = rows[i].getElementsByTagName("TD")[n];
+    y = rows[i + 1].getElementsByTagName("TD")[n];
+    if (dir === "asc") {
+    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+    shouldSwitch = true;
+    break;
+}
+} else if (dir === "desc") {
+    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+    shouldSwitch = true;
+    break;
+}
+}
+}
+    if (shouldSwitch) {
+    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+    swapped = true;
+    switchcount ++;
+} else {
+    if (switchcount === 0 && dir === "asc") {
+    dir = "desc";
+    swapped = true;
+}
+}
+}
+}}
 
 
