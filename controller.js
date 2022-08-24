@@ -216,6 +216,6 @@ app.get("/admin", function (req,res){
     res.sendFile(__dirname + '/pages/admin.html');
 });
 
-
+app.use('/', express.static("pages"))
 
 

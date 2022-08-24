@@ -3,12 +3,29 @@
 <head>
     <link rel="stylesheet" href="index.css"/>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
-    <script src="index.js"></script>
+    <script defer src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script defer src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <script defer src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+    <script defer src="model.js"></script>
+
+
+    <script defer src="pages/maps/code.js"></script>
+
+    <script defer src="index.js"></script>
+
+    <script defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAC4HSkQqHjyWCc9wP_xSvgtuOOHIJEw0A&callback=initMap&v=weekly"
+    ></script>
+
+
 </head>
 <body>
+
+
+
+
 
 <nav class="navbar navbar-default">
     </header>
@@ -57,6 +74,7 @@
     <span>MNGMNT</span>
 </h1>
 
+
 <table id="weather-table">
     <tbody>
         <tr>
@@ -66,8 +84,10 @@
     </tbody>
 </table>
 
-
-<script src="model.js"></script>
+<main>
+          <footer class="footer"><div id="map"></div></footer>
+           <div id="weather"></div>
+</main>
 
 </body>
 <div id="container"></div>
