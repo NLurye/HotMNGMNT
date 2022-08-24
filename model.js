@@ -68,7 +68,6 @@ socket.on('searchRoomDone', function (room) {
             <td>${r.numOfBeds}</td>
             <td>${r.price}</td>
         </tr>`
-        tBody.innerHTML += row;
         $('#tBody').append(row);
     }
 });
@@ -88,57 +87,55 @@ let selto = new Date(sto).toLocaleDateString('en-IL');
             <td>${selto}</td>
             <td><button onclick="handleConfirm(${room},${sfrom},${sto})">Confirm</button></td>
         </tr>`
-    $('#tBody').append(row).append('<br><br><br><div id="billing" style="margin-left: 400px"><div class="row">\n' +
-        '  <div class="col-75">\n' +
-        '    <div class="container">\n' +
-        '      <form action="/action_page.php">\n' +
-        '\n' +
-        '        <div class="row">\n' +
-        '          <div class="col-50">\n' +
-        '            <h3>Billing Address</h3>\n' +
-        '            <label for="fname"><i class="fa fa-user"></i> Full Name</label>\n' +
-        '            <input type="text" id="fname" name="firstname" placeholder="John M. Doe">\n' +
-        '  <button style="margin-top: 250px" id="search-btn" type="button" class="btn btn-success">Book</button>\n' +
-
-        '          </div>\n' +
-        '\n' +
-        '          <div class="col-50">\n' +
-        '            <h3>Payment</h3>\n' +
-        '            <label for="fname">Accepted Cards</label>\n' +
-        '            <div class="icon-container">\n' +
-        '              <i class="fa-brands fa-cc-visa" style="color:navy;"></i>\n' +
-        '              <i class="fa-brands fa-cc-amex" style="color:blue;"></i>\n' +
-        '              <i class="fa-brands fa-cc-mastercard" style="color:red;"></i>\n' +
-        '              <i class="fa-brands fa-cc-discover" style="color:orange;"></i>\n' +
-        '            </div>\n' +
-        '            <label for="cname">Name on Card</label>\n' +
-        '            <input type="text" id="cname" name="cardname" placeholder="John More Doe">\n' +
-        '            <label for="ccnum">Credit card number</label>\n' +
-        '            <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">\n' +
-        '            <label for="expmonth">Exp Month</label>\n' +
-        '            <input type="text" id="expmonth" name="expmonth" placeholder="September">\n' +
-        '\n' +
-        '            <div class="row">\n' +
-        '              <div class="col-50">\n' +
-        '                <label for="expyear">Exp Year</label>\n' +
-        '                <input type="text" id="expyear" name="expyear" placeholder="2018">\n' +
-        '              </div>\n' +
-        '              <div class="col-50">\n' +
-        '                <label for="cvv">CVV</label>\n' +
-        '                <input type="text" id="cvv" name="cvv" placeholder="352">\n' +
-        '              </div>\n' +
-        '            </div>\n' +
-        '          </div>\n' +
-        '\n' +
-        '        </div>\n' +
-        '      </form>\n' +
-        '    </div>\n' +
-        '  </div>\n' +
-        '\n' +
-        '    </div>\n' +
-        '  </div>\n' +
-        '</div></div>')
-     //socket.emit('newOrder',room,from,to,custName, custId);
+    const row2 = `<div>
+          <div class="col-75">
+            <div class="container">
+              <form>
+        
+                <div class="row">
+                  <div class="col-50">
+                    <h3>Billing Address</h3>
+                    <label for="fname"><i class="fa fa-user"></i> Full Name</label>
+                    <input type="text" id="cust-name" name="firstname" placeholder="John M. Doe">
+                    <label for="id"><i class="fa fa-user"></i> Identification Number</label>
+                    <input type="text" id="cust-id" name="id" placeholder="123456789">
+                  </div>
+        
+                  <div class="col-50">
+                    <h3>Payment</h3>
+                    <label for="fname">Accepted Cards</label>
+                    <div class="icon-container">
+                      <i class="fa fa-cc-visa" style="color:navy;"></i>
+                      <i class="fa fa-cc-amex" style="color:blue;"></i>
+                      <i class="fa fa-cc-mastercard" style="color:red;"></i>
+                      <i class="fa fa-cc-discover" style="color:orange;"></i>
+                    </div>
+                    <label for="cname">Name on Card</label>
+                    <input type="text" id="cname" name="cardname" placeholder="John More Doe">
+                    <label for="ccnum">Credit card number</label>
+                    <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">
+                    <label for="expmonth">Exp Month</label>
+                    <input type="text" id="expmonth" name="expmonth" placeholder="September">
+        
+                    <div class="row">
+                      <div class="col-50">
+                        <label for="expyear">Exp Year</label>
+                        <input type="text" id="expyear" name="expyear" placeholder="2018">
+                      </div>
+                      <div class="col-50">
+                        <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" name="cvv" placeholder="352">
+                      </div>
+                    </div>
+                  </div>
+        
+                </div>
+               <button id="book-btn-success" type="button" class="btn btn-success" onclick="completeBook('${sroom}','${sfrom}','${sto}')">Book</button>
+              </form>
+            </div>
+          </div>
+        </div>`
+    $('#tBody').append(row).append(row2);
 }
 
 function handleConfirm(room,sfrom,sto) {

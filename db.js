@@ -7,6 +7,7 @@ let showEmp = [];
 let employees = [];
 let roomsList = [];
 let showRoom = [];
+let locations = [];
 
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
@@ -606,6 +607,20 @@ let initHotelDB = function () {
         });
     });
 }
+
+let getLocations = function () {
+    MongoClient.connect(url, function (err, db) {
+        if (err) console.log(err);
+        let dbo = db.db("hotel");
+        let attractions = dbo.collection("Attractions");
+        attractions.find({}).toArray(function (err, attractionsRes) {
+            if (err) throw err;
+            else attractionsRes.forEach(item => {
+                locations.push(item)
+            });
+        });
+    });
+}
 let logIn = function (id, pass) { ///<-----add encryption, admin?
     MongoClient.connect(url, function (err, db) {
         if (err) console.log(err);
@@ -955,6 +970,7 @@ let searchRoom = function (roomNumber) {
     });
 }
 
+module.exports.locations = locations;
 module.exports.validLogIn = validLogIn;
 module.exports.selectedRooms = selectedRooms;
 module.exports.employees = employees;
@@ -980,8 +996,7 @@ module.exports.searchEmp = searchEmp;//to be done-------------------------------
 module.exports.getStaff = getStaff;//done
 module.exports.getRooms = getRooms;//done
 module.exports.searchRoom = searchRoom;//to be done---------------------------------------------
-//room-num
-//room-search-btn
+module.exports.getLocations = getLocations;
 
 
 
