@@ -677,7 +677,7 @@ let selectRoomsByDates = function (selected_from, selected_to,price,beds) {//
                     selectedRooms.push(item);//import all appropriate rooms
                 });
                 let appropriate = selectedRooms.map(a => a.room);
-                console.log("Fit :"+appropriate);
+                //console.log("Fit :"+appropriate);
                 orders.aggregate([
                     {
                         $match:
@@ -696,9 +696,14 @@ let selectRoomsByDates = function (selected_from, selected_to,price,beds) {//
                         { $sort : { count : -1 } }
                     ]
                 ).toArray(function (err, queryResult){
-                    console.log(queryResult);
+                    //console.log(queryResult);
+                    //console.log(selectedRooms);
                     rooms.find({room: queryResult[0]._id}).tryNext(function(err, doc) {
+                        popRoom.length = 0;
                         popRoom.push(doc); //import most popular rooms
+                        console.log(doc);
+                        console.log("##################################################");
+                        console.log(selectedRooms);
                     });
                 });
             });
@@ -735,7 +740,6 @@ let checkIn =function(cust_id,cust_name){
     });
 }
 let checkOut = function (cust_id, cust_name, sfrom, sto) {
-    console.log(cust_id,cust_name,sfrom,sto, typeof  sfrom, typeof cust_id)
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");

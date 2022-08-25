@@ -14,7 +14,7 @@ io.sockets.on('connection', function (socket) {
         setTimeout(getResultFromSelectRooms,1000);//<------Callback
         function getResultFromSelectRooms() {
           // console.log(myDB.selectedRooms);//<----remove
-            console.log(myDB.popRoom, myDB.selectedRooms);
+            //console.log(myDB.popRoom, myDB.selectedRooms);
             io.sockets.emit('displayRooms', myDB.popRoom, myDB.selectedRooms,from,to);
         }
     });
@@ -180,13 +180,13 @@ io.sockets.on('connection', function (socket) {
         }
     });
     socket.on('SearchRoomTest',function (roomNum,beds,price) {
-        console.log(roomNum,beds,price)
+        //console.log(roomNum,beds,price)
         myDB.searchRoom(roomNum,beds,price);
         setTimeout(getResultFromSrcRoom,1000);//<------Callback
         function getResultFromSrcRoom() {
-            console.log("????" + myDB.showRoom.length)
+            //console.log("????" + myDB.showRoom.length)
             if(myDB.showRoom.length===1){
-                console.log(myDB.showRoom);
+                //console.log(myDB.showRoom);
                 io.sockets.emit('AdminSearchRoomDoneTest',myDB.showRoom[0]);
             }
 
