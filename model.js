@@ -284,7 +284,10 @@ function onBookClick() {
     let to  = new Date($('#toDate').val());//2022-08-14
     let price  = $('#price-book').val();//2022-08-14
     let beds  = $('#beds-book').val();//2022-08-14
-
+    if(from >= to){
+        alert('invalid dates, try again');
+    }
+    else
     // trigger server to execute selectRooms by chosen dates
     socket.emit('sendDates',from,to,price,beds);
 }
@@ -373,7 +376,8 @@ $(function () {
 
 
 //Fixed price
-renderPage = function (page) { // here the data and url are not hardcoded anymore
+renderPage = function (page) {
+    $('#weather-btn').empty();
     return $.ajax({
         type: "GET",
         url: "http://localhost:8080/" + page,
@@ -388,6 +392,7 @@ renderPage = function (page) { // here the data and url are not hardcoded anymor
 
 renderHome = function (page) { // here the data and url are not hardcoded anymore
     addMapMarkers();
+    // createCanvas();
     let row1 = `<a id="weather-btn" onclick="useWeatherAPI()" class="navbar-brand">Show weather</a>`;
     $('#nav-nav').append(row1);
     return $.ajax({
@@ -491,6 +496,7 @@ socket.on('newLocations',function initMap(arrLocations) {
     }
     window.initMap = initMap;
 });
+
 
 
 
