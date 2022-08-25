@@ -5,7 +5,8 @@ let express = require('express')
     , myDB = require("./db")
     , io = require('socket.io')(server);
 server.listen(8080);
-//myDB.init();
+// myDB.init();
+
 io.sockets.on('connection', function (socket) {
  //############ React to client's emit #################
     socket.on('sendDates', function (from,to,price,beds) { //price+beds
@@ -126,7 +127,7 @@ io.sockets.on('connection', function (socket) {
         myDB.checkOut(id,name,from,to);
         setTimeout(getResultFromCheckOut,1000);//<------Callback
         function getResultFromCheckOut() {
-            io.sockets.emit('checkOutDone');
+            io.sockets.emit('checkOutDone', name);
         }
     });
 
@@ -134,7 +135,7 @@ io.sockets.on('connection', function (socket) {
         myDB.deleteOrder(id,name, from, to);
         setTimeout(getResultFromDeleteOrder,1000);//<------Callback
         function getResultFromDeleteOrder() {
-            io.sockets.emit('deleteOrderDone', id ,name, from, to);
+            io.sockets.emit('deleteOrderDone');
         }
     });
 
@@ -180,11 +181,16 @@ io.sockets.on('connection', function (socket) {
         }
     });
     socket.on('SearchRoomTest',function (roomNum,beds,price) {
-        myDB.searchRoom(roomNum);
+        console.log(roomNum,beds,price)
+        myDB.searchRoom(roomNum,beds,price);
         setTimeout(getResultFromSrcRoom,1000);//<------Callback
         function getResultFromSrcRoom() {
-            if(myDB.showRoom.length===1)
-                io.sockets.emit('AdminSearchRoomDoneTest',myDB.showRoom,roomNum);
+            console.log("????" + myDB.showRoom.length)
+            if(myDB.showRoom.length===1){
+                console.log(myDB.showRoom);
+                io.sockets.emit('AdminSearchRoomDoneTest',myDB.showRoom[0]);
+            }
+
             else
                 io.sockets.emit('AdminSearchRoomFailed',roomNum);
 
