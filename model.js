@@ -506,11 +506,14 @@ socket.on('displayStatistics',function (DBdata1,DBdata2) {
     console.log(DBdata1,DBdata2);
     renderPage('histogramIndex');
     $("#my_dataviz_histogram").empty();
+    $("#my_dataviz_histogram2").empty();
     setTimeout(f,1000);//<------Callback
     function f(){
         let chart1 = BarChart(DBdata1);
         let chart2 = BarChart(DBdata2);
-            $("#my_dataviz_histogram").append(chart1,chart2);
+            $("#my_dataviz_histogram").append(chart1);
+        $("#my_dataviz_histogram2").append(chart2);
+
     }
         function BarChart(data, {
             x = d => d._id,
