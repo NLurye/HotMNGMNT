@@ -386,7 +386,7 @@ let initHotelDB = function () {
                 {
                     room: 10,
                     from: new Date('2022-08-22'),//'2022-08-01'
-                    to: new Date('2022-08-25'),//2022-08-02
+                    to: new Date('2022-08-27'),//2022-08-02
                     custName: "Tom",
                     custID: "111111110"
                 },
@@ -715,18 +715,24 @@ let checkIn =function(cust_id,cust_name){
     });
 }
 let checkOut = function (cust_id, cust_name, sfrom, sto) {
+    console.log(cust_id,cust_name,sfrom,sto, typeof  sfrom, typeof cust_id)
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
         let orders = dbo.collection("Orders");
         let ordersHistory = dbo.collection("OrdersHistory");
-        let query = {custID: cust_id, custName: cust_name, from: sfrom, to: sto};
-        orders.find(query).toArray(function (err, checkOutRes) {
+        orders.find(
+            {
+                from: new Date(sfrom),
+                to: new Date(sto),
+                custId: cust_id,
+                custName: cust_name
+            }
+        ).toArray(function (err, checkOutRes) {
             if (err) throw err;
             else {
-                console.log(checkOutRes);
                 if (checkOutRes.length === 0)
-                    console.log("Reservation doesn't exist");
+                    console.log("Reservation doesn't exist...");
                 else {
                     ordersHistory.insertMany(checkOutRes, function (err, res) {
                         if (err) throw err;
@@ -757,7 +763,7 @@ let addOrder = function (curRoom, from, to, custName, custID) {
         });
     });
 }
-let deleteOrder = function (cust_id, cust_name, myFrom, myTo) {
+let deleteOrder = function (cust_id, cust_name, from, to) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
@@ -767,8 +773,8 @@ let deleteOrder = function (cust_id, cust_name, myFrom, myTo) {
                 {
                     custName: cust_name,
                     custID: cust_id,
-                    from: myFrom,
-                    to: myTo
+                    from: new Date(from),
+                    to: new Date(to),
                 });
         } catch (e) {
             print(e);

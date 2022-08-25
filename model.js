@@ -195,6 +195,14 @@ function onCOClick() {
     socket.emit('sendValsCheckOut', id,name,from,to);
 }
 
+function onDelOrderClick() {
+    let id = $('#id-num-co').val();
+    let name = $('#cust-name-co').val();
+    let from = new Date($('#fromOutDate').val());
+    let to  = new Date($('#toOutDate').val());
+    socket.emit('sendDeleteOrder', id,name,from,to);
+}
+
 
 // $(function () {
 //     $('#emp-del-btn').click(function () {
@@ -212,7 +220,7 @@ socket.on('checkInFailed',function () {
     alert("reservation doesn't exist");
 });
 
-socket.on('checkOutDone',function (id,name) {
+socket.on('checkOutDone',function (name) {
     alert(name + " has checked out");
     renderHome('home');
 });
