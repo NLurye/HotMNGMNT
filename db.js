@@ -1,6 +1,6 @@
 let MongoClient = require('mongodb').MongoClient;
 let url = "mongodb://localhost:27017/hotel";
-const selectedRooms = [];
+let selectedRooms = [];
 let validLogIn = [];
 let validReservation = [];
 let showEmp = [];
@@ -677,33 +677,36 @@ let selectRoomsByDates = function (selected_from, selected_to,price,beds) {//
                     selectedRooms.push(item);//import all appropriate rooms
                 });
                 let appropriate = selectedRooms.map(a => a.room);
-                console.log("Fit :"+appropriate);
-                orders.aggregate([
-                    {
-                        $match:
-                            {
-                                room:{$in: appropriate}
-                            }
-                    },
-                    {
-                        $group :
-                            {
-                                _id : '$room',
-                                count : {$sum : 1}
-                            }
-                    },
-
-                        { $sort : { count : -1 } }
-                    ]
-                ).toArray(function (err, queryResult){
-                    console.log(queryResult);
-                    rooms.find({room: queryResult[0]._id}).tryNext(function(err, doc) {
-                        popRoom.push(doc); //import most popular rooms
-                    });
+                getRoomsStatistics(orders,appropriate).toArray(function (err, queryResult){
+                    if (queryResult.length!==0) {
+                        rooms.find({room: queryResult[0]._id}).tryNext(function (err, doc) {
+                            popRoom.push(doc); //import most popular room
+                        });
+                    }
                 });
             });
         });
     });
+}
+let getRoomsStatistics = function (orders,appropriate) {
+    return orders.aggregate([
+            {
+                $match:
+                    {
+                        room:{$in: appropriate}
+                    }
+            },
+            {
+                $group :
+                    {
+                        _id : '$room',
+                        count : {$sum : 1}
+                    }
+            },
+
+            { $sort : { count : -1 } }
+        ]
+    )
 }
 let checkIn =function(cust_id,cust_name){
     MongoClient.connect(url, function (err, db) {
