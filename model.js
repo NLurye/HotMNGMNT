@@ -224,12 +224,12 @@ socket.on('deleteOrderDone',function () {
 
 socket.on('deleteEmployeeDone',function (id) {
     alert('employee ' + id + ' deleted');
-    renderHome('home');
+    renderPage('admin');
 });
 
 socket.on('updateEmployeeDone',function (id) {
     alert('employee ' + id + ' updated');
-    renderHome('home');
+    renderPage('admin');
 });
 
 socket.on('searchEmployeeDone',function (id) {
@@ -268,17 +268,12 @@ socket.on('registerSuccess', function (username) {
 
 socket.on('addRoomDone',function (roomNum) {
     alert("Room " +roomNum+ " added");
-    renderHome('home');
+    renderPage('admin');
 });
 
 socket.on('deleteRoomDone',function (roomNum) {
     alert("Room " +roomNum+ " deleted");
-    renderHome('home');
-});
-
-socket.on('deleteRoomDone',function (roomNum) {
-    alert("Room " +roomNum+ " deleted");
-    renderHome('home');
+    renderPage('admin');
 });
 
 socket.on('OrderAdded',function (room,from,to, name) {
@@ -288,7 +283,7 @@ socket.on('OrderAdded',function (room,from,to, name) {
 
 socket.on('updateRoomDone',function (RoomNum) {
     alert("room number " + RoomNum + " updated ");
-    renderHome('home');
+    renderPage('admin');
 });
 
 
