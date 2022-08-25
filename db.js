@@ -658,7 +658,6 @@ let selectRoomsByDates = function (selected_from, selected_to,price,beds) {//
             let rooms = dbo.collection("Rooms");
             let my_beds = 0;
             let my_price = Number.MAX_VALUE;
-            console.log("Interrupt: "+interruptions);
             if(beds === ''){
                 beds = my_beds;
             }
@@ -673,15 +672,15 @@ let selectRoomsByDates = function (selected_from, selected_to,price,beds) {//
             }
             rooms.find(
                 {
-                    numOfBeds: {$gte: beds},
-                    price: {$lte: price},
-                    room: {$nin: interruptions}
-                }
-            ).toArray(function (err, queryResult) {
+                        numOfBeds: {$gte: beds},
+                        price: {$lte: price},
+                        room: {$nin: interruptions}
+                      }
+            ).toArray(function (err, appropriateRooms) {
                 if (err) throw err;
                 selectedRooms.length = 0;
-                queryResult.forEach(item => {
-                    selectedRooms.push(item);
+                appropriateRooms.forEach(item => {
+                    selectedRooms.push(item);//import all appropriate rooms
                 });
                 let appropriate = selectedRooms.map(a => a.room);
                 console.log("Fit :"+appropriate);
@@ -705,7 +704,7 @@ let selectRoomsByDates = function (selected_from, selected_to,price,beds) {//
                 ).toArray(function (err, queryResult){
                     console.log(queryResult);
                     rooms.find({room: queryResult[0]._id}).tryNext(function(err, doc) {
-                        popRoom.push(doc);
+                        popRoom.push(doc); //import most popular rooms
                     });
                 });
             });

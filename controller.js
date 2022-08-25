@@ -6,7 +6,6 @@ let express = require('express')
     , io = require('socket.io')(server);
 server.listen(8080);
 //myDB.init();
-myDB.selectRooms(new Date('2022-08-01'),new Date('2022-08-03'),'','');
 io.sockets.on('connection', function (socket) {
  //############ React to client's emit #################
     socket.on('sendDates', function (from,to,price,beds) { //price+beds
@@ -225,6 +224,10 @@ app.get("/index.css", function (req,res){
 
 app.get("/background.jpg", function (req,res){
     res.sendFile(__dirname + '/background.jpg');
+});
+
+app.get("/popular.jpg", function (req,res){
+    res.sendFile(__dirname + '/popular.jpg');
 });
 
 //for client (index.html) to use functions from model.js:

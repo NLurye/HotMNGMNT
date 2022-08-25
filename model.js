@@ -12,7 +12,7 @@ socket.on('displayRooms', function (pop, roomsArr,sfrom,sto) {
             <td><button onclick="handleReserve('${pop[0].room}','${sfrom}','${sto}')">Reserve</button></td>
         </tr>`
     $('#tBody').append(mostPop);
-    $('#pop').css("background-color", "red");
+    $('#pop').css("background-color", "#FF6F61","background","url(popular.jpg)");
     for (const room of roomsArr) {
         const row = `
         <tr>
@@ -36,7 +36,6 @@ socket.on('AdminSearchRoomDoneTest', function (roomsArr,roomNum) {
             <td>${room.numOfBeds}</td>
             <td>${room.price}</td>
         </tr>`
-        //tBody.innerHTML += row;
         $('#tBody').append(row);
     }
 });
