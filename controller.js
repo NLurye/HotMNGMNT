@@ -5,7 +5,7 @@ let express = require('express')
     , myDB = require("./db")
     , io = require('socket.io')(server);
 server.listen(8080);
-// myDB.init();
+//myDB.init();
 io.sockets.on('connection', function (socket) {
  //############ React to client's emit #################
     socket.on('sendDates', function (from,to,price,beds) { //price+beds
