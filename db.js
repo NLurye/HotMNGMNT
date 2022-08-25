@@ -949,6 +949,7 @@ let getStaff = function () {
         staff.find({}).toArray(function (err, getEmpResult) {
             if (err) throw err;
             else {
+                employees.length = 0;
                 getEmpResult.forEach(item => {
                     employees.push(item);
                 });

@@ -48,7 +48,6 @@ socket.on('displayEmployees', function (staff) {
             <td>${emp.empID}</td>
             <td>${emp.admin}</td>
         </tr>`
-        //tBody.innerHTML += row;
         $('#tBody').append(row);
     }
 });
