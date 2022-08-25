@@ -36,7 +36,7 @@ socket.on('displayRooms', function (pop, roomsArr, sfrom, sto) {
 });
 
 socket.on('AdminSearchRoomDone', function (roomsArr) {
-    $('#container').empty().append("<table id=\"myTable\" class=\"table table-striped table-hover table-bordered \"><thead><tr><th onclick=\"sortTable(0)\">Room number</th><th onclick=\"sortTable(1)\">Number of beds</th><th onclick=\"sortTable(2)\">Price</th><th></th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+    $('#container').empty().append("<table id=\"myTable\" class=\"table table-striped table-hover table-bordered \"><thead><tr><th onclick=\"sortTable(0)\">Room number</th><th onclick=\"sortTable(1)\">Number of beds</th><th onclick=\"sortTable(2)\">Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
     for (const room of roomsArr) {
         const row = `
         <tr>
@@ -207,7 +207,7 @@ socket.on('checkInDone', function (name) {
 })
 
 socket.on('checkInFailed', function () {
-    alert("reservation doesn't exist");
+    alert("Reservation doesn't exist");
 });
 
 socket.on('checkOutDone', function (name) {
@@ -216,37 +216,33 @@ socket.on('checkOutDone', function (name) {
 });
 
 socket.on('deleteOrderDone', function () {
-    alert('order deleted');
+    alert('Order deleted');
     renderHome('home');
 });
 
 socket.on('deleteEmployeeDone', function (id) {
-    alert('employee ' + id + ' deleted');
+    alert('Employee ' + id + ' deleted');
     renderPage('admin');
 });
 
 socket.on('updateEmployeeDone', function (id) {
-    alert('employee ' + id + ' updated');
+    alert('Employee ' + id + ' updated');
     renderPage('admin');
 });
 
 socket.on('searchEmployeeDone', function (id) {
-    alert('employee ' + id + ' has found');
+    alert('Employee ' + id + ' has found');
     renderPage('admin');
 });
 
-socket.on('AdminSearchRoomDone', function (roomNum) {
-    alert('room ' + roomNum + ' has found');
-    renderPage('admin');
-});
 
 socket.on('AdminSearchRoomFailed', function (roomNum) {
-    alert('room ' + roomNum + ' has not found');
+    alert('Room ' + roomNum + ' has not found');
     renderPage('admin');
 });
 
 socket.on('searchEmployeeFailed', function (id) {
-    alert('employee ' + id + ' has not found');
+    alert("Employee " + id + " has not found");
     renderPage('admin');
 });
 
@@ -275,12 +271,12 @@ socket.on('deleteRoomDone', function (roomNum) {
 });
 
 socket.on('OrderAdded', function (room, from, to, name) {
-    alert("room number " + room + " is reserved to " + name + " from " + new Date(from) + " until " + to);
+    alert("Room number " + room + " is reserved to " + name + " from " + new Date(from).toLocaleDateString('he-IL') + " until " + new Date(to).toLocaleDateString('he-IL'));
     renderHome('home');
 });
 
 socket.on('updateRoomDone', function (RoomNum) {
-    alert("room number " + RoomNum + " updated ");
+    alert("Room number " + RoomNum + " updated ");
     renderPage('admin');
 });
 
@@ -293,7 +289,7 @@ function onBookClick() {
     let price = $('#price-book').val();//2022-08-14
     let beds = $('#beds-book').val();//2022-08-14
     if (from >= to) {
-        alert('invalid dates, try again');
+        alert('Invalid dates, try again');
     } else
         // trigger server to execute selectRooms by chosen dates
         socket.emit('sendDates', from, to, price, beds);
@@ -329,7 +325,7 @@ function onAddRoomClick() {
     let beds = $("#room-num-beds").val();
     let price = $("#room-price").val();
     if (roomNum === '' || beds === '' || price === '') {
-        alert('missing parameters');
+        alert('Missing parameters');
         renderPage('admin');
     } else {
         socket.emit('addRoom', roomNum, beds, price);
@@ -343,14 +339,9 @@ function onDelRoomClick() {
 
 function onSrcRoomClick() {
     let roomNum = $("#room-num").val();
-    socket.emit('SearchRoom', roomNum);
-}
-
-function onSrcRoomClickTest() {
-    let roomNum = $("#room-num").val();
     let beds = $("#room-num-beds").val();
     let price = $("#room-price").val();
-    socket.emit('SearchRoomTest', roomNum, beds, price);
+    socket.emit('SearchRoom', roomNum, beds, price);
 
 }
 
@@ -358,7 +349,12 @@ function onUpdRoomClick() {
     let roomNum = $("#room-num-upd").val();
     let newBeds = $("#room-new-beds").val();
     let newPrice = $("#room-new-price").val();
-    socket.emit('UpdateRoom', roomNum, newBeds, newPrice);
+    if (roomNum===''||newBeds===''||newPrice===''){
+        alert("Missing parameters");
+    }
+    else {
+        socket.emit('UpdateRoom', roomNum, newBeds, newPrice);
+    }
 }
 
 function onGetStatClick() {
@@ -540,7 +536,7 @@ socket.on('displayStatistics',function (DBdata1,DBdata2) {
             yRange = [height - marginBottom, marginTop], // [bottom, top]
             xPadding = 0.1, // amount of x-range to reserve to separate bars
             yFormat, // a format specifier string for the y-axis
-            yLabel, // a label for the y-axis
+            yLabel = "Appearances", // a label for the y-axis
             color = "currentColor" // bar fill color
         } = {}) {
             // Compute values.
@@ -570,54 +566,6 @@ socket.on('displayStatistics',function (DBdata1,DBdata2) {
                 const T = title;
                 title = i => T(O[i], i, data);
             }
-
-    function BarChart(data, {
-        x = d => d._id, // given d in data, returns the (ordinal) x-value
-        y = d => d.count, // given d in data, returns the (quantitative) y-value
-        title, // given d in data, returns the title text
-        marginTop = 20, // the top margin, in pixels
-        marginRight = 0, // the right margin, in pixels
-        marginBottom = 30, // the bottom margin, in pixels
-        marginLeft = 40, // the left margin, in pixels
-        width = 640, // the outer width of the chart, in pixels
-        height = 400, // the outer height of the chart, in pixels
-        xDomain, // an array of (ordinal) x-values
-        xRange = [marginLeft, width - marginRight], // [left, right]
-        yType = d3.scaleLinear, // y-scale type
-        yDomain, // [ymin, ymax]
-        yRange = [height - marginBottom, marginTop], // [bottom, top]
-        xPadding = 0.1, // amount of x-range to reserve to separate bars
-        yFormat, // a format specifier string for the y-axis
-        yLabel = "appearences", // a label for the y-axis
-        color = "currentColor" // bar fill color
-    } = {}) {
-        // Compute values.
-        const X = d3.map(data, x);
-        const Y = d3.map(data, y);
-
-        // Compute default domains, and unique the x-domain.
-        if (xDomain === undefined) xDomain = X;
-        if (yDomain === undefined) yDomain = [0, d3.max(Y)];
-        xDomain = new d3.InternSet(xDomain);
-
-        // Omit any data not present in the x-domain.
-        const I = d3.range(X.length).filter(i => xDomain.has(X[i]));
-
-        // Construct scales, axes, and formats.
-        const xScale = d3.scaleBand(xDomain, xRange).padding(xPadding);
-        const yScale = yType(yDomain, yRange);
-        const xAxis = d3.axisBottom(xScale).tickSizeOuter(0);
-        const yAxis = d3.axisLeft(yScale).ticks(height / 40, yFormat);
-
-        // Compute titles.
-        if (title === undefined) {
-            const formatValue = yScale.tickFormat(100, yFormat);
-            title = i => `${X[i]}\n${formatValue(Y[i])}`;
-        } else {
-            const O = d3.map(data, d => d);
-            const T = title;
-            title = i => T(O[i], i, data);
-        }
 
         const svg = d3.create("svg")
             .attr("width", width)

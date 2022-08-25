@@ -1154,6 +1154,7 @@ let getRooms = function () {
         rooms.find({}).toArray(function (err, getRoomsResult) {
             if (err) throw err;
             else {
+                roomsList.length = 0;
                 getRoomsResult.forEach(item => {
                     roomsList.push(item);
                 });
