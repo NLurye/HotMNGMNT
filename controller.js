@@ -1,4 +1,4 @@
-var express = require('express')
+let express = require('express')
     , app = express()
     , http = require('http')
     , server = http.createServer(app)
@@ -6,7 +6,7 @@ var express = require('express')
     , io = require('socket.io')(server);
 server.listen(8080);
 //myDB.init();
-//myDB.checkIn();
+
 io.sockets.on('connection', function (socket) {
  //############ React to client's emit #################
     socket.on('sendDates', function (from,to) {
@@ -14,8 +14,16 @@ io.sockets.on('connection', function (socket) {
         myDB.selectRooms(from, to);
         setTimeout(getResultFromSelectRooms,1000);//<------Callback
         function getResultFromSelectRooms() {
-           console.log(myDB.selectedRooms);//<----remove
+          // console.log(myDB.selectedRooms);//<----remove
             io.sockets.emit('displayRooms', myDB.selectedRooms,from,to);
+        }
+    });
+
+    socket.on('sendOrderVals', function (room,from,to, name, id) {
+        myDB.addOrder(room,from,to, name, id);
+        setTimeout(getResultFromAddOrder,1000);//<------Callback
+        function getResultFromAddOrder() {
+            io.sockets.emit('OrderAdded', room,from,to, name);
         }
     });
 
@@ -24,17 +32,19 @@ io.sockets.on('connection', function (socket) {
         myDB.getStaff();
         setTimeout(getEmpList,1000);//<------Callback
         function getEmpList() {
-            console.log(myDB.employees);//<----remove
+            //console.log(myDB.employees);//<----remove
             io.sockets.emit('displayEmployees', myDB.employees);
         }
     });
 
     socket.on('displayRoomsList', function () {
         //prepare rooms available on those dates
-        myDB.getRooms();
-        setTimeout(getRoomsList,1000);//<------Callback
+        myDB.getRooms(function onRes(arr) {
+            io.sockets.emit('displayAdminRooms', arr);
+        });
+        //setTimeout(getRoomsList,1000);//<------Callback
         function getRoomsList() {
-            console.log(myDB.roomsList);//<----remove
+            //console.log(myDB.roomsList);//<----remove
             io.sockets.emit('displayAdminRooms', myDB.roomsList);
         }
     });
@@ -44,11 +54,25 @@ io.sockets.on('connection', function (socket) {
         myDB.deleteEmployee(id);
         setTimeout(deleteEmp,1000);//<------Callback
         function deleteEmp() {
+            io.sockets.emit('deleteEmployeeDone', id); //need to catch error
+        }
+    });
 
-            if (myDB.validLogIn.length===1)
-                io.sockets.emit('loginSuccess');
-            else
-                io.sockets.emit('loginFail');
+    socket.on('updateEmployee', function (emp_id, emp_pass, new_emp_pass) {
+        //prepare rooms available on those dates
+        myDB.changeEmpPass(emp_id, emp_pass, new_emp_pass);
+        setTimeout(updateEmp,1000);//<------Callback
+        function updateEmp() {
+            io.sockets.emit('updateEmployeeDone', emp_id); //need to catch error
+        }
+    });
+
+    socket.on('updateRoom', function (newRoomNum, newNumBeds, newPrice) {
+        //prepare rooms available on those dates
+        myDB.updateRoom(newRoomNum, newNumBeds, newPrice);
+        setTimeout(updRoom,1000);//<------Callback
+        function updRoom() {
+            io.sockets.emit('updateRoomDone',newRoomNum); //need to catch error
         }
     });
 
@@ -63,36 +87,75 @@ io.sockets.on('connection', function (socket) {
                 io.sockets.emit('loginFail');
         }
     });
+
+    socket.on('valRegister', function (username,pw) {
+        // validate login
+        myDB.signIn(username,pw);
+        setTimeout(getResultFromSignIn,1000);//<------Callback
+        function getResultFromSignIn() {
+            io.sockets.emit('registerSuccess', username);
+        }
+    });
+
     socket.on('sendValsCheckIn',function (id,name) {
+        console.log(id, name, typeof id, typeof name);
         myDB.checkIn(id,name);
         setTimeout(getResultFromCheckIn,1000);//<------Callback
         function getResultFromCheckIn() {
             if(myDB.validReservation.length !== 0)
-                io.sockets.emit('checkInDone');
+                io.sockets.emit('checkInDone', name);
             else
                 io.sockets.emit('checkInFailed');
             myDB.validReservation.length = 0;
         }
     });
 
-    socket.on('sendValsCheckOut',function (id,name) {
-        myDB.checkOut(id,name);
+
+    socket.on('sendValsCheckOut',function (id,name,from,to) {
+        myDB.checkOut(id,name,from,to);
         setTimeout(getResultFromCheckOut,1000);//<------Callback
         function getResultFromCheckOut() {
-            io.sockets.emit('checkOutDone', id ,name);
+            io.sockets.emit('checkOutDone');
         }
     });
 
-    socket.on('newOrder', function (room,from,to,custName, custId) {
-        myDB.addOrder(room,from,to,custName, custId);
-        //add email+whatsapp confirmation+maps location
+    socket.on('sendDeleteOrder',function (id,name, from, to) {
+        myDB.deleteOrder(id,name, from, to);
+        setTimeout(getResultFromDeleteOrder,1000);//<------Callback
+        function getResultFromDeleteOrder() {
+            io.sockets.emit('deleteOrderDone', id ,name, from, to);
+        }
     });
+
 
     socket.on('addRoom',function (roomNum,numOfBeds,price) {
         myDB.addRoom(roomNum,numOfBeds,price);
         setTimeout(getResultFromAddRoom,1000);//<------Callback
         function getResultFromAddRoom() {
             io.sockets.emit('addRoomDone',roomNum);
+        }
+    });
+
+
+    socket.on('sendValsSearchRoom',function (roomNum) {
+        myDB.searchRoom(roomNum);
+        setTimeout(getResultFromSearchRoom,1000);//<------Callback
+        function getResultFromSearchRoom() {
+            if(myDB.showRoom.length===1)
+                io.sockets.emit('searchRoomDone',myDB.showRoom);
+            else
+                io.sockets.emit('searchRoomFailed',roomNum);
+                        }
+    });
+
+});
+
+    socket.on('deleteRoom',function (roomNum) {
+        myDB.deleteRoom(roomNum);
+        setTimeout(getResultFromDeleteRoom,1000);//<------Callback
+        function getResultFromDeleteRoom() {
+            io.sockets.emit('deleteRoomDone',roomNum);
+
         }
     });
 
