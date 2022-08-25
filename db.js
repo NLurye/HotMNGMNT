@@ -9,7 +9,9 @@ let roomsList = [];
 let showRoom = [];
 let locations = [];
 let popRoom = [];
-let graphData = [];
+let graphData1 = [];
+let graphData2 = [];
+
 
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
@@ -870,7 +872,7 @@ let getRoomsStatistics = function (orders,appropriate) {
     )
 }
 
-let statisticsForGraph = function (collection,key){
+let statisticsForGraph = function (collection,key,arr){
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
@@ -888,9 +890,9 @@ let statisticsForGraph = function (collection,key){
             ]
         ).toArray(function (err, q) {
             if (err) throw err;
-            graphData.length = 0;
+            arr.length = 0;
             q.forEach(item => {
-                graphData.push(item);//import all appropriate rooms
+                arr.push(item);//import all appropriate rooms
             })
             }
         );
@@ -1235,7 +1237,8 @@ let getLocations = function () {
 }
 
 
-module.exports.graphData = graphData;
+module.exports.graphData1 = graphData1;
+module.exports.graphData2 = graphData2;
 module.exports.locations = locations;
 module.exports.validLogIn = validLogIn;
 module.exports.selectedRooms = selectedRooms;

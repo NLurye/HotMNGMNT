@@ -506,19 +506,19 @@ socket.on('newLocations',function initMap(arrLocations) {
     window.initMap = initMap;
 });
 
-socket.on('displayStatistics',function (DBdata) {
-    console.log(DBdata);
+socket.on('displayStatistics',function (DBdata1,DBdata2) {
+    console.log(DBdata1,DBdata2);
     renderPage('histogramIndex');
     $("#my_dataviz_histogram").empty();
     setTimeout(f,1000);//<------Callback
     function f(){
-        let chart1 = BarChart(DBdata);
-        //let chart2 = BarChart(DBdata);
-            $("#my_dataviz_histogram").append(chart1);
+        let chart1 = BarChart(DBdata1);
+        let chart2 = BarChart(DBdata2);
+            $("#my_dataviz_histogram").append(chart1,chart2);
     }
         function BarChart(data, {
-            x = d => d._id, // given d in data, returns the (ordinal) x-value
-            y = d => d.count, // given d in data, returns the (quantitative) y-value
+            x = d => d._id,
+            y = d => d.count,
             title, // given d in data, returns the title text
             marginTop = 20, // the top margin, in pixels
             marginRight = 0, // the right margin, in pixels
@@ -526,7 +526,7 @@ socket.on('displayStatistics',function (DBdata) {
             marginLeft = 40, // the left margin, in pixels
             width = 640, // the outer width of the chart, in pixels
             height = 400, // the outer height of the chart, in pixels
-            xDomain, // an array of (ordinal) x-values
+            xDomain= d3.groupSort(data, ([d]) => -d.count, d => d._id), // sort by descending frequenc  an array of (ordinal) x-values
             xRange = [marginLeft, width - marginRight], // [left, right]
             yType = d3.scaleLinear, // y-scale type
             yDomain, // [ymin, ymax]
