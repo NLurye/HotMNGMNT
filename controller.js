@@ -172,7 +172,6 @@ io.sockets.on('connection', function (socket) {
             if(myDB.showRoom.length===1){
                 io.sockets.emit('AdminSearchRoomDone',myDB.showRoom[0]);
             }
-
             else
                 io.sockets.emit('AdminSearchRoomFailed',roomNum);
 

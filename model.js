@@ -396,7 +396,6 @@ renderPage = function (page) {
         }
     })}
 
-
 renderHome = function (page) { // here the data and url are not hardcoded anymore
     addMapMarkers();
     // createCanvas();
@@ -469,7 +468,6 @@ const header =
 
 }
 
-
 function addMapMarkers() {
     socket.emit('getLocations');
 }
@@ -504,77 +502,102 @@ socket.on('newLocations',function initMap(arrLocations) {
     window.initMap = initMap;
 });
 
-socket.on('displayStatistics',function (data) {
+socket.on('displayStatistics',function (DBdata) {
+    console.log(DBdata);
     renderPage('histogramIndex');
+    $("#my_dataviz_histogram").empty();
+    setTimeout(f,1000);//<------Callback
+    function f(){
+        let chart1 = BarChart(DBdata);
+        //let chart2 = BarChart(DBdata);
+            $("#my_dataviz_histogram").append(chart1);
+    }
+        function BarChart(data, {
+            x = d => d._id, // given d in data, returns the (ordinal) x-value
+            y = d => d.count, // given d in data, returns the (quantitative) y-value
+            title, // given d in data, returns the title text
+            marginTop = 20, // the top margin, in pixels
+            marginRight = 0, // the right margin, in pixels
+            marginBottom = 30, // the bottom margin, in pixels
+            marginLeft = 40, // the left margin, in pixels
+            width = 640, // the outer width of the chart, in pixels
+            height = 400, // the outer height of the chart, in pixels
+            xDomain, // an array of (ordinal) x-values
+            xRange = [marginLeft, width - marginRight], // [left, right]
+            yType = d3.scaleLinear, // y-scale type
+            yDomain, // [ymin, ymax]
+            yRange = [height - marginBottom, marginTop], // [bottom, top]
+            xPadding = 0.1, // amount of x-range to reserve to separate bars
+            yFormat, // a format specifier string for the y-axis
+            yLabel, // a label for the y-axis
+            color = "currentColor" // bar fill color
+        } = {}) {
+            // Compute values.
+            const X = d3.map(data, x);
+            const Y = d3.map(data, y);
 
-// set the dimensions and margins of the graph
-    var margin = {top: 10, right: 30, bottom: 30, left: 40},
-        width = 460 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
+            // Compute default domains, and unique the x-domain.
+            if (xDomain === undefined) xDomain = X;
+            if (yDomain === undefined) yDomain = [0, d3.max(Y)];
+            xDomain = new d3.InternSet(xDomain);
 
-// append the svg object to the body of the page
+            // Omit any data not present in the x-domain.
+            const I = d3.range(X.length).filter(i => xDomain.has(X[i]));
 
-    var svg = d3.select("#my_dataviz_histogram")
-        // var svg = d3.select("#my_dataviz")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
+            // Construct scales, axes, and formats.
+            const xScale = d3.scaleBand(xDomain, xRange).padding(xPadding);
+            const yScale = yType(yDomain, yRange);
+            const xAxis = d3.axisBottom(xScale).tickSizeOuter(0);
+            const yAxis = d3.axisLeft(yScale).ticks(height / 40, yFormat);
 
-// get the data
-    d3.json(data, function (data) {
-        // X axis: scale and draw:
-        var x = d3.scaleLinear()
-            .domain([0, 1000])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
-            .range([0, width]);
-        svg.append("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x));
+            // Compute titles.
+            if (title === undefined) {
+                const formatValue = yScale.tickFormat(100, yFormat);
+                title = i => `${X[i]}\n${formatValue(Y[i])}`;
+            } else {
+                const O = d3.map(data, d => d);
+                const T = title;
+                title = i => T(O[i], i, data);
+            }
 
-        // set the parameters for the histogram
-        var histogram = d3.histogram()
-            .value(function (d) {
-                return d.price;
-            })   // I need to give the vector of value
-            .domain(x.domain())  // then the domain of the graphic
-            .thresholds(x.ticks(70)); // then the numbers of bins
+            const svg = d3.create("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .attr("viewBox", [0, 0, width, height])
+                .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
 
-        // And apply this function to data to get the bins
-        var bins = histogram(data);
+            svg.append("g")
+                .attr("transform", `translate(${marginLeft},0)`)
+                .call(yAxis)
+                .call(g => g.select(".domain").remove())
+                .call(g => g.selectAll(".tick line").clone()
+                    .attr("x2", width - marginLeft - marginRight)
+                    .attr("stroke-opacity", 0.1))
+                .call(g => g.append("text")
+                    .attr("x", -marginLeft)
+                    .attr("y", 10)
+                    .attr("fill", "currentColor")
+                    .attr("text-anchor", "start")
+                    .text(yLabel));
 
-        // Y axis: scale and draw:
-        var y = d3.scaleLinear()
-            .range([height, 0]);
-        //y.domain([0, 50]);   // d3.hist has to be called before the Y axis obviously
+            const bar = svg.append("g")
+                .attr("fill", color)
+                .selectAll("rect")
+                .data(I)
+                .join("rect")
+                .attr("x", i => xScale(X[i]))
+                .attr("y", i => yScale(Y[i]))
+                .attr("height", i => yScale(0) - yScale(Y[i]))
+                .attr("width", xScale.bandwidth());
 
+            if (title) bar.append("title")
+                .text(title);
 
-        y.domain([0, d3.max(bins, function (d) {
-            return d.length;
-        })]);   // d3.hist has to be called before the Y axis obviously
-        svg.append("g")
-            .call(d3.axisLeft(y));
+            svg.append("g")
+                .attr("transform", `translate(0,${height - marginBottom})`)
+                .call(xAxis);
 
-        // append the bar rectangles to the svg element
-        svg.selectAll("rect")
-            .data(bins)
-            .enter()
-            .append("rect")
-            .attr("x", 1)
-            .attr("transform", function (d) {
-                return "translate(" + x(d.x0) + "," + y(d.length) + ")";
-            })
-            .attr("width", function (d) {
-                return x(d.x1) - x(d.x0) - 1;
-            })
-            .attr("height", function (d) {
-                return height - y(d.length);
-            })
-            .style("fill", "#69b3a2")
+            return svg.node();
 
-    });
-})
-
-
+}})
 
