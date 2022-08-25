@@ -495,15 +495,19 @@ function sortTable(n) {
 }
 
 async function useWeatherAPI() {
-    const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=32.52&longitude=34.41&hourly=temperature_2m').then(res => res.json())
 
+    const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=32.52&longitude=34.41&hourly=temperature_2m').then(res => res.json())
     for (let i = 0; i < res.hourly.time.length; i+=24) {
         document.querySelector("#weather-table tbody").innerHTML += `
         <tr>
-            <td>${new Date(res.hourly.time[i]).toLocaleString()}</td>
-            <td>${res.hourly.temperature_2m[i]}</td>
+            <td style="width:50px; font-family: monospace; font-weight: bold">${new Date(res.hourly.time[i]).toLocaleDateString()}</td>
+            <td style="width:50px; font-family: monospace; font-weight: bold">${res.hourly.temperature_2m[i]}</td>
         </tr>
     `
     }
+
 }
+
+useWeatherAPI();
+
 

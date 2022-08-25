@@ -946,27 +946,63 @@ let getRooms = function () {
         });
     });
 }
-let searchRoom = function (roomNumber) {
+let searchRoom = function (roomNumber,beds,price) {
     MongoClient.connect(url, function (err, db) {
         if (err) console.log(err);
         let dbo = db.db("hotel");
         let rooms = dbo.collection("Rooms");
-        rooms.find(
-            {
-                room: parseInt(roomNumber),
-            }
-        ).toArray(function (err, searchRoomRes) {
-            if (err) throw err;
-            else {
+        let my_beds = 0;
+        let my_roomNumber = 0;
+        let my_price = Number.MAX_VALUE;
+        if (roomNumber !== '') {
+            roomNumber = parseInt(roomNumber);
+            beds = my_beds;
+            price = my_price;
+            rooms.find(
+                {
+                    room: roomNumber
+                }
+            ).toArray(function (err, searchRoomRes) {
+                if (err) throw err;
                 showRoom.length = 0;
                 if (searchRoomRes.length === 0)
-                    console.log("Employee not found");
+                    console.log('room not found');
                 else {
                     showRoom.push(searchRoomRes);
                 }
+            });
+        } else {
+
+            if (beds !== '' && price !== '') {
+                beds = parseInt(beds);
+                price = parseInt(price);
             }
-            db.close();
-        });
+            if (beds !== '' && price === '') {
+                price = my_price;
+                beds = parseInt(beds);
+            }
+            if (beds === '' && price !== '') {
+                price = parseInt(price);
+                beds = my_beds;
+            }
+
+            roomNumber = my_roomNumber;
+            rooms.find(
+                {
+                    room: {$gte: roomNumber},
+                    numOfBeds: {$gte: beds},
+                    price: {$lte: price}
+                }
+            ).toArray(function (err, searchRoomRes) {
+                if (err) throw err;
+                showRoom.length = 0;
+                if (searchRoomRes.length === 0)
+                    console.log('room not found');
+                else {
+                    showRoom.push(searchRoomRes);
+                }
+            });
+        }
     });
 }
 let getLocations = function () {
