@@ -527,11 +527,6 @@ let initHotelDB = function () {
             ];
             let attractions = [
                 {
-                    lat: 32.065981,
-                    lng: 34.775369,
-                    description: "hotMNGMNT Hotel"
-                },
-                {
                     lat: 32.068893,
                     lng: 34.772175,
                     description: "SanYang Restaurant"
@@ -632,7 +627,6 @@ let logIn = function (id, pass) { ///<-----add encryption, admin?
     });
 }
 let selectRoomsByDates = function (selected_from, selected_to,price,beds) {//
-    //eliminate rooms that have orders that starting before selected_to and simultaneously ending after selected_from
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
@@ -982,6 +976,7 @@ let getLocations = function () {
         });
     });
 }
+
 module.exports.locations = locations;
 module.exports.validLogIn = validLogIn;
 module.exports.selectedRooms = selectedRooms;

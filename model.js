@@ -1,5 +1,6 @@
 var lurl = 'http://localhost:8080';
 var socket = io.connect(lurl);
+mapBlabla();
 
 //############ React to server's emit #################
 socket.on('displayRooms', function (roomsArr,sfrom,sto) {
@@ -506,3 +507,41 @@ async function useWeatherAPI() {
     }
 }
 
+function mapBlabla() {
+    socket.emit('getLocations');
+}
+socket.on('newLocations',function initMap(arrLocations) {
+    const ourHotel = { lat: 32.065997, lng: 34.775369 };
+    // Initialize and add the map
+    const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 13,
+        center: ourHotel,
+    });
+    // The marker, positioned at ourHotel
+    new google.maps.Marker({
+        position: ourHotel,
+        map: map,
+        label: {
+            color: 'black',
+            fontWeight: 'bold',
+            text: "HotMNGMNT Hotel",
+        }
+    });
+    for(const attr of arrLocations ) {
+        new google.maps.Marker({
+            position: {lat: attr.lat, lng: attr.lng},
+            map: map,
+            label: {
+                color: 'purple',
+                fontWeight: 'bold',
+                text: attr.description,
+            }
+        });
+    }
+    window.initMap = initMap;
+});
+
+//arrLocations.forEach(item =>{item.lat.position, item.lng.position})
+//arrLocations.forEach(item => {item.description.text})
+//arrLocations.forEach(item => {item.lat.valueOf(), item.lng.valueOf()}).position
+//arrLocations.forEach(item => {item.description.toString}).text
