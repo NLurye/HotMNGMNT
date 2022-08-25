@@ -200,10 +200,10 @@ io.sockets.on('connection', function (socket) {
     });
     socket.on('getStatistics', function () {
         //prepare rooms available on those dates
-        myDB.statisticsForGraph();
+        myDB.statisticsForGraph("Orders",'$room');
         setTimeout(getStats,1000);//<------Callback
         function getStats() {
-            io.sockets.emit('displayStatistics');
+            io.sockets.emit('displayStatistics',myDB.graphData);
         }
     });
 });
@@ -215,6 +215,10 @@ io.sockets.on('connection', function (socket) {
 //############ Routing  #################
 app.get("/", function(req, res){
     res.sendFile(__dirname + '/pages/login.html');
+});
+
+app.get("/histogramIndex", function (req,res){
+    res.sendFile(__dirname + '/pages/histogramIndex.html');
 });
 
 app.get("/login.css", function (req,res){
