@@ -1,6 +1,6 @@
 let MongoClient = require('mongodb').MongoClient;
 let url = "mongodb://localhost:27017/hotel";
-const selectedRooms = [];
+let selectedRooms = [];
 let validLogIn = [];
 let validReservation = [];
 let showEmp = [];
@@ -9,6 +9,7 @@ let roomsList = [];
 let showRoom = [];
 let locations = [];
 let popRoom = [];
+let graphData = [];
 
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
@@ -356,26 +357,26 @@ let initHotelDB = function () {
                 //                Orders                  //
                 // ************************************** //
                 //     FROM    TO     ROOM#   CUST_NAME   //
-                // 1)  1.8     2.8     10        Tom      //
+                // 1)  1.8     2.8     20        Tom      //
                 // 2)  1.8     5.8     11        Alon     //
                 // 3)  6.8     7.8     11     Anastasia   //
                 // 4)  8.8     12.8    11     Anastasia   //
                 // 5)  5.8     11.8    12     Anastasia   //
-                // 6)  4.8     6.8     10        Tom      //
-                // 7)  10.8    14.8    10        Tom      //
+                // 6)  4.8     6.8     20        Tom      //
+                // 7)  10.8    14.8    20        Tom      //
                 // 8)  2.8     8.8     13        Tal      //
-                // 9)  7.8     9.8     10        Alon     //
+                // 9)  7.8     9.8     20        Alon     //
                 //10)  8.8     13.8    13        Alon     //
                 //11)  10.8    12.8    14        Tal      //
-                //12)  17.8    19.8    10        Tom      //
+                //12)  17.8    19.8    20        Tom      //
                 //13)  17.8    20.8    11     Anastasia   //
-                //14)  20.8    25.8    10        Tal      //
+                //14)  20.8    25.8    20        Tal      //
                 //15)  20.8    25.8    13        Alon     //
                 //16)  20.8    25.8    14        Tom      //
                 //17)  21.8    22.8    11        Tom      //
                 //18)  21.8    24.8    12     Anastasia   //
                 //19)  26.8    30.8    11        Tal      //
-                //20)  27.8    29.8    10        Alon     //
+                //20)  27.8    29.8    20        Alon     //
                 ////////////////////////////////////////////
                 //
                 // times with NO ORDERS: 14.8-17.8, 25.8-26.8, 30.8-31.8
@@ -385,9 +386,9 @@ let initHotelDB = function () {
                 //        2) if(from > to) ===> alert("ERR: fromDate needs to be prior to toDate)
                 //        3) if(from == to == null) ===> alert("ERR: must enter dates)
                 {
-                    room: 10,
+                    room: 20,
                     from: new Date('2022-08-22'),//'2022-08-01'
-                    to: new Date('2022-08-27'),//2022-08-02
+                    to: new Date('2022-08-25'),//2022-08-02
                     custName: "Tom",
                     custID: "111111110"
                 },
@@ -420,14 +421,14 @@ let initHotelDB = function () {
                     custID: "444444444"
                 },
                 {
-                    room: 10,
+                    room: 20,
                     from: new Date('2022-08-04'),
                     to: new Date('2022-08-06'),
                     custName: "Tom",
                     custID: "111111111"
                 },
                 {
-                    room: 10,
+                    room: 20,
                     from: new Date('2022-08-10'),
                     to: new Date('2022-08-14'),
                     custName: "Tom",
@@ -441,7 +442,7 @@ let initHotelDB = function () {
                     custID: "333333333"
                 },
                 {
-                    room: 10,
+                    room: 20,
                     from: new Date('2022-08-07'),
                     to: new Date('2022-08-09'),
                     custName: "Alon",
@@ -462,7 +463,7 @@ let initHotelDB = function () {
                     custID: "333333333"
                 },
                 {
-                    room: 10,
+                    room: 20,
                     from: new Date('2022-08-17'),
                     to: new Date('2022-08-19'),
                     custName: "Tom",
@@ -476,7 +477,7 @@ let initHotelDB = function () {
                     custID: "444444444"
                 },
                 {
-                    room: 10,
+                    room: 20,
                     from: new Date('2022-08-20'),
                     to: new Date('2022-08-25'),
                     custName: "Tal",
@@ -518,7 +519,7 @@ let initHotelDB = function () {
                     custID: "333333333"
                 },
                 {
-                    room: 10,
+                    room: 20,
                     from: new Date('2022-08-27'),
                     to: new Date('2022-08-29'),
                     custName: "Alon",
@@ -578,13 +579,173 @@ let initHotelDB = function () {
                     description: "Pinsker 9 Bar"
                 }
             ];
-            let ordersHistory = [{
-                room: 10,
-                from: new Date('2021-09-29'),
-                to: new Date('2021-10-05'),
-                custName: "Tom",
-                custID: "111111111"//before adding a new prev order check if custID already exist -> add new date. if not exist -> new prev order.
-            }];
+            let ordersHistory = [
+                ////////////////////////////////////////////
+                //          OrdersHistory 2021            //
+                // ************************************** //
+                //     FROM    TO     ROOM#   CUST_NAME   //
+                // 1)  29.9    5.10    20        Tom      //
+                // 2)  1.8     5.8     11        Alon     //
+                // 3)  6.8     7.8     11     Anastasia   //
+                // 4)  8.8     12.8    11     Anastasia   //
+                // 5)  5.8     11.8    12     Anastasia   //
+                // 6)  4.8     6.8     38        Tom      //
+                // 7)  10.8    14.8    23        Tom      //
+                // 8)  2.8     8.8     25        Tal      //
+                // 9)  7.8     9.8     51        Alon     //
+                //10)  8.8     13.8    44        Alon     //
+                //11)  10.8    12.8    14        Tal      //
+                //12)  17.8    19.8    10        Tom      //
+                //13)  17.8    20.8    18     Anastasia   //
+                //14)  20.8    25.8    37        Tal      //
+                //15)  20.8    25.8    47        Alon     //
+                //16)  20.8    25.8    57        Tom      //
+                //17)  21.8    22.8    11        Tom      //
+                //18)  21.8    24.8    10     Anastasia   //
+                //19)  26.8    30.8    48        Tal      //
+                //20)  27.8    29.8    35        Alon     //
+                ////////////////////////////////////////////
+                {
+                    room: 20,
+                    from: new Date('2021-09-29'),
+                    to: new Date('2021-10-05'),
+                    custName: "Tom",
+                    custID: "111111111"//before adding a new prev order check if custID already exist -> add new date. if not exist -> new prev order.
+                },
+                {
+                    room: 11,
+                    from: new Date('2021-08-01'),
+                    to: new Date('2021-08-05'),
+                    custName: "Alon",
+                    custID: "222222222"
+                },
+                {
+                    room: 11,
+                    from: new Date('2021-08-06'),
+                    to: new Date('2021-08-07'),
+                    custName: "Anastasia",
+                    custID: "444444444"
+                },
+                {
+                    room: 11,
+                    from: new Date('2021-08-08'),
+                    to: new Date('2021-08-12'),
+                    custName: "Anastasia",
+                    custID: "444444444"
+                },
+                {
+                    room: 12,
+                    from: new Date('2021-08-05'),
+                    to: new Date('2021-08-11'),
+                    custName: "Anastasia",
+                    custID: "444444444"
+                },
+                {
+                    room: 38,
+                    from: new Date('2021-08-04'),
+                    to: new Date('2021-08-06'),
+                    custName: "Tom",
+                    custID: "111111111"
+                },
+                {
+                    room: 23,
+                    from: new Date('2021-08-10'),
+                    to: new Date('2021-08-14'),
+                    custName: "Tom",
+                    custID: "111111111"
+                },
+                {
+                    room: 25,
+                    from: new Date('2021-08-02'),
+                    to: new Date('2021-08-08'),
+                    custName: "Tal",
+                    custID: "333333333"
+                },
+                {
+                    room: 51,
+                    from: new Date('2021-08-07'),
+                    to: new Date('2021-08-09'),
+                    custName: "Alon",
+                    custID: "222222222"
+                },
+                {
+                    room: 44,
+                    from: new Date('2021-08-08'),
+                    to: new Date('2021-08-13'),
+                    custName: "Alon",
+                    custID: "222222222"
+                },
+                {
+                    room: 14,
+                    from: new Date('2021-08-10'),
+                    to: new Date('2021-08-12'),
+                    custName: "Tal",
+                    custID: "333333333"
+                },
+                {
+                    room: 10,
+                    from: new Date('2021-08-17'),
+                    to: new Date('2021-08-19'),
+                    custName: "Tom",
+                    custID: "111111111"
+                },
+                {
+                    room: 18,
+                    from: new Date('2021-08-17'),
+                    to: new Date('2021-08-20'),
+                    custName: "Anastasia",
+                    custID: "444444444"
+                },
+                {
+                    room: 37,
+                    from: new Date('2021-08-20'),
+                    to: new Date('2021-08-25'),
+                    custName: "Tal",
+                    custID: "333333333"
+                },
+                {
+                    room: 47,
+                    from: new Date('2021-08-20'),
+                    to: new Date('2021-08-25'),
+                    custName: "Alon",
+                    custID: "222222222"
+                },
+                {
+                    room: 57,
+                    from: new Date('2021-08-20'),
+                    to: new Date('2021-08-25'),
+                    custName: "Tom",
+                    custID: "111111111"
+                },
+                {
+                    room: 11,
+                    from: new Date('2021-08-21'),
+                    to: new Date('2021-08-22'),
+                    custName: "Tom",
+                    custID: "111111111"
+                },
+                {
+                    room: 10,
+                    from: new Date('2021-08-21'),
+                    to: new Date('2021-08-24'),
+                    custName: "Anastasia",
+                    custID: "444444444"
+                },
+                {
+                    room: 48,
+                    from: new Date('2021-08-26'),
+                    to: new Date('2021-08-30'),
+                    custName: "Tal",
+                    custID: "333333333"
+                },
+                {
+                    room: 35,
+                    from: new Date('2021-08-27'),
+                    to: new Date('2021-08-29'),
+                    custName: "Alon",
+                    custID: "222222222"
+                }
+                ];
             dbo.collection("Rooms").insertMany(rooms, function (err, res) {
                 if (err) throw err;
             });
@@ -677,38 +838,63 @@ let selectRoomsByDates = function (selected_from, selected_to,price,beds) {//
                     selectedRooms.push(item);//import all appropriate rooms
                 });
                 let appropriate = selectedRooms.map(a => a.room);
-                //console.log("Fit :"+appropriate);
-                orders.aggregate([
-                    {
-                        $match:
-                            {
-                                room:{$in: appropriate}
-                            }
-                    },
-                    {
-                        $group :
-                            {
-                                _id : '$room',
-                                count : {$sum : 1}
-                            }
-                    },
-
-                        { $sort : { count : -1 } }
-                    ]
-                ).toArray(function (err, queryResult){
-                    //console.log(queryResult);
-                    //console.log(selectedRooms);
-                    rooms.find({room: queryResult[0]._id}).tryNext(function(err, doc) {
-                        popRoom.length = 0;
-                        popRoom.push(doc); //import most popular rooms
-                        console.log(doc);
-                        console.log("##################################################");
-                        console.log(selectedRooms);
-                    });
+                getRoomsStatistics(orders,appropriate).toArray(function (err, queryResult){
+                    if (queryResult.length!==0) {
+                        rooms.find({room: queryResult[0]._id}).tryNext(function (err, doc) {
+                            popRoom.push(doc); //import most popular room
+                        });
+                    }
                 });
             });
         });
     });
+}
+let getRoomsStatistics = function (orders,appropriate) {
+    return orders.aggregate([
+            {
+                $match:
+                    {
+                        room:{$in: appropriate}
+                    }
+            },
+            {
+                $group :
+                    {
+                        _id : '$room',
+                        count : {$sum : 1}
+                    }
+            },
+
+            { $sort : { count : -1 } }
+        ]
+    )
+}
+
+let statisticsForGraph = function (collection,key){
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        let dbo = db.db("hotel");
+        let orders = dbo.collection(collection);
+        return orders.aggregate([
+                {
+                    $group :
+                        {
+                            _id : key,
+                            count : {$sum : 1}
+                        }
+                },
+
+                { $sort : { count : -1 } }
+            ]
+        ).toArray(function (err, q) {
+            if (err) throw err;
+            graphData.length = 0;
+            q.forEach(item => {
+                graphData.push(item);//import all appropriate rooms
+            })
+            }
+        );
+})
 }
 let checkIn =function(cust_id,cust_name){
     MongoClient.connect(url, function (err, db) {
@@ -751,7 +937,6 @@ let checkOut = function (cust_id, cust_name, sfrom, sto) {
             custID: cust_id,
             custName: cust_name
         }).toArray(function (err, checkOutRes) {
-
             if (err) throw err;
             else {
                 if (checkOutRes.length === 0)
@@ -953,6 +1138,7 @@ let getStaff = function () {
         staff.find({}).toArray(function (err, getEmpResult) {
             if (err) throw err;
             else {
+                employees.length = 0;
                 getEmpResult.forEach(item => {
                     employees.push(item);
                 });
@@ -1048,6 +1234,8 @@ let getLocations = function () {
     });
 }
 
+
+module.exports.graphData = graphData;
 module.exports.locations = locations;
 module.exports.validLogIn = validLogIn;
 module.exports.selectedRooms = selectedRooms;
@@ -1057,6 +1245,7 @@ module.exports.validReservation = validReservation;
 module.exports.showEmp = showEmp;
 module.exports.showRoom = showRoom;
 module.exports.popRoom = popRoom;
+module.exports.statisticsForGraph = statisticsForGraph;
 module.exports.init = initHotelDB;//done
 module.exports.addOrder = addOrder;//to be done-----------------------------------------------
 module.exports.selectRooms = selectRoomsByDates;//done

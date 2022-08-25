@@ -5,6 +5,8 @@ let express = require('express')
     , myDB = require("./db")
     , io = require('socket.io')(server);
 server.listen(8080);
+// myDB.statisticsForGraph("Orders",'$room');
+// myDB.statisticsForGraph("Orders",'$from');
 // myDB.init();
 io.sockets.on('connection', function (socket) {
  //############ React to client's emit #################
@@ -13,8 +15,6 @@ io.sockets.on('connection', function (socket) {
         myDB.selectRooms(from, to,price,beds); //price+beds
         setTimeout(getResultFromSelectRooms,1000);//<------Callback
         function getResultFromSelectRooms() {
-          // console.log(myDB.selectedRooms);//<----remove
-            //console.log(myDB.popRoom, myDB.selectedRooms);
             io.sockets.emit('displayRooms', myDB.popRoom, myDB.selectedRooms,from,to);
         }
     });
@@ -32,7 +32,6 @@ io.sockets.on('connection', function (socket) {
         myDB.getStaff();
         setTimeout(getEmpList,1000);//<------Callback
         function getEmpList() {
-            //console.log(myDB.employees);//<----remove
             io.sockets.emit('displayEmployees', myDB.employees);
         }
     });
@@ -180,13 +179,10 @@ io.sockets.on('connection', function (socket) {
         }
     });
     socket.on('SearchRoomTest',function (roomNum,beds,price) {
-        //console.log(roomNum,beds,price)
         myDB.searchRoom(roomNum,beds,price);
         setTimeout(getResultFromSrcRoom,1000);//<------Callback
         function getResultFromSrcRoom() {
-            //console.log("????" + myDB.showRoom.length)
             if(myDB.showRoom.length===1){
-                //console.log(myDB.showRoom);
                 io.sockets.emit('AdminSearchRoomDoneTest',myDB.showRoom[0]);
             }
 
@@ -200,6 +196,14 @@ io.sockets.on('connection', function (socket) {
         setTimeout(getResultFromLocations,1000);
         function getResultFromLocations() {
             io.sockets.emit('newLocations',myDB.locations);
+        }
+    });
+    socket.on('getStatistics', function () {
+        //prepare rooms available on those dates
+        myDB.statisticsForGraph();
+        setTimeout(getStats,1000);//<------Callback
+        function getStats() {
+            io.sockets.emit('displayStatistics');
         }
     });
 });

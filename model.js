@@ -3,17 +3,24 @@ var socket = io.connect(lurl);
 
 //############ React to server's emit #################
 socket.on('displayRooms', function (pop, roomsArr,sfrom,sto) {
+    //display the most popular room based on history if available:
+    let flag = 0;
     $('#container').empty().append("<table id=\"myTable\" class=\"table table-striped table-hover table-bordered \"><thead><tr><th onclick=\"sortTable(0)\">Room number</th><th onclick=\"sortTable(1)\">Number of beds</th><th onclick=\"sortTable(2)\">Price</th><th></th></tr></thead><tbody id=\"tBody\"></tbody></table>");
-    const mostPop = `
+    if(pop.length!==0) {
+        flag = pop[0].room;
+        const mostPop = `
         <tr id="pop">
             <td>${pop[0].room}</td>
             <td>${pop[0].numOfBeds}</td>
             <td>${pop[0].price}</td>
             <td><button onclick="handleReserve('${pop[0].room}','${sfrom}','${sto}')">Reserve</button></td>
         </tr>`
-    $('#tBody').append(mostPop);
-    $('#pop').css("background-color", "#FF6F61","background","url(popular.jpg)");
+        $('#tBody').append(mostPop);
+    }
+    $('#pop').css("background-color", "#ff2b4a","background","url(popular.jpg)");
+    //display all available rooms:
     for (const room of roomsArr) {
+        if(room.room !== flag){
         const row = `
         <tr>
             <td>${room.room}</td>
@@ -22,6 +29,7 @@ socket.on('displayRooms', function (pop, roomsArr,sfrom,sto) {
             <td><button onclick="handleReserve('${room.room}','${sfrom}','${sto}')">Reserve</button></td>
         </tr>`
         $('#tBody').append(row);
+    }
     }
 
 
@@ -48,7 +56,6 @@ socket.on('displayEmployees', function (staff) {
             <td>${emp.empID}</td>
             <td>${emp.admin}</td>
         </tr>`
-        //tBody.innerHTML += row;
         $('#tBody').append(row);
     }
 });
@@ -251,13 +258,13 @@ socket.on('loginFail', function () {
     alert("Incorrect user name or password, try again.");
 });
 
-socket.on('registerSuccess', function (username) {
-    alert(username + "has registered");
+socket.on('registerSuccess', function (id) {
+    alert("New employee with ID "+id+" has registered.");
 });
 
 
 socket.on('addRoomDone',function (roomNum) {
-    alert("Room " +roomNum+ " added");
+    alert("Room " +roomNum+ " added.");
     renderPage('admin');
 });
 
@@ -284,7 +291,10 @@ function onBookClick() {
     let to  = new Date($('#toDate').val());//2022-08-14
     let price  = $('#price-book').val();//2022-08-14
     let beds  = $('#beds-book').val();//2022-08-14
-
+    if(from >= to){
+        alert('invalid dates, try again');
+    }
+    else
     // trigger server to execute selectRooms by chosen dates
     socket.emit('sendDates',from,to,price,beds);
 }
@@ -318,7 +328,13 @@ function onAddRoomClick() {
     let roomNum = $("#room-num").val();
     let beds = $("#room-num-beds").val();
     let price = $("#room-price").val();
-    socket.emit('addRoom' , roomNum, beds,price);
+    if(roomNum === '' || beds === '' || price === ''){
+        alert('missing parameters');
+        renderPage('admin');
+    }
+    else{
+        socket.emit('addRoom' , roomNum, beds,price);
+    }
 }
 
 function onDelRoomClick() {
@@ -344,6 +360,10 @@ function onUpdRoomClick() {
     socket.emit('UpdateRoom' ,roomNum, newBeds, newPrice);
 }
 
+function onGetStatClick() {
+    socket.emit('getStatistics');
+}
+
 
 $(function(){
     // when client clicks Login
@@ -367,7 +387,8 @@ $(function () {
 
 
 //Fixed price
-renderPage = function (page) { // here the data and url are not hardcoded anymore
+renderPage = function (page) {
+    $('#weather-btn').empty();
     return $.ajax({
         type: "GET",
         url: "http://localhost:8080/" + page,
@@ -382,6 +403,7 @@ renderPage = function (page) { // here the data and url are not hardcoded anymor
 
 renderHome = function (page) { // here the data and url are not hardcoded anymore
     addMapMarkers();
+    // createCanvas();
     let row1 = `<a id="weather-btn" onclick="useWeatherAPI()" class="navbar-brand">Show weather</a>`;
     $('#nav-nav').append(row1);
     return $.ajax({
@@ -485,6 +507,7 @@ socket.on('newLocations',function initMap(arrLocations) {
     }
     window.initMap = initMap;
 });
+
 
 
 
