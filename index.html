@@ -11,6 +11,19 @@
     <script defer src="controller.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAC4HSkQqHjyWCc9wP_xSvgtuOOHIJEw0A&callback=initMap&v=weekly"></script>
+    <script>
+            var c = document.getElementById("myCanvas");
+
+            if (c.getContext) {
+                const ctx = c.getContext('2d');
+
+                ctx.fillStyle = 'rgb(200, 0, 0)';
+                ctx.fillRect(10, 10, 50, 50);
+
+                ctx.fillStyle = 'rgba(255, 240, 0, 0.5)';
+                ctx.fillRect(30, 30, 50, 50);
+            }
+    </script>
 </head>
 <body>
 
@@ -19,6 +32,7 @@
     </header>
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
+            <canvas id="myCanvas" width="200" height="50"></canvas>
             <button id="nav-nav"
                     type="button"
                     class="navbar-toggle collapsed"

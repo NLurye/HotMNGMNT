@@ -388,7 +388,7 @@ let initHotelDB = function () {
                 {
                     room: 20,
                     from: new Date('2022-08-22'),//'2022-08-01'
-                    to: new Date('2022-08-27'),//2022-08-02
+                    to: new Date('2022-08-25'),//2022-08-02
                     custName: "Tom",
                     custID: "111111110"
                 },
@@ -926,7 +926,6 @@ let checkIn =function(cust_id,cust_name){
     });
 }
 let checkOut = function (cust_id, cust_name, sfrom, sto) {
-    console.log(cust_id,cust_name,sfrom,sto, typeof  sfrom, typeof cust_id)
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
@@ -938,7 +937,6 @@ let checkOut = function (cust_id, cust_name, sfrom, sto) {
             custID: cust_id,
             custName: cust_name
         }).toArray(function (err, checkOutRes) {
-
             if (err) throw err;
             else {
                 if (checkOutRes.length === 0)
@@ -1235,6 +1233,7 @@ let getLocations = function () {
         });
     });
 }
+
 
 module.exports.graphData = graphData;
 module.exports.locations = locations;
