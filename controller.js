@@ -196,6 +196,13 @@ io.sockets.on('connection', function (socket) {
 
         }
     });
+    socket.on('getLocations',function () {
+        myDB.getLocations();
+        setTimeout(getResultFromLocations,1000);
+        function getResultFromLocations() {
+            io.sockets.emit('newLocations',myDB.locations);
+        }
+    });
 });
 
 
