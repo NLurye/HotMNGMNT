@@ -529,7 +529,7 @@ socket.on('displayStatistics',function (DBdata) {
             yRange = [height - marginBottom, marginTop], // [bottom, top]
             xPadding = 0.1, // amount of x-range to reserve to separate bars
             yFormat, // a format specifier string for the y-axis
-            yLabel = "appearances", // a label for the y-axis
+            yLabel, // a label for the y-axis
             color = "currentColor" // bar fill color
         } = {}) {
             // Compute values.
