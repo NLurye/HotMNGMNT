@@ -9,6 +9,7 @@ let roomsList = [];
 let showRoom = [];
 let locations = [];
 let popRoom = [];
+let graphData = [];
 
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
@@ -708,6 +709,33 @@ let getRoomsStatistics = function (orders,appropriate) {
         ]
     )
 }
+
+let statisticsForGraph = function (collection,key){
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        let dbo = db.db("hotel");
+        let orders = dbo.collection(collection);
+        return orders.aggregate([
+                {
+                    $group :
+                        {
+                            _id : key,
+                            count : {$sum : 1}
+                        }
+                },
+
+                { $sort : { count : -1 } }
+            ]
+        ).toArray(function (err, q) {
+            if (err) throw err;
+            graphData.length = 0;
+            q.forEach(item => {
+                graphData.push(item);//import all appropriate rooms
+            })
+            }
+        );
+})
+}
 let checkIn =function(cust_id,cust_name){
     MongoClient.connect(url, function (err, db) {
     if (err) console.log(err);
@@ -1048,6 +1076,7 @@ let getLocations = function () {
     });
 }
 
+module.exports.graphData = graphData;
 module.exports.locations = locations;
 module.exports.validLogIn = validLogIn;
 module.exports.selectedRooms = selectedRooms;
@@ -1057,6 +1086,7 @@ module.exports.validReservation = validReservation;
 module.exports.showEmp = showEmp;
 module.exports.showRoom = showRoom;
 module.exports.popRoom = popRoom;
+module.exports.statisticsForGraph = statisticsForGraph;
 module.exports.init = initHotelDB;//done
 module.exports.addOrder = addOrder;//to be done-----------------------------------------------
 module.exports.selectRooms = selectRoomsByDates;//done
