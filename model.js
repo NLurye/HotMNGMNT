@@ -35,7 +35,7 @@ socket.on('displayRooms', function (pop, roomsArr,sfrom,sto) {
 
 });
 
-socket.on('AdminSearchRoomDoneTest', function (roomsArr) {
+socket.on('AdminSearchRoomDone', function (roomsArr) {
     $('#container').empty().append("<table id=\"myTable\" class=\"table table-striped table-hover table-bordered \"><thead><tr><th onclick=\"sortTable(0)\">Room number</th><th onclick=\"sortTable(1)\">Number of beds</th><th onclick=\"sortTable(2)\">Price</th><th></th></tr></thead><tbody id=\"tBody\"></tbody></table>");
     for (const room of roomsArr) {
         const row = `
@@ -49,7 +49,7 @@ socket.on('AdminSearchRoomDoneTest', function (roomsArr) {
 });
 
 socket.on('displayEmployees', function (staff) {
-    $('#container-emp').empty().append("<table style='margin-right: 100px' class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Employee ID</th><th>Admin</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+    $('#container-emp').empty().append("<table style='width: 1200px' class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Employee ID</th><th>Admin</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
     for (const emp of staff) {
         const row = `
         <tr>
@@ -61,7 +61,7 @@ socket.on('displayEmployees', function (staff) {
 });
 
 socket.on('displayAdminRooms', function (rooms) {
-    $('#container-emp').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room Number</th><th>Number of Beds</th><th>Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+    $('#container-emp').empty().append("<table style='width: 1200px;' class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room Number</th><th>Number of Beds</th><th>Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
     for (const room of rooms) {
         const row = `
         <tr>
@@ -344,13 +344,9 @@ function onDelRoomClick() {
 
 function onSrcRoomClick() {
     let roomNum = $("#room-num").val();
-    socket.emit('SearchRoom' , roomNum);
-}
-function onSrcRoomClickTest() {
-    let roomNum = $("#room-num").val();
     let beds = $("#room-num-beds").val();
     let price = $("#room-price").val();
-    socket.emit('SearchRoomTest' , roomNum,beds,price);
+    socket.emit('SearchRoom' , roomNum,beds,price);
 }
 
 function onUpdRoomClick() {
