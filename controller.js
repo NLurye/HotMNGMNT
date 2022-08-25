@@ -15,7 +15,8 @@ io.sockets.on('connection', function (socket) {
         setTimeout(getResultFromSelectRooms,1000);//<------Callback
         function getResultFromSelectRooms() {
           // console.log(myDB.selectedRooms);//<----remove
-            io.sockets.emit('displayRooms', myDB.selectedRooms,from,to);
+            console.log(myDB.popRoom, myDB.selectedRooms);
+            io.sockets.emit('displayRooms', myDB.popRoom, myDB.selectedRooms,from,to);
         }
     });
 
@@ -229,6 +230,10 @@ app.get("/index.css", function (req,res){
 
 app.get("/background.jpg", function (req,res){
     res.sendFile(__dirname + '/background.jpg');
+});
+
+app.get("/popular.jpg", function (req,res){
+    res.sendFile(__dirname + '/popular.jpg');
 });
 
 //for client (index.html) to use functions from model.js:

@@ -8,6 +8,7 @@ let employees = [];
 let roomsList = [];
 let showRoom = [];
 let locations = [];
+let popRoom = [];
 
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
@@ -671,15 +672,40 @@ let selectRoomsByDates = function (selected_from, selected_to,price,beds) {//
             }
             rooms.find(
                 {
-                    numOfBeds: {$gte: beds},
-                    price: {$lte: price},
-                    room: {$nin: interruptions}
-                },
-            ).toArray(function (err, queryResult) {
+                        numOfBeds: {$gte: beds},
+                        price: {$lte: price},
+                        room: {$nin: interruptions}
+                      }
+            ).toArray(function (err, appropriateRooms) {
                 if (err) throw err;
                 selectedRooms.length = 0;
-                queryResult.forEach(item => {
-                    selectedRooms.push(item);
+                appropriateRooms.forEach(item => {
+                    selectedRooms.push(item);//import all appropriate rooms
+                });
+                let appropriate = selectedRooms.map(a => a.room);
+                console.log("Fit :"+appropriate);
+                orders.aggregate([
+                    {
+                        $match:
+                            {
+                                room:{$in: appropriate}
+                            }
+                    },
+                    {
+                        $group :
+                            {
+                                _id : '$room',
+                                count : {$sum : 1}
+                            }
+                    },
+
+                        { $sort : { count : -1 } }
+                    ]
+                ).toArray(function (err, queryResult){
+                    console.log(queryResult);
+                    rooms.find({room: queryResult[0]._id}).tryNext(function(err, doc) {
+                        popRoom.push(doc); //import most popular rooms
+                    });
                 });
             });
         });
@@ -1032,6 +1058,7 @@ module.exports.roomsList = roomsList;
 module.exports.validReservation = validReservation;
 module.exports.showEmp = showEmp;
 module.exports.showRoom = showRoom;
+module.exports.popRoom = popRoom;
 module.exports.init = initHotelDB;//done
 module.exports.addOrder = addOrder;//to be done-----------------------------------------------
 module.exports.selectRooms = selectRoomsByDates;//done
