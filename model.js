@@ -131,8 +131,6 @@ let selto = new Date(sto).toLocaleDateString('en-IL');
         </div>`
     
     $('#tBody').append(row).append(row2)
-     //socket.emit('newOrder',room,from,to,custName, custId);
-
 }
 
 
