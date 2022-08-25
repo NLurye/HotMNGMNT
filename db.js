@@ -714,8 +714,12 @@ let checkOut = function (cust_id, cust_name, sfrom, sto) {
         let dbo = db.db("hotel");
         let orders = dbo.collection("Orders");
         let ordersHistory = dbo.collection("OrdersHistory");
-        let query = {custID: cust_id, custName: cust_name, from: sfrom, to: sto};
-        orders.find(query).toArray(function (err, checkOutRes) {
+        orders.find({
+            from: {$eq: new Date(sfrom)},
+            to: {$eq: new Date(sto)},
+            custID: cust_id,
+            custName: cust_name
+        }).toArray(function (err, checkOutRes) {
             if (err) throw err;
             else {
                 console.log(checkOutRes);
