@@ -9,8 +9,6 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
   <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
   <link rel="stylesheet" href="login.css">
-<!--  <script src="../db.js"></script>-->
-
   <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
   <link rel="stylesheet" href="maps/style.css">
 </head>
@@ -78,36 +76,14 @@
   </div>
 </div>
 
-<script>
-  $(function() {
-
-    $('#login-form-link').click(function(e) {
-      $("#login-form").delay(100).fadeIn(100);
-      $("#register-form").fadeOut(100);
-      $('#register-form-link').removeClass('active');
-      $(this).addClass('active');
-      e.preventDefault();
-    });
-    $('#register-form-link').click(function(e) {
-      $("#register-form").delay(100).fadeIn(100);
-      $("#login-form").fadeOut(100);
-      $('#login-form-link').removeClass('active');
-      $(this).addClass('active');
-      e.preventDefault();
-    });
-
-  });
-
-</script>
-<script src="model.js"></script>
 
 </div>
 
-<script src="maps/code.js"></script>
 
 <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAC4HSkQqHjyWCc9wP_xSvgtuOOHIJEw0A&callback=initMap&v=weekly"
         defer
 ></script>
+<script src="model.js"></script>
 </body>
 </html>
