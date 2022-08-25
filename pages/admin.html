@@ -16,13 +16,13 @@
             <table class="table table-bordered" style="height: 300px; width: 100%; border: none" >
                 <tbody>
                 <tr style="height: 50px; border: none">
-                    <th scope="row"><input
+                    <td scope="row"><input
                             id="emp-id-del"
                             type="text"
                             required
                             placeholder="Emp ID"
                             class="form-control"
-                    /></th>
+                    /></td>
                     <td><input
                             id="emp-id-oldp"
                             type="text"
@@ -38,21 +38,21 @@
                             class="form-control"
                     /></td>
                     <td>
-                        <button id="emp-list-btn" type="button" class="btn btn-info" onclick="onEmpListClick()">Employee list</button>
-                        <button id="emp-del-btn" type="button" class="btn btn-info" onclick="onEmpDelClick()">Delete Employee</button>
-                        <button id="emp-upd-btn" type="button" class="btn btn-info" onclick="onEmpUpdClick()">Update Employee</button>
-                        <button id="emp-search-btn" type="button" class="btn btn-info" onclick="onEmpSrcClick()">Search Employee</button>
+                        <button id="emp-list-btn" type="button" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Click me" onclick="onEmpListClick()">Employee list</button>
+                        <button id="emp-del-btn" type="button" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Emp ID" onclick="onEmpDelClick()">Delete Employee</button>
+                        <button id="emp-upd-btn" type="button" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Emp ID, Old Password, New Password" onclick="onEmpUpdClick()">Update Employee</button>
+                        <button id="emp-search-btn" type="button" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Emp ID" onclick="onEmpSrcClick()">Search Employee</button>
 
                     </td>
                 </tr>
                 <tr style="height: 50px;border: none">
-                    <th scope="row"><input
+                    <td scope="row"><input
                             id="room-num"
                             type="text"
                             required
                             placeholder="Room Number"
                             class="form-control"
-                    /></th>
+                    /></td>
                     <td><input
                             id="room-num-beds"
                             type="text"
@@ -68,27 +68,27 @@
                             class="form-control"
                     /></td>
                     <td>
-                        <button id="room-list-btn" type="button" class="btn btn-info"onclick="onRoomsListClick()">Rooms list</button>
-                        <button id="room-add-btn" type="button" class="btn btn-info" onclick="onAddRoomClick()">Add Room</button>
-                        <button id="room-del-btn" type="button" class="btn btn-info" onclick="onDelRoomClick()">Delete Room</button>
-                        <button id="room-search-btn" type="button" class="btn btn-info" onclick="onSrcRoomClickTest()">Search Rooms</button>
+                        <button id="room-list-btn" type="button" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Click me" onclick="onRoomsListClick()">Rooms list</button>
+                        <button id="room-add-btn" type="button" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Room number, Number of beds, Room price" onclick="onAddRoomClick()">Add Room</button>
+                        <button id="room-del-btn" type="button" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Room number" onclick="onDelRoomClick()">Delete Room</button>
+                        <button id="room-search-btn" type="button" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Room number, Number of beds, Room price" onclick="onSrcRoomClickTest()">Search Rooms</button>
                     </td>
                 </tr>
                 <tr style="height: 50px;border: none">
-                    <th scope="row"><input
+                    <td scope="row"><input
                             id="room-num-upd"
                             type="text"
                             required
                             placeholder="Room Number"
                             class="form-control"
-                    /></th>
-                    <th scope="row"><input
+                    /></td>
+                    <td scope="row"><input
                             id="room-new-beds"
                             type="text"
                             required
                             placeholder="New Number Of Beds"
                             class="form-control"
-                    /></th>
+                    /></td>
                     <td><input
                             id="room-new-price"
                             type="text"
@@ -97,7 +97,7 @@
                             class="form-control"
                     /></td>
                     <td>
-                        <button id="room-upd-btn" type="button" class="btn btn-info" onclick="onUpdRoomClick()">Update Room</button>
+                        <button id="room-upd-btn" type="button" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Room number, New Number of beds, New Room price" onclick="onUpdRoomClick()">Update Room</button>
                     </td>
                 </tr>
                 </tbody>
