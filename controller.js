@@ -5,8 +5,6 @@ let express = require('express')
     , myDB = require("./db")
     , io = require('socket.io')(server);
 server.listen(8080);
-// myDB.statisticsForGraph("Orders",'$room');
-// myDB.statisticsForGraph("Orders",'$from');
 // myDB.init();
 io.sockets.on('connection', function (socket) {
  //############ React to client's emit #################
@@ -167,23 +165,12 @@ io.sockets.on('connection', function (socket) {
     });
 
 
-    socket.on('SearchRoom',function (roomNum) {
-        myDB.searchRoom(roomNum);
-        setTimeout(getResultFromSrcRoom,1000);//<------Callback
-        function getResultFromSrcRoom() {
-            if(myDB.showRoom.length===1)
-                io.sockets.emit('AdminSearchRoomDone',roomNum);
-            else
-                io.sockets.emit('AdminSearchRoomFailed',roomNum);
-
-        }
-    });
-    socket.on('SearchRoomTest',function (roomNum,beds,price) {
+    socket.on('SearchRoom',function (roomNum,beds,price) {
         myDB.searchRoom(roomNum,beds,price);
         setTimeout(getResultFromSrcRoom,1000);//<------Callback
         function getResultFromSrcRoom() {
             if(myDB.showRoom.length===1){
-                io.sockets.emit('AdminSearchRoomDoneTest',myDB.showRoom[0]);
+                io.sockets.emit('AdminSearchRoomDone',myDB.showRoom[0]);
             }
 
             else
