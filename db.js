@@ -12,7 +12,6 @@ let popRoom = [];
 let graphData1 = [];
 let graphData2 = [];
 
-
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
@@ -871,8 +870,6 @@ let getRoomsStatistics = function (orders,appropriate) {
         ]
     )
 }
-
-
 let statisticsForGraph = function (collection,key,arr){
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
@@ -1034,6 +1031,28 @@ let deleteEmployee = function (emp_ID) {
                 });
         } catch (e) {
             print(e);
+        }
+    });
+}
+let updateOrder = function (cust_id, cust_name, my_from, my_to, new_cust_id, new_cust_name) {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        let dbo = db.db("hotel");
+        let order = dbo.collection("Orders");
+        try {
+            order.updateMany(
+                {
+                    custID: cust_id,
+                    custName: cust_name,
+                    from: my_from,
+                    to: my_to
+                },
+                {
+                    custID: new_cust_id,
+                    custName: new_cust_name
+                });
+        } catch (err) {
+            print(err);
         }
     });
 }
@@ -1237,6 +1256,7 @@ module.exports.deleteOrder = deleteOrder;
 module.exports.addRoom = addRoom;
 module.exports.deleteRoom = deleteRoom;
 module.exports.deleteEmployee = deleteEmployee;
+module.exports.updateOrder = updateOrder;
 module.exports.signIn = addEmployee;
 module.exports.changeEmpPass = changeEmpPass;
 module.exports.updateRoom = updateRoom;
