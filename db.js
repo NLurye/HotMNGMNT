@@ -528,11 +528,6 @@ let initHotelDB = function () {
             ];
             let attractions = [
                 {
-                    lat: 32.065981,
-                    lng: 34.775369,
-                    description: "hotMNGMNT Hotel"
-                },
-                {
                     lat: 32.068893,
                     lng: 34.772175,
                     description: "SanYang Restaurant"
@@ -633,7 +628,6 @@ let logIn = function (id, pass) { ///<-----add encryption, admin?
     });
 }
 let selectRoomsByDates = function (selected_from, selected_to,price,beds) {//
-    //eliminate rooms that have orders that starting before selected_to and simultaneously ending after selected_from
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
@@ -747,14 +741,13 @@ let checkOut = function (cust_id, cust_name, sfrom, sto) {
         let dbo = db.db("hotel");
         let orders = dbo.collection("Orders");
         let ordersHistory = dbo.collection("OrdersHistory");
-        orders.find(
-            {
-                from: new Date(sfrom),
-                to: new Date(sto),
-                custId: cust_id,
-                custName: cust_name
-            }
-        ).toArray(function (err, checkOutRes) {
+        orders.find({
+            from: {$eq: new Date(sfrom)},
+            to: {$eq: new Date(sto)},
+            custID: cust_id,
+            custName: cust_name
+        }).toArray(function (err, checkOutRes) {
+
             if (err) throw err;
             else {
                 if (checkOutRes.length === 0)
@@ -1050,6 +1043,7 @@ let getLocations = function () {
         });
     });
 }
+
 module.exports.locations = locations;
 module.exports.validLogIn = validLogIn;
 module.exports.selectedRooms = selectedRooms;

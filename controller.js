@@ -6,7 +6,6 @@ let express = require('express')
     , io = require('socket.io')(server);
 server.listen(8080);
 // myDB.init();
-
 io.sockets.on('connection', function (socket) {
  //############ React to client's emit #################
     socket.on('sendDates', function (from,to,price,beds) { //price+beds
@@ -194,6 +193,13 @@ io.sockets.on('connection', function (socket) {
             else
                 io.sockets.emit('AdminSearchRoomFailed',roomNum);
 
+        }
+    });
+    socket.on('getLocations',function () {
+        myDB.getLocations();
+        setTimeout(getResultFromLocations,1000);
+        function getResultFromLocations() {
+            io.sockets.emit('newLocations',myDB.locations);
         }
     });
 });
