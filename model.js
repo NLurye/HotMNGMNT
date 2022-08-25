@@ -318,7 +318,13 @@ function onAddRoomClick() {
     let roomNum = $("#room-num").val();
     let beds = $("#room-num-beds").val();
     let price = $("#room-price").val();
-    socket.emit('addRoom' , roomNum, beds,price);
+    if(roomNum === '' || beds === '' || price === ''){
+        alert('missing parameters');
+        renderPage('admin');
+    }
+    else{
+        socket.emit('addRoom' , roomNum, beds,price);
+    }
 }
 
 function onDelRoomClick() {
