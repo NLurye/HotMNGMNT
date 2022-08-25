@@ -131,8 +131,6 @@ let selto = new Date(sto).toLocaleDateString('en-IL');
         </div>`
     
     $('#tBody').append(row).append(row2)
-     //socket.emit('newOrder',room,from,to,custName, custId);
-
 }
 
 
@@ -149,6 +147,25 @@ $(function(){
         // trigger server to validate login
         socket.emit('valRegister',username,pw);
     });
+});
+
+$(function() {
+
+    $('#login-form-link').click(function(e) {
+        $("#login-form").delay(100).fadeIn(100);
+        $("#register-form").fadeOut(100);
+        $('#register-form-link').removeClass('active');
+        $(this).addClass('active');
+        e.preventDefault();
+    });
+    $('#register-form-link').click(function(e) {
+        $("#register-form").delay(100).fadeIn(100);
+        $("#login-form").fadeOut(100);
+        $('#login-form-link').removeClass('active');
+        $(this).addClass('active');
+        e.preventDefault();
+    });
+
 });
 
 function onCIClick() {
@@ -364,6 +381,9 @@ renderPage = function (page) { // here the data and url are not hardcoded anymor
 
 
 renderHome = function (page) { // here the data and url are not hardcoded anymore
+    addMapMarkers();
+    let row1 = `<a id="weather-btn" onclick="useWeatherAPI()" class="navbar-brand">Show weather</a>`;
+    $('#nav-nav').append(row1);
     return $.ajax({
         type: "GET",
         url: "http://localhost:8080/" + page,
@@ -412,22 +432,27 @@ function sortTable(n) {
 }
 
 async function useWeatherAPI() {
-
+const header =
+    ` <tr>
+         <th>Time</th>
+         <th>Temperature</th>
+     </tr>`
     const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=32.52&longitude=34.41&hourly=temperature_2m').then(res => res.json())
+    $('#weather-table tbody').empty().append(header);
     for (let i = 0; i < res.hourly.time.length; i+=24) {
-        document.querySelector("#weather-table tbody").innerHTML += `
+        let row = `
         <tr>
             <td style="width:50px; font-family: monospace; font-weight: bold">${new Date(res.hourly.time[i]).toLocaleDateString()}</td>
             <td style="width:50px; font-family: monospace; font-weight: bold">${res.hourly.temperature_2m[i]}</td>
-        </tr>
-    `
+        </tr>`
+        $('#weather-table tbody').append(row);
+        $('#weather-btn').empty();
     }
 
 }
 
 
-
-function mapBlabla() {
+function addMapMarkers() {
     socket.emit('getLocations');
 }
 socket.on('newLocations',function initMap(arrLocations) {
@@ -460,3 +485,7 @@ socket.on('newLocations',function initMap(arrLocations) {
     }
     window.initMap = initMap;
 });
+
+
+
+

@@ -1041,7 +1041,6 @@ let getLocations = function () {
         });
     });
 }
-
 module.exports.locations = locations;
 module.exports.validLogIn = validLogIn;
 module.exports.selectedRooms = selectedRooms;
@@ -1050,6 +1049,7 @@ module.exports.roomsList = roomsList;
 module.exports.validReservation = validReservation;
 module.exports.showEmp = showEmp;
 module.exports.showRoom = showRoom;
+module.exports.popRoom = popRoom;
 module.exports.init = initHotelDB;//done
 module.exports.addOrder = addOrder;//to be done-----------------------------------------------
 module.exports.selectRooms = selectRoomsByDates;//done
