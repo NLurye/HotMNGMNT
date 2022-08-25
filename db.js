@@ -387,7 +387,7 @@ let initHotelDB = function () {
                 {
                     room: 10,
                     from: new Date('2022-08-22'),//'2022-08-01'
-                    to: new Date('2022-08-27'),//2022-08-02
+                    to: new Date('2022-08-25'),//2022-08-02
                     custName: "Tom",
                     custID: "111111110"
                 },
@@ -735,20 +735,17 @@ let checkIn =function(cust_id,cust_name){
     });
 }
 let checkOut = function (cust_id, cust_name, sfrom, sto) {
-    console.log(cust_id,cust_name,sfrom,sto, typeof  sfrom, typeof cust_id)
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
         let orders = dbo.collection("Orders");
         let ordersHistory = dbo.collection("OrdersHistory");
-        orders.find(
-            {
-                from: new Date(sfrom),
-                to: new Date(sto),
-                custId: cust_id,
-                custName: cust_name
-            }
-        ).toArray(function (err, checkOutRes) {
+        orders.find({
+            from: {$eq: new Date(sfrom)},
+            to: {$eq: new Date(sto)},
+            custID: cust_id,
+            custName: cust_name
+        }).toArray(function (err, checkOutRes) {
             if (err) throw err;
             else {
                 if (checkOutRes.length === 0)
@@ -1053,7 +1050,6 @@ module.exports.roomsList = roomsList;
 module.exports.validReservation = validReservation;
 module.exports.showEmp = showEmp;
 module.exports.showRoom = showRoom;
-module.exports.popRoom = popRoom;
 module.exports.init = initHotelDB;//done
 module.exports.addOrder = addOrder;//to be done-----------------------------------------------
 module.exports.selectRooms = selectRoomsByDates;//done
