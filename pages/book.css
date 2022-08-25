@@ -399,3 +399,6 @@ h4 {
 td, th {
     vertical-align: middle;
 }
+td{
+    border: none !important;
+}

@@ -353,6 +353,10 @@ function onUpdRoomClick() {
     socket.emit('UpdateRoom' ,roomNum, newBeds, newPrice);
 }
 
+function onGetStatClick() {
+    socket.emit('getStatistics');
+}
+
 
 $(function(){
     // when client clicks Login

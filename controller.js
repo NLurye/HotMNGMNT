@@ -202,6 +202,14 @@ io.sockets.on('connection', function (socket) {
             io.sockets.emit('newLocations',myDB.locations);
         }
     });
+    socket.on('getStatistics', function () {
+        //prepare rooms available on those dates
+        myDB.statisticsForGraph();
+        setTimeout(getStats,1000);//<------Callback
+        function getStats() {
+            io.sockets.emit('displayStatistics');
+        }
+    });
 });
 
 
