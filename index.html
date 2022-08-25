@@ -10,6 +10,7 @@
     <script defer src="model.js"></script>
     <script defer src="pages/maps/code.js"></script>
     <script defer src="controller.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAC4HSkQqHjyWCc9wP_xSvgtuOOHIJEw0A&callback=initMap&v=weekly"></script>
 </head>
 <body>
@@ -62,15 +63,21 @@
     <span>MNGMNT</span>
 </h1>
 
+<section>
+    <aside>
+        <table id="weather-table" class="table table-borderless table-dark" style="font-family: monospace;" >
+            <tbody>
+            <tr>
+                <th>Time</th>
+                <th>Temperature</th>
+            </tr>
+            </tbody>
+        </table>
+    </aside>
+</section>
 
-<table id="weather-table">
-    <tbody>
-        <tr>
-            <th>time</th>
-            <th>temp</th>
-        </tr>
-    </tbody>
-</table>
+
+
 
 <main id="main">
           <footer class="footer"><div id="map"></div></footer>

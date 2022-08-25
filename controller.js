@@ -5,7 +5,7 @@ let express = require('express')
     , myDB = require("./db")
     , io = require('socket.io')(server);
 server.listen(8080);
-//myDB.init();
+// myDB.init();
 io.sockets.on('connection', function (socket) {
  //############ React to client's emit #################
     socket.on('sendDates', function (from,to,price,beds) { //price+beds
@@ -14,7 +14,8 @@ io.sockets.on('connection', function (socket) {
         setTimeout(getResultFromSelectRooms,1000);//<------Callback
         function getResultFromSelectRooms() {
           // console.log(myDB.selectedRooms);//<----remove
-            io.sockets.emit('displayRooms', myDB.selectedRooms,from,to);
+            console.log(myDB.popRoom, myDB.selectedRooms);
+            io.sockets.emit('displayRooms', myDB.popRoom, myDB.selectedRooms,from,to);
         }
     });
 
@@ -125,7 +126,7 @@ io.sockets.on('connection', function (socket) {
         myDB.checkOut(id,name,from,to);
         setTimeout(getResultFromCheckOut,1000);//<------Callback
         function getResultFromCheckOut() {
-            io.sockets.emit('checkOutDone');
+            io.sockets.emit('checkOutDone', name);
         }
     });
 
@@ -133,7 +134,7 @@ io.sockets.on('connection', function (socket) {
         myDB.deleteOrder(id,name, from, to);
         setTimeout(getResultFromDeleteOrder,1000);//<------Callback
         function getResultFromDeleteOrder() {
-            io.sockets.emit('deleteOrderDone', id ,name, from, to);
+            io.sockets.emit('deleteOrderDone');
         }
     });
 
@@ -179,11 +180,16 @@ io.sockets.on('connection', function (socket) {
         }
     });
     socket.on('SearchRoomTest',function (roomNum,beds,price) {
-        myDB.searchRoom(roomNum);
+        console.log(roomNum,beds,price)
+        myDB.searchRoom(roomNum,beds,price);
         setTimeout(getResultFromSrcRoom,1000);//<------Callback
         function getResultFromSrcRoom() {
-            if(myDB.showRoom.length===1)
-                io.sockets.emit('AdminSearchRoomDoneTest',myDB.showRoom,roomNum);
+            console.log("????" + myDB.showRoom.length)
+            if(myDB.showRoom.length===1){
+                console.log(myDB.showRoom);
+                io.sockets.emit('AdminSearchRoomDoneTest',myDB.showRoom[0]);
+            }
+
             else
                 io.sockets.emit('AdminSearchRoomFailed',roomNum);
 
@@ -230,6 +236,10 @@ app.get("/index.css", function (req,res){
 
 app.get("/background.jpg", function (req,res){
     res.sendFile(__dirname + '/background.jpg');
+});
+
+app.get("/popular.jpg", function (req,res){
+    res.sendFile(__dirname + '/popular.jpg');
 });
 
 //for client (index.html) to use functions from model.js:

@@ -3,8 +3,17 @@ var socket = io.connect(lurl);
 mapBlabla();
 
 //############ React to server's emit #################
-socket.on('displayRooms', function (roomsArr,sfrom,sto) {
+socket.on('displayRooms', function (pop, roomsArr,sfrom,sto) {
     $('#container').empty().append("<table id=\"myTable\" class=\"table table-striped table-hover table-bordered \"><thead><tr><th onclick=\"sortTable(0)\">Room number</th><th onclick=\"sortTable(1)\">Number of beds</th><th onclick=\"sortTable(2)\">Price</th><th></th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+    const mostPop = `
+        <tr id="pop">
+            <td>${pop[0].room}</td>
+            <td>${pop[0].numOfBeds}</td>
+            <td>${pop[0].price}</td>
+            <td><button onclick="handleReserve('${pop[0].room}','${sfrom}','${sto}')">Reserve</button></td>
+        </tr>`
+    $('#tBody').append(mostPop);
+    $('#pop').css("background-color", "#FF6F61","background","url(popular.jpg)");
     for (const room of roomsArr) {
         const row = `
         <tr>
@@ -13,11 +22,13 @@ socket.on('displayRooms', function (roomsArr,sfrom,sto) {
             <td>${room.price}</td>
             <td><button onclick="handleReserve('${room.room}','${sfrom}','${sto}')">Reserve</button></td>
         </tr>`
-        //tBody.innerHTML += row;
         $('#tBody').append(row);
     }
+
+
 });
-socket.on('AdminSearchRoomDoneTest', function (roomsArr,roomNum) {
+
+socket.on('AdminSearchRoomDoneTest', function (roomsArr) {
     $('#container').empty().append("<table id=\"myTable\" class=\"table table-striped table-hover table-bordered \"><thead><tr><th onclick=\"sortTable(0)\">Room number</th><th onclick=\"sortTable(1)\">Number of beds</th><th onclick=\"sortTable(2)\">Price</th><th></th></tr></thead><tbody id=\"tBody\"></tbody></table>");
     for (const room of roomsArr) {
         const row = `
@@ -26,11 +37,9 @@ socket.on('AdminSearchRoomDoneTest', function (roomsArr,roomNum) {
             <td>${room.numOfBeds}</td>
             <td>${room.price}</td>
         </tr>`
-        //tBody.innerHTML += row;
         $('#tBody').append(row);
     }
 });
-
 
 socket.on('displayEmployees', function (staff) {
     $('#container-emp').empty().append("<table style='margin-right: 100px' class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Employee ID</th><th>Admin</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
@@ -57,36 +66,6 @@ socket.on('displayAdminRooms', function (rooms) {
         $('#tBody').append(row);
     }
 });
-
-
-
-// socket.on('deleteSuccess', function (rooms) {
-//     $('#container-emp').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room Number</th><th>Number of Beds</th><th>Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
-//     for (const room of rooms) {
-//         const row = `
-//         <tr>
-//             <td>${room.room}</td>
-//             <td>${room.numOfBeds}</td>
-//             <td>${room.price}</td>
-//         </tr>`
-//         tBody.innerHTML += row;
-//         $('#tBody').append(row);
-//     }
-// });
-
-// socket.on('searchRoomDone', function (room) {
-//     $('#container-emp').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room Number</th><th>Number of Beds</th><th>Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
-//     for (const r of room) {
-//         const row = `
-//         <tr>
-//             <td>${r.room}</td>
-//             <td>${r.numOfBeds}</td>
-//             <td>${r.price}</td>
-//         </tr>`
-//         $('#tBody').append(row);
-//     }
-// });
-
 
 socket.on('searchRoomFailed',function (roomNum) {
     alert("There is no room "+roomNum+" in your hotel.");
@@ -179,12 +158,6 @@ function onCIClick() {
     let roomNum = $('#room-num-ci').val();
     socket.emit('sendValsCheckIn', id,name,roomNum);
 }
-function onCIClickTest() {
-    let id = $('#id-num-ci').val();
-    let name = $('#cust-name-ci').val();
-    let roomNum = $('#room-num-ci').val();
-    socket.emit('sendValsCheckIn', id,name,roomNum);
-}
 
 
 function onCOClick() {
@@ -195,24 +168,25 @@ function onCOClick() {
     socket.emit('sendValsCheckOut', id,name,from,to);
 }
 
+function onDelOrderClick() {
+    let id = $('#id-num-co').val();
+    let name = $('#cust-name-co').val();
+    let from = new Date($('#fromOutDate').val());
+    let to  = new Date($('#toOutDate').val());
+    socket.emit('sendDeleteOrder', id,name,from,to);
+}
 
-// $(function () {
-//     $('#emp-del-btn').click(function () {
-//         let id = $('#emp-id-del').val();
-//         socket.emit('deleteEmployee',id);
-//     });
-// });
 
 socket.on('checkInDone',function (name) {
     alert("Welcome to our hotel " + name);
     renderHome('home');
-});
+})
 
 socket.on('checkInFailed',function () {
     alert("reservation doesn't exist");
 });
 
-socket.on('checkOutDone',function (id,name) {
+socket.on('checkOutDone',function (name) {
     alert(name + " has checked out");
     renderHome('home');
 });
@@ -224,12 +198,12 @@ socket.on('deleteOrderDone',function () {
 
 socket.on('deleteEmployeeDone',function (id) {
     alert('employee ' + id + ' deleted');
-    renderHome('home');
+    renderPage('admin');
 });
 
 socket.on('updateEmployeeDone',function (id) {
     alert('employee ' + id + ' updated');
-    renderHome('home');
+    renderPage('admin');
 });
 
 socket.on('searchEmployeeDone',function (id) {
@@ -256,10 +230,10 @@ socket.on('loginSuccess', function () {
     renderHome('home');
 //-------> if admin add options like delete/add employee
 });
+
 socket.on('loginFail', function () {
     alert("Incorrect user name or password, try again.");
 });
-
 
 socket.on('registerSuccess', function (username) {
     alert(username + "has registered");
@@ -268,17 +242,12 @@ socket.on('registerSuccess', function (username) {
 
 socket.on('addRoomDone',function (roomNum) {
     alert("Room " +roomNum+ " added");
-    renderHome('home');
+    renderPage('admin');
 });
 
 socket.on('deleteRoomDone',function (roomNum) {
     alert("Room " +roomNum+ " deleted");
-    renderHome('home');
-});
-
-socket.on('deleteRoomDone',function (roomNum) {
-    alert("Room " +roomNum+ " deleted");
-    renderHome('home');
+    renderPage('admin');
 });
 
 socket.on('OrderAdded',function (room,from,to, name) {
@@ -288,20 +257,11 @@ socket.on('OrderAdded',function (room,from,to, name) {
 
 socket.on('updateRoomDone',function (RoomNum) {
     alert("room number " + RoomNum + " updated ");
-    renderHome('home');
+    renderPage('admin');
 });
 
 
 //############ Ping to server #################
-// $(function(){
-//     // when client clicks Search Rooms
-//     $('#search-btn').click( function() {
-//         let from = new Date($('#fromDate').val());//2022-08-01
-//         let to  = new Date($('#toDate').val());//2022-08-14
-//         // trigger server to execute selectRooms by chosen dates
-//         socket.emit('sendDates',from,to);
-//     });
-// });
 
 function onBookClick() {
     let from = new Date($('#fromDate').val());//2022-08-01
@@ -334,11 +294,9 @@ function onEmpSrcClick() {
     socket.emit('searchEmployee', id);
 }
 
-
 function onRoomsListClick() {
     socket.emit('displayRoomsList');
 }
-
 
 function onAddRoomClick() {
     let roomNum = $("#room-num").val();
@@ -371,17 +329,6 @@ function onUpdRoomClick() {
 }
 
 
-
-
-// $(function(){
-//     // when client clicks Search Rooms
-//     $('#room-list-btn').click( function() {
-//         // trigger server to execute selectRooms by chosen dates
-//         socket.emit('displayRoomsList');
-//     });
-// });
-
-
 $(function(){
     // when client clicks Login
     $('#login-submit').click( function() {
@@ -393,17 +340,6 @@ $(function(){
 });
 
 
-
-
-// $(function () {
-//     $('#room-add-btn').click(function () {
-//         let roomNum = $('#room-num').val();
-//         let numOfBeds = $('#num-beds').val();
-//         let price = $('#room-price').val();
-//         socket.emit('addRoom',roomNum,numOfBeds,price);
-//     });
-// });
-
 $(function () {
     $('#room-add-btn').click(function () {
         let roomNum = $('#room-num').val();
@@ -412,24 +348,6 @@ $(function () {
         socket.emit('addRoom',roomNum,numOfBeds,price);
     });
 });
-
-
-// $(function () {
-//     $('#room-del-btn').click(function () {
-//         let roomNum = $('#del-room').val();
-//         socket.emit('deleteRoom',roomNum);
-//     });
-// });
-
-// $(function () {
-//     $('#room-upd-btn').click(function () {
-//         let newRoomNum = $('#room-num-upd').val();
-//         let newNumBeds = $('#new-num-beds').val();
-//         let newPrice = $('#new-price').val();
-//         socket.emit('updateRoom',newRoomNum, newNumBeds, newPrice);
-//     });
-// });
-
 
 
 //Fixed price
@@ -495,17 +413,19 @@ function sortTable(n) {
 }
 
 async function useWeatherAPI() {
-    const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=32.52&longitude=34.41&hourly=temperature_2m').then(res => res.json())
 
+    const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=32.52&longitude=34.41&hourly=temperature_2m').then(res => res.json())
     for (let i = 0; i < res.hourly.time.length; i+=24) {
         document.querySelector("#weather-table tbody").innerHTML += `
         <tr>
-            <td>${new Date(res.hourly.time[i]).toLocaleString()}</td>
-            <td>${res.hourly.temperature_2m[i]}</td>
+            <td style="width:50px; font-family: monospace; font-weight: bold">${new Date(res.hourly.time[i]).toLocaleDateString()}</td>
+            <td style="width:50px; font-family: monospace; font-weight: bold">${res.hourly.temperature_2m[i]}</td>
         </tr>
     `
     }
+
 }
+
 
 function mapBlabla() {
     socket.emit('getLocations');
@@ -541,7 +461,7 @@ socket.on('newLocations',function initMap(arrLocations) {
     window.initMap = initMap;
 });
 
-//arrLocations.forEach(item =>{item.lat.position, item.lng.position})
-//arrLocations.forEach(item => {item.description.text})
-//arrLocations.forEach(item => {item.lat.valueOf(), item.lng.valueOf()}).position
-//arrLocations.forEach(item => {item.description.toString}).text
+useWeatherAPI();
+
+
+

@@ -8,6 +8,7 @@ let employees = [];
 let roomsList = [];
 let showRoom = [];
 let locations = [];
+let popRoom = [];
 
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
@@ -386,7 +387,7 @@ let initHotelDB = function () {
                 {
                     room: 10,
                     from: new Date('2022-08-22'),//'2022-08-01'
-                    to: new Date('2022-08-25'),//2022-08-02
+                    to: new Date('2022-08-27'),//2022-08-02
                     custName: "Tom",
                     custID: "111111110"
                 },
@@ -665,15 +666,40 @@ let selectRoomsByDates = function (selected_from, selected_to,price,beds) {//
             }
             rooms.find(
                 {
-                    numOfBeds: {$gte: beds},
-                    price: {$lte: price},
-                    room: {$nin: interruptions}
-                },
-            ).toArray(function (err, queryResult) {
+                        numOfBeds: {$gte: beds},
+                        price: {$lte: price},
+                        room: {$nin: interruptions}
+                      }
+            ).toArray(function (err, appropriateRooms) {
                 if (err) throw err;
                 selectedRooms.length = 0;
-                queryResult.forEach(item => {
-                    selectedRooms.push(item);
+                appropriateRooms.forEach(item => {
+                    selectedRooms.push(item);//import all appropriate rooms
+                });
+                let appropriate = selectedRooms.map(a => a.room);
+                console.log("Fit :"+appropriate);
+                orders.aggregate([
+                    {
+                        $match:
+                            {
+                                room:{$in: appropriate}
+                            }
+                    },
+                    {
+                        $group :
+                            {
+                                _id : '$room',
+                                count : {$sum : 1}
+                            }
+                    },
+
+                        { $sort : { count : -1 } }
+                    ]
+                ).toArray(function (err, queryResult){
+                    console.log(queryResult);
+                    rooms.find({room: queryResult[0]._id}).tryNext(function(err, doc) {
+                        popRoom.push(doc); //import most popular rooms
+                    });
                 });
             });
         });
@@ -709,6 +735,7 @@ let checkIn =function(cust_id,cust_name){
     });
 }
 let checkOut = function (cust_id, cust_name, sfrom, sto) {
+    console.log(cust_id,cust_name,sfrom,sto, typeof  sfrom, typeof cust_id)
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
@@ -720,11 +747,11 @@ let checkOut = function (cust_id, cust_name, sfrom, sto) {
             custID: cust_id,
             custName: cust_name
         }).toArray(function (err, checkOutRes) {
+
             if (err) throw err;
             else {
-                console.log(checkOutRes);
                 if (checkOutRes.length === 0)
-                    console.log("Reservation doesn't exist");
+                    console.log("Reservation doesn't exist...");
                 else {
                     ordersHistory.insertMany(checkOutRes, function (err, res) {
                         if (err) throw err;
@@ -755,7 +782,7 @@ let addOrder = function (curRoom, from, to, custName, custID) {
         });
     });
 }
-let deleteOrder = function (cust_id, cust_name, myFrom, myTo) {
+let deleteOrder = function (cust_id, cust_name, from, to) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
@@ -765,8 +792,8 @@ let deleteOrder = function (cust_id, cust_name, myFrom, myTo) {
                 {
                     custName: cust_name,
                     custID: cust_id,
-                    from: myFrom,
-                    to: myTo
+                    from: new Date(from),
+                    to: new Date(to),
                 });
         } catch (e) {
             print(e);
@@ -944,27 +971,63 @@ let getRooms = function () {
         });
     });
 }
-let searchRoom = function (roomNumber) {
+let searchRoom = function (roomNumber,beds,price) {
     MongoClient.connect(url, function (err, db) {
         if (err) console.log(err);
         let dbo = db.db("hotel");
         let rooms = dbo.collection("Rooms");
-        rooms.find(
-            {
-                room: parseInt(roomNumber),
-            }
-        ).toArray(function (err, searchRoomRes) {
-            if (err) throw err;
-            else {
+        let my_beds = 0;
+        let my_roomNumber = 0;
+        let my_price = Number.MAX_VALUE;
+        if (roomNumber !== '') {
+            roomNumber = parseInt(roomNumber);
+            beds = my_beds;
+            price = my_price;
+            rooms.find(
+                {
+                    room: roomNumber
+                }
+            ).toArray(function (err, searchRoomRes) {
+                if (err) throw err;
                 showRoom.length = 0;
                 if (searchRoomRes.length === 0)
-                    console.log("Employee not found");
+                    console.log('room not found');
                 else {
                     showRoom.push(searchRoomRes);
                 }
+            });
+        } else {
+
+            if (beds !== '' && price !== '') {
+                beds = parseInt(beds);
+                price = parseInt(price);
             }
-            db.close();
-        });
+            if (beds !== '' && price === '') {
+                price = my_price;
+                beds = parseInt(beds);
+            }
+            if (beds === '' && price !== '') {
+                price = parseInt(price);
+                beds = my_beds;
+            }
+
+            roomNumber = my_roomNumber;
+            rooms.find(
+                {
+                    room: {$gte: roomNumber},
+                    numOfBeds: {$gte: beds},
+                    price: {$lte: price}
+                }
+            ).toArray(function (err, searchRoomRes) {
+                if (err) throw err;
+                showRoom.length = 0;
+                if (searchRoomRes.length === 0)
+                    console.log('room not found');
+                else {
+                    showRoom.push(searchRoomRes);
+                }
+            });
+        }
     });
 }
 let getLocations = function () {
@@ -989,6 +1052,7 @@ module.exports.roomsList = roomsList;
 module.exports.validReservation = validReservation;
 module.exports.showEmp = showEmp;
 module.exports.showRoom = showRoom;
+module.exports.popRoom = popRoom;
 module.exports.init = initHotelDB;//done
 module.exports.addOrder = addOrder;//to be done-----------------------------------------------
 module.exports.selectRooms = selectRoomsByDates;//done
