@@ -869,7 +869,6 @@ let getRoomsStatistics = function (orders,appropriate) {
         ]
     )
 }
-
 let statisticsForGraph = function (collection,key){
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
@@ -1031,28 +1030,6 @@ let deleteEmployee = function (emp_ID) {
                 });
         } catch (e) {
             print(e);
-        }
-    });
-}
-let updateOrder = function (cust_id, cust_name, my_from, my_to, new_cust_id, new_cust_name) {
-    MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        let dbo = db.db("hotel");
-        let order = dbo.collection("Orders");
-        try {
-            order.updateMany(
-                {
-                    custID: cust_id,
-                    custName: cust_name,
-                    from: my_from,
-                    to: my_to
-                },
-                {
-                    custID: new_cust_id,
-                    custName: new_cust_name
-                });
-        } catch (err) {
-            print(err);
         }
     });
 }
@@ -1257,7 +1234,6 @@ module.exports.deleteOrder = deleteOrder;//to be done---------------------------
 module.exports.addRoom = addRoom;//to be done-------------------------------------------------
 module.exports.deleteRoom = deleteRoom;//to be done-------------------------------------------
 module.exports.deleteEmployee = deleteEmployee;//to be done-----------------------------------
-module.exports.updateOrder = updateOrder;//to be done-----------------------------------------
 module.exports.signIn = addEmployee;//to be done----------------------------------------------
 module.exports.changeEmpPass = changeEmpPass;//to be done-------------------------------------
 module.exports.updateRoom = updateRoom;//to be done-------------------------------------------
