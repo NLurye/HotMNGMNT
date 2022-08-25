@@ -1,13 +1,12 @@
-
-
-
-    // set the dimensions and margins of the graph
+    let myDB = require("./db");
+   // set the dimensions and margins of the graph
     var margin = {top: 10, right: 30, bottom: 30, left: 40},
     width = 460 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
     var svg = d3.select("#my_dataviz_histogram")
+   // var svg = d3.select("#my_dataviz")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -16,11 +15,11 @@
     "translate(" + margin.left + "," + margin.top + ")");
 
     // get the data
-    d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/1_OneNum.csv", function(data) {
+    d3.json(myDB.graph1Data, function(data) {
 
     // X axis: scale and draw:
     var x = d3.scaleLinear()
-    .domain([1, 31])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+    .domain([0, 1000])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
     .range([0, width]);
     svg.append("g")
     .attr("transform", "translate(0," + height + ")")
@@ -38,7 +37,9 @@
     // Y axis: scale and draw:
     var y = d3.scaleLinear()
     .range([height, 0]);
-    y.domain([0, 50]);   // d3.hist has to be called before the Y axis obviously
+    //y.domain([0, 50]);   // d3.hist has to be called before the Y axis obviously
+
+    y.domain([0, d3.max(bins, function(d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
     svg.append("g")
     .call(d3.axisLeft(y));
 
@@ -54,8 +55,6 @@
     .style("fill", "#69b3a2")
 
 });
-
-
 
 
     // set the dimensions and margins of the graph
@@ -111,5 +110,4 @@
     .style("fill", "#69b3a2")
 
 });
-
 
