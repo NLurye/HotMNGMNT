@@ -35,7 +35,7 @@ socket.on('displayRooms', function (pop, roomsArr, sfrom, sto) {
 
 });
 
-socket.on('AdminSearchRoomDoneTest', function (roomsArr) {
+socket.on('AdminSearchRoomDone', function (roomsArr) {
     $('#container').empty().append("<table id=\"myTable\" class=\"table table-striped table-hover table-bordered \"><thead><tr><th onclick=\"sortTable(0)\">Room number</th><th onclick=\"sortTable(1)\">Number of beds</th><th onclick=\"sortTable(2)\">Price</th><th></th></tr></thead><tbody id=\"tBody\"></tbody></table>");
     for (const room of roomsArr) {
         const row = `
@@ -49,7 +49,7 @@ socket.on('AdminSearchRoomDoneTest', function (roomsArr) {
 });
 
 socket.on('displayEmployees', function (staff) {
-    $('#container-emp').empty().append("<table style='margin-right: 100px' class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Employee ID</th><th>Admin</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+    $('#container-emp').empty().append("<table style='width: 1200px' class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Employee ID</th><th>Admin</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
     for (const emp of staff) {
         const row = `
         <tr>
@@ -61,7 +61,7 @@ socket.on('displayEmployees', function (staff) {
 });
 
 socket.on('displayAdminRooms', function (rooms) {
-    $('#container-emp').empty().append("<table class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room Number</th><th>Number of Beds</th><th>Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
+    $('#container-emp').empty().append("<table style='width: 1200px;' class=\"table table-striped table-hover table-bordered \"><thead><tr><th>Room Number</th><th>Number of Beds</th><th>Price</th></tr></thead><tbody id=\"tBody\"></tbody></table>");
     for (const room of rooms) {
         const row = `
         <tr>
@@ -351,6 +351,7 @@ function onSrcRoomClickTest() {
     let beds = $("#room-num-beds").val();
     let price = $("#room-price").val();
     socket.emit('SearchRoomTest', roomNum, beds, price);
+
 }
 
 function onUpdRoomClick() {
@@ -508,15 +509,67 @@ socket.on('newLocations', function initMap(arrLocations) {
     window.initMap = initMap;
 });
 
-socket.on('displayStatistics', function (DBdata) {
-    console.log(DBdata);
+
+socket.on('displayStatistics',function (DBdata1,DBdata2) {
+    console.log(DBdata1,DBdata2);
     renderPage('histogramIndex');
     $("#my_dataviz_histogram").empty();
-    setTimeout(f, 1000);//<------Callback
-    function f() {
-        let chart1 = BarChart(DBdata);
-        $("#my_dataviz_histogram").append(chart1);
+    $("#my_dataviz_histogram2").empty();
+    setTimeout(f,1000);//<------Callback
+    function f(){
+        let chart1 = BarChart(DBdata1);
+        let chart2 = BarChart(DBdata2);
+            $("#my_dataviz_histogram").append(chart1);
+        $("#my_dataviz_histogram2").append(chart2);
+
     }
+        function BarChart(data, {
+            x = d => d._id,
+            y = d => d.count,
+            title, // given d in data, returns the title text
+            marginTop = 20, // the top margin, in pixels
+            marginRight = 0, // the right margin, in pixels
+            marginBottom = 30, // the bottom margin, in pixels
+            marginLeft = 40, // the left margin, in pixels
+            width = 640, // the outer width of the chart, in pixels
+            height = 400, // the outer height of the chart, in pixels
+            xDomain= d3.groupSort(data, ([d]) => -d.count, d => d._id), // sort by descending frequenc  an array of (ordinal) x-values
+            xRange = [marginLeft, width - marginRight], // [left, right]
+            yType = d3.scaleLinear, // y-scale type
+            yDomain, // [ymin, ymax]
+            yRange = [height - marginBottom, marginTop], // [bottom, top]
+            xPadding = 0.1, // amount of x-range to reserve to separate bars
+            yFormat, // a format specifier string for the y-axis
+            yLabel, // a label for the y-axis
+            color = "currentColor" // bar fill color
+        } = {}) {
+            // Compute values.
+            const X = d3.map(data, x);
+            const Y = d3.map(data, y);
+
+            // Compute default domains, and unique the x-domain.
+            if (xDomain === undefined) xDomain = X;
+            if (yDomain === undefined) yDomain = [0, d3.max(Y)];
+            xDomain = new d3.InternSet(xDomain);
+
+            // Omit any data not present in the x-domain.
+            const I = d3.range(X.length).filter(i => xDomain.has(X[i]));
+
+            // Construct scales, axes, and formats.
+            const xScale = d3.scaleBand(xDomain, xRange).padding(xPadding);
+            const yScale = yType(yDomain, yRange);
+            const xAxis = d3.axisBottom(xScale).tickSizeOuter(0);
+            const yAxis = d3.axisLeft(yScale).ticks(height / 40, yFormat);
+
+            // Compute titles.
+            if (title === undefined) {
+                const formatValue = yScale.tickFormat(100, yFormat);
+                title = i => `${X[i]}\n${formatValue(Y[i])}`;
+            } else {
+                const O = d3.map(data, d => d);
+                const T = title;
+                title = i => T(O[i], i, data);
+            }
 
     function BarChart(data, {
         x = d => d._id, // given d in data, returns the (ordinal) x-value

@@ -9,7 +9,9 @@ let roomsList = [];
 let showRoom = [];
 let locations = [];
 let popRoom = [];
-let graphData = [];
+let graphData1 = [];
+let graphData2 = [];
+
 
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
@@ -869,7 +871,9 @@ let getRoomsStatistics = function (orders,appropriate) {
         ]
     )
 }
-let statisticsForGraph = function (collection,key){
+
+
+let statisticsForGraph = function (collection,key,arr){
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         let dbo = db.db("hotel");
@@ -887,9 +891,9 @@ let statisticsForGraph = function (collection,key){
             ]
         ).toArray(function (err, q) {
             if (err) throw err;
-            graphData.length = 0;
+            arr.length = 0;
             q.forEach(item => {
-                graphData.push(item);//import all appropriate rooms
+                arr.push(item);//import all appropriate rooms
             })
             }
         );
@@ -1211,8 +1215,8 @@ let getLocations = function () {
     });
 }
 
-
-module.exports.graphData = graphData;
+module.exports.graphData1 = graphData1;
+module.exports.graphData2 = graphData2;
 module.exports.locations = locations;
 module.exports.validLogIn = validLogIn;
 module.exports.selectedRooms = selectedRooms;
@@ -1223,24 +1227,23 @@ module.exports.showEmp = showEmp;
 module.exports.showRoom = showRoom;
 module.exports.popRoom = popRoom;
 module.exports.statisticsForGraph = statisticsForGraph;
-module.exports.init = initHotelDB;//done
-module.exports.addOrder = addOrder;//to be done-----------------------------------------------
-module.exports.selectRooms = selectRoomsByDates;//done
-module.exports.logIn = logIn;//done
-module.exports.checkIn = checkIn;//to be done -> add an alert---------------------------------
-module.exports.checkOut = checkOut;//done
-module.exports.deleteOrder = deleteOrder;//to be done-----------------------------------------
-//admin actions
-module.exports.addRoom = addRoom;//to be done-------------------------------------------------
-module.exports.deleteRoom = deleteRoom;//to be done-------------------------------------------
-module.exports.deleteEmployee = deleteEmployee;//to be done-----------------------------------
-module.exports.signIn = addEmployee;//to be done----------------------------------------------
-module.exports.changeEmpPass = changeEmpPass;//to be done-------------------------------------
-module.exports.updateRoom = updateRoom;//to be done-------------------------------------------
-module.exports.searchEmp = searchEmp;//to be done---------------------------------------------
-module.exports.getStaff = getStaff;//done
-module.exports.getRooms = getRooms;//done
-module.exports.searchRoom = searchRoom;//to be done---------------------------------------------
+module.exports.init = initHotelDB;
+module.exports.addOrder = addOrder;
+module.exports.selectRooms = selectRoomsByDates;
+module.exports.logIn = logIn;
+module.exports.checkIn = checkIn;
+module.exports.checkOut = checkOut;
+module.exports.deleteOrder = deleteOrder;
+module.exports.addRoom = addRoom;
+module.exports.deleteRoom = deleteRoom;
+module.exports.deleteEmployee = deleteEmployee;
+module.exports.signIn = addEmployee;
+module.exports.changeEmpPass = changeEmpPass;
+module.exports.updateRoom = updateRoom;
+module.exports.searchEmp = searchEmp;
+module.exports.getStaff = getStaff;
+module.exports.getRooms = getRooms;
+module.exports.searchRoom = searchRoom;
 module.exports.getLocations = getLocations;
 
 

@@ -4,6 +4,7 @@ let express = require('express')
     , server = http.createServer(app)
     , myDB = require("./db")
     , io = require('socket.io')(server);
+const {graphData} = require("./db");
 server.listen(8080);
 // myDB.init();
 io.sockets.on('connection', function (socket) {
@@ -133,6 +134,7 @@ io.sockets.on('connection', function (socket) {
             io.sockets.emit('displayEmployees', myDB.employees);
         }
     });
+
     socket.on('displayRoomsList', function () {
         //prepare rooms available on those dates
         myDB.getRooms();
@@ -156,7 +158,16 @@ io.sockets.on('connection', function (socket) {
         setTimeout(getResultFromLocations, 1000);
 
         function getResultFromLocations() {
-            io.sockets.emit('newLocations', myDB.locations);
+            io.sockets.emit('newLocations',myDB.locations);
+        }
+    });
+    socket.on('getStatistics', function () {
+        //prepare rooms available on those dates
+        myDB.statisticsForGraph("Orders",'$room',myDB.graphData1);
+        myDB.statisticsForGraph("Rooms",'$price',myDB.graphData2);
+        setTimeout(getStats,1000);//<------Callback
+        function getStats() {
+            io.sockets.emit('displayStatistics',myDB.graphData1,myDB.graphData2);
         }
     });
 });
