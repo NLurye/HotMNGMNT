@@ -1,6 +1,6 @@
 let MongoClient = require('mongodb').MongoClient;
 let url = "mongodb://localhost:27017/hotel";
-const selectedRooms = [];
+let selectedRooms = [];
 let validLogIn = [];
 let validReservation = [];
 let showEmp = [];
@@ -9,6 +9,7 @@ let roomsList = [];
 let showRoom = [];
 let locations = [];
 let popRoom = [];
+let graphData = [];
 
 let initHotelDB = function () {
     MongoClient.connect(url, function (err, db) {
@@ -837,33 +838,63 @@ let selectRoomsByDates = function (selected_from, selected_to,price,beds) {//
                     selectedRooms.push(item);//import all appropriate rooms
                 });
                 let appropriate = selectedRooms.map(a => a.room);
-                console.log("Fit :"+appropriate);
-                orders.aggregate([
-                    {
-                        $match:
-                            {
-                                room:{$in: appropriate}
-                            }
-                    },
-                    {
-                        $group :
-                            {
-                                _id : '$room',
-                                count : {$sum : 1}
-                            }
-                    },
-
-                        { $sort : { count : -1 } }
-                    ]
-                ).toArray(function (err, queryResult){
-                    console.log(queryResult);
-                    rooms.find({room: queryResult[0]._id}).tryNext(function(err, doc) {
-                        popRoom.push(doc); //import most popular rooms
-                    });
+                getRoomsStatistics(orders,appropriate).toArray(function (err, queryResult){
+                    if (queryResult.length!==0) {
+                        rooms.find({room: queryResult[0]._id}).tryNext(function (err, doc) {
+                            popRoom.push(doc); //import most popular room
+                        });
+                    }
                 });
             });
         });
     });
+}
+let getRoomsStatistics = function (orders,appropriate) {
+    return orders.aggregate([
+            {
+                $match:
+                    {
+                        room:{$in: appropriate}
+                    }
+            },
+            {
+                $group :
+                    {
+                        _id : '$room',
+                        count : {$sum : 1}
+                    }
+            },
+
+            { $sort : { count : -1 } }
+        ]
+    )
+}
+
+let statisticsForGraph = function (collection,key){
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        let dbo = db.db("hotel");
+        let orders = dbo.collection(collection);
+        return orders.aggregate([
+                {
+                    $group :
+                        {
+                            _id : key,
+                            count : {$sum : 1}
+                        }
+                },
+
+                { $sort : { count : -1 } }
+            ]
+        ).toArray(function (err, q) {
+            if (err) throw err;
+            graphData.length = 0;
+            q.forEach(item => {
+                graphData.push(item);//import all appropriate rooms
+            })
+            }
+        );
+})
 }
 let checkIn =function(cust_id,cust_name){
     MongoClient.connect(url, function (err, db) {
@@ -1109,6 +1140,7 @@ let getStaff = function () {
         staff.find({}).toArray(function (err, getEmpResult) {
             if (err) throw err;
             else {
+                employees.length = 0;
                 getEmpResult.forEach(item => {
                     employees.push(item);
                 });
@@ -1204,6 +1236,7 @@ let getLocations = function () {
     });
 }
 
+module.exports.graphData = graphData;
 module.exports.locations = locations;
 module.exports.validLogIn = validLogIn;
 module.exports.selectedRooms = selectedRooms;
@@ -1213,6 +1246,7 @@ module.exports.validReservation = validReservation;
 module.exports.showEmp = showEmp;
 module.exports.showRoom = showRoom;
 module.exports.popRoom = popRoom;
+module.exports.statisticsForGraph = statisticsForGraph;
 module.exports.init = initHotelDB;//done
 module.exports.addOrder = addOrder;//to be done-----------------------------------------------
 module.exports.selectRooms = selectRoomsByDates;//done
